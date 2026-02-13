@@ -1,0 +1,171 @@
+<resources>
+    <!-- App Info -->
+    <string name="app_name">flow</string>
+
+    <!-- Main Titles -->
+    <string name="title_main">Preencha os campos abaixo</string>
+    <string name="title_category">CATEGORIA</string>
+    <string name="title_details">Detalhes</string>
+    <string name="title_summary">Resumo</string>
+    <string name="title_select">Selecionar</string>
+
+    <!-- Subtitles -->
+    <string name="subtitle_required">Campos obrigatórios</string>
+    <string name="subtitle_optional">Campos opcionais</string>
+    <string name="subtitle_info">Informações adicionais</string>
+
+    <!-- Input Hints -->
+    <string name="hint_animal_weight">Peso do Animal (kg)</string>
+    <string name="hint_animal_quantity">Quantidade de Animais</string>
+    <string name="hint_arroba_price">Preço da Arroba</string>
+    <string name="hint_percentage">Ágio</string>
+    <string name="hint_weight">Peso (%s)</string>
+    <string name="hint_quantity">Quantidade</string>
+    <string name="hint_price">Preço</string>
+    <string name="hint_name">Nome</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_phone">Telefone</string>
+    <string name="hint_search">Digite o endereço de origem</string>
+    <string name="hint_notes">Observações</string>
+    <string name="hint_searchbar">Digite a localização de origem</string>
+
+    <!-- Labels -->
+    <string name="label_weight">Peso</string>
+    <string name="label_quantity">Quantidade</string>
+    <string name="label_price">Preço</string>
+    <string name="label_percentage">Percentual</string>
+    <string name="label_total">Total</string>
+    <string name="label_value">Valor</string>
+    <string name="label_unit">Unitário</string>
+    <string name="label_arroba">Arroba</string>
+    <string name="label_per">por</string>
+
+    <!-- Card Labels - Flexíveis -->
+    <string name="card_label_valor_por_kg">Valor por Kg</string>
+    <string name="card_label_total_value">Valor Total</string>
+    <string name="card_label_unit_value">Valor por Cabeça</string>
+    <string name="card_label_total_arroba">Total de Arrobas</string>
+    <string name="card_label_value_per_unit">%1$s / %2$s</string> <!-- Ex: R$ / kg -->
+    <string name="card_suffix_unit">unidade</string>
+    <string name="card_suffix_head">cabeça</string>
+    <string name="card_suffix_kg">kg</string>
+    <string name="add_location_label">Adicionar localização</string>
+
+    <!-- Units -->
+    <string name="unit_kg">kg</string>
+    <string name="unit_percentage">%</string>
+    <string name="unit_currency">R$</string>
+    <string name="unit_head">cabeça</string>
+    <string name="unit_piece">unidade</string>
+
+    <!-- Currency -->
+    <string name="currency_symbol">R$</string>
+    <string name="currency_symbol_slash">R$ /</string>
+    <string name="currency_format">R$ %s</string>
+    <string name="currency_with_unit">R$ %1$s / %2$s</string>
+
+    <!-- Default Values -->
+    <string name="default_decimal_value">0,00</string>
+    <string name="default_integer_value">0</string>
+    <string name="default_empty">—</string>
+    <string name="placeholder_text">Texto placeholder</string>
+    <string name="placeholder_number">0</string>
+
+    <!-- Formatted Values -->
+    <string name="format_decimal">%,.2f</string>
+    <string name="format_integer">%d</string>
+    <string name="format_percentage">%s%%</string>
+    <string name="format_with_unit">%1$s %2$s</string>
+
+    <!-- Buttons -->
+    <string name="button_confirm">Confirmar</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="button_save">Salvar</string>
+    <string name="button_submit">Enviar</string>
+    <string name="button_next">Próximo</string>
+    <string name="button_back">Voltar</string>
+    <string name="button_delete">Excluir</string>
+    <string name="button_edit">Editar</string>
+    <string name="button_add">Adicionar</string>
+    <string name="button_search">Buscar</string>
+    <string name="button_close">Fechar</string>
+    <string name="button_reset">Limpar</string>
+    <string name="button_goto_settings">Ir para configurações</string>
+
+    <!-- Actions -->
+    <string name="action_yes">Sim</string>
+    <string name="action_no">Não</string>
+    <string name="action_ok">OK</string>
+    <string name="action_retry">Tentar novamente</string>
+    <string name="action_dismiss">Dispensar</string>
+    <string name="action_continue">Continuar</string>
+
+    <!-- Success Messages -->
+    <string name="message_success">Operação realizada com sucesso!</string>
+    <string name="message_saved">Salvo com sucesso</string>
+    <string name="message_deleted">Excluído com sucesso</string>
+    <string name="message_updated">Atualizado com sucesso</string>
+    <string name="message_success_generic">%s com sucesso!</string>
+    <string name="message_location_selected">Endereço selecionado e vinculado com sucesso.</string>
+    <!-- Info Messages -->
+    <string name="message_loading">Carregando…</string>
+    <string name="message_empty">Nenhum item encontrado</string>
+    <string name="message_no_data">Sem dados disponíveis</string>
+    <string name="message_processing">Processando…</string>
+
+    <!-- Error Messages -->
+    <string name="error_required_field">Campo obrigatório</string>
+    <string name="error_empty_field">Este campo não pode estar vazio</string>
+    <string name="error_invalid_email">E-mail inválido</string>
+    <string name="error_invalid_number">Número inválido</string>
+    <string name="error_invalid_value">Valor inválido</string>
+    <string name="error_network">Erro de conexão</string>
+    <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
+    <string name="error_field_invalid">%s inválido</string>
+    <string name="error_min_value">Valor mínimo: %s</string>
+    <string name="error_max_value">Valor máximo: %s</string>
+    <string name="error_location_permission_required">Permissão necessária para calcular o frete.</string>
+    <string name="error_address_not_found">Nenhum endereço encontrado.</string>
+    <string name="error_search_address">Erro ao buscar endereço. Verifique sua conexão.</string>
+    <string name="error_invalid_input">Verifique os valores informados.</string>
+    <string name="error_permission_access_denied">Erro de permissão ao acessar localização.</string>
+    <string name="error_region_not_identified">Não foi possível identificar sua região.</string>
+
+    <!-- Validation Messages -->
+    <string name="validation_must_be_positive">O valor deve ser maior que zero</string>
+    <string name="validation_must_be_number">Digite apenas números</string>
+    <string name="validation_out_of_range">Valor fora do intervalo permitido</string>
+
+    <!-- Content Descriptions (Accessibility) -->
+    <string name="content_description_icon">Ícone</string>
+    <string name="content_description_image">Imagem</string>
+    <string name="content_description_logo">Logo</string>
+    <string name="content_description_close">Fechar</string>
+    <string name="content_description_info">Informação</string>
+    <string name="content_description_delete">Excluir</string>
+    <string name="content_description_edit">Editar</string>
+    <string name="content_description_add">Adicionar</string>
+
+    <string name="dialog_title_confirm">Confirmar ação</string>
+    <string name="dialog_title_delete">Excluir item</string>
+    <string name="dialog_message_delete">Deseja realmente excluir este item?</string>
+    <string name="dialog_message_unsaved">Há alterações não salvas. Deseja continuar?</string>
+    <string name="dialog_title_permission_location">Permissão de localização necessária</string>
+    <string name="dialog_message_permission_location">Para usar este recurso, você precisa permitir o acesso à localização nas configurações do aplicativo.</string>
+
+    <!-- Mileage Adjustment -->
+    <string name="label_km_atual">QUILOMETRAGEM ATUAL</string>
+    <string name="label_ajuste_fino">AJUSTE FINO</string>
+    <string name="label_incremento_rapido">INCREMENTO RÁPIDO</string>
+    <string name="label_km_unidade">km</string>
+    <string name="label_km_default">125.430</string>
+    <string name="label_hodometro">HODÔMETRO</string>
+    <string name="btn_menos_um_km">−1 Km</string>
+    <string name="btn_mais_um_km">+1 Km</string>
+    <string name="btn_incremento_10">+10</string>
+    <string name="btn_incremento_30">+30</string>
+    <string name="btn_incremento_50">+50</string>
+    <string name="btn_incremento_100">+100</string>
+    <string name="hint_valor_km">Quilometragem</string>
+
+</resources>

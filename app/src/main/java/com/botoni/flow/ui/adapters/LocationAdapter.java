@@ -1,0 +1,96 @@
+package com.botoni.flow.ui.adapters;
+
+import android.location.Address;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.botoni.flow.databinding.ItemAddressBinding;
+
+import java.util.List;
+import java.util.Objects;
+
+public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHolder> {
+    @FunctionalInterface
+    public interface OnClickListener {
+        void onClick(Address address);
+    }
+
+    private final OnClickListener listener;
+
+    public LocationAdapter(List<Address> addresses, OnClickListener listener) {
+        super(new AddressDiffCallback());
+        this.listener = listener;
+        submitList(addresses);
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        ItemAddressBinding binding = ItemAddressBinding.inflate(
+                LayoutInflater.from(parent.getContext()), parent, false
+        );
+        return new ViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.bind(getItem(position), listener);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ItemAddressBinding binding;
+
+        ViewHolder(ItemAddressBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        void bind(Address address, OnClickListener listener) {
+            bindCidade(address.getLocality());
+            bindEstado(address.getAdminArea());
+            bindClickListener(address, listener);
+        }
+
+        private void bindCidade(String cidade) {
+            setText(binding.textoNomeCidade, cidade);
+        }
+
+        private void bindEstado(String estado) {
+            setText(binding.textoNomeEstado, estado);
+        }
+
+        private void bindClickListener(Address address, OnClickListener listener) {
+            itemView.setOnClickListener(v -> listener.onClick(address));
+        }
+
+        private void setText(TextView textView, String text) {
+            if (text == null || text.trim().isEmpty()) {
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setText(text.trim());
+                textView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private static class AddressDiffCallback extends DiffUtil.ItemCallback<Address> {
+        @Override
+        public boolean areItemsTheSame(@NonNull Address oldItem, @NonNull Address newItem) {
+            return oldItem.getLatitude() == newItem.getLatitude()
+                    && oldItem.getLongitude() == newItem.getLongitude();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Address oldItem, @NonNull Address newItem) {
+            return Objects.equals(oldItem.getLocality(), newItem.getLocality())
+                    && Objects.equals(oldItem.getAdminArea(), newItem.getAdminArea());
+        }
+    }
+}
