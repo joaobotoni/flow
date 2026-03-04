@@ -1,8 +1,6 @@
 package com.botoni.flow.ui.fragments;
 
-import android.location.Address;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.botoni.flow.data.repositories.network.LocationRepository;
-import com.botoni.flow.databinding.FragmentMainBinding;
+import com.botoni.flow.databinding.FragmentCattlePriceSettingsBinding;
 import com.botoni.flow.ui.helpers.TaskHelper;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MainFragment extends Fragment {
-    private FragmentMainBinding binding;
+public class CattlePriceSettingsFragment extends Fragment {
+
+    private FragmentCattlePriceSettingsBinding binding;
+
     @Inject
     TaskHelper taskHelper;
-    @Inject
-    LocationRepository repository;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,9 +32,8 @@ public class MainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentMainBinding.inflate(inflater, container, false);
+        binding = FragmentCattlePriceSettingsBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
     }
 
     @Override
@@ -53,5 +46,4 @@ public class MainFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

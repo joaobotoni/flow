@@ -17,7 +17,6 @@ import dagger.hilt.components.SingletonComponent;
 @Module
 @InstallIn(SingletonComponent.class)
 public class ExecutorModule {
-
     @Provides
     @Singleton
     public static Executor provideExecutor() {

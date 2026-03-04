@@ -6,8 +6,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.botoni.flow.R;
-//import com.botoni.flow.ui.fragments.MainFragment;
+import com.botoni.flow.ui.fragments.CattlePriceSettingsFragment;
+import com.botoni.flow.ui.fragments.DealFragment;
 import com.botoni.flow.ui.fragments.MainFragment;
+import com.botoni.flow.ui.fragments.RouteFragment;
+
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.container, MainFragment.class, null)
+                    .add(R.id.container, RouteFragment.class, null)
                     .commit();
         }
     }

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  * <p>
  * Esta classe atua como uma ponte entre a interface do usuário e o {@link NumberHelper},
  * cuidando de verificações de nulidade e extração de texto antes da conversão.
+ * </p>
  */
 public class ViewHelper {
 

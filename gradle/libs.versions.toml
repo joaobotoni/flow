@@ -1,18 +1,19 @@
 [versions]
-agp = "9.0.0"
-hiltAndroid = "2.59.1"
+agp = "9.0.1"
+hiltAndroid = "2.59.2"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-activity = "1.12.3"
+activity = "1.12.4"
 constraintlayout = "2.2.1"
 roomCompiler = "2.8.4"
 ksp = "2.3.4"
-hilt = "2.59.1"
+hilt = "2.59.2"
 gms = "21.3.0"
-
+secrets = "2.0.1"
+playServicesMaps = "20.0.0"
 
 [libraries]
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
@@ -27,9 +28,11 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "gms" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-
+secrects = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }

@@ -2,13 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.secrects)
 }
 
 android {
     namespace = "com.botoni.flow"
-    compileSdk {
-        version = release(36)
-    }
+
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.botoni.flow"
@@ -33,9 +33,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         viewBinding = true
     }
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+    defaultPropertiesFileName = "local.defaults.properties"
 }
 
 dependencies {
@@ -46,6 +52,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
 
     implementation(libs.appcompat)
     implementation(libs.material)

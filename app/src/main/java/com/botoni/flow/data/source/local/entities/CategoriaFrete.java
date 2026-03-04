@@ -6,14 +6,12 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "xgp_categoria_frete")
-
 public class CategoriaFrete {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_categoria_frete")
     private Long id;
     @ColumnInfo(name = "descricao")
     private String descricao;
-
     public CategoriaFrete() {}
 
     public CategoriaFrete(String descricao) {
