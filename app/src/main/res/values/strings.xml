@@ -184,4 +184,12 @@
     <string name="botao_finalizar_rota">Finalizar rota</string>
 
     <string name="api_key_google_maps">com.google.android.geo.API_KEY</string>
+    <string name="km">km</string>
+    <string name="label_origem">Origem</string>
+    <string name="label_destino">Destino</string>
+    <string name="finalizar_rota">Finalizar rota</string>
+    <string name="editar">Editar</string>
+    <string name="label_rota">ROTA</string>
+    <string name="action_open_sheet">Ver frete</string>
+    <string name="action_next">Prosseguir</string>
 </resources>

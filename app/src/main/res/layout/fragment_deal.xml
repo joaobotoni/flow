@@ -6,9 +6,11 @@
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/layout_container_botoes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,7 +28,6 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/title_main"
                 android:textSize="14sp"
-                android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +43,7 @@
 
             <TextView
                 android:id="@+id/texto_titulo_categoria"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/title_category"
@@ -54,7 +55,7 @@
 
             <HorizontalScrollView
                 android:id="@+id/scroll_horizontal_categorias"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:scrollbars="none"
@@ -72,7 +73,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/campo_texto_peso_animal"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="@string/hint_animal_weight"
@@ -91,7 +92,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/campo_texto_quantidade_animais"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="@string/hint_animal_quantity"
@@ -110,7 +111,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_container_resultados"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
@@ -122,7 +123,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cartao_valor_total"
                     style="?attr/materialCardViewFilledStyle"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="?attr/colorPrimaryContainer"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -141,8 +142,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.8"
-                            android:fontFamily="sans-serif-medium"
-                            android:letterSpacing="0.05"
                             android:text="@string/card_label_total_value"
                             android:textAllCaps="true"
                             android:textColor="?attr/colorOnPrimaryContainer"
@@ -155,7 +154,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:fontFamily="sans-serif-medium"
                             android:text="@string/currency_symbol"
                             android:textColor="?attr/colorOnPrimaryContainer"
                             android:textSize="18sp"
@@ -167,7 +165,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:includeFontPadding="false"
                             android:text="@string/default_decimal_value"
                             android:textColor="?attr/colorOnPrimaryContainer"
                             android:textSize="38sp"
@@ -188,7 +185,6 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="4dp"
                     app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                    app:cardElevation="0dp"
                     app:layout_constraintEnd_toStartOf="@id/cartao_valor_por_kg"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cartao_valor_total"
@@ -205,8 +201,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.8"
-                            android:fontFamily="sans-serif-medium"
-                            android:letterSpacing="0.08"
                             android:text="@string/card_label_unit_value"
                             android:textAllCaps="true"
                             android:textColor="?attr/colorOnPrimaryContainer"
@@ -232,7 +226,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
                             android:layout_marginTop="4dp"
-                            android:includeFontPadding="false"
                             android:text="@string/default_decimal_value"
                             android:textColor="?attr/colorOnPrimaryContainer"
                             android:textSize="22sp"
@@ -266,7 +259,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.7"
-                            android:fontFamily="sans-serif-medium"
                             android:text="@string/card_label_valor_por_kg"
                             android:textAllCaps="true"
                             android:textColor="?attr/colorOnSurfaceVariant"
@@ -292,7 +284,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
                             android:layout_marginTop="4dp"
-                            android:includeFontPadding="false"
                             android:text="@string/default_decimal_value"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="22sp"
@@ -305,7 +296,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/layout_container_frete"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:visibility="gone"
@@ -313,9 +304,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_container_resultados"
-                tools:layout="@layout/fragment_frete"
+                tools:layout="@layout/fragment_route"
                 tools:visibility="visible" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_container_botoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/botao_abrir_bottom_sheet"
+            style="?attr/materialButtonTonalStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/action_open_sheet"
+            app:layout_constraintEnd_toStartOf="@id/botao_prosseguir"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+
+        <Button
+            android:id="@+id/botao_prosseguir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/action_next"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/botao_abrir_bottom_sheet"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

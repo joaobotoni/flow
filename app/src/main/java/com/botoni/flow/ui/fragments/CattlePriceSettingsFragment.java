@@ -18,9 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class CattlePriceSettingsFragment extends Fragment {
-
     private FragmentCattlePriceSettingsBinding binding;
-
     @Inject
     TaskHelper taskHelper;
 

@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.container, RouteFragment.class, null)
+                    .add(R.id.container, DealFragment.class, null)
                     .commit();
         }
     }
