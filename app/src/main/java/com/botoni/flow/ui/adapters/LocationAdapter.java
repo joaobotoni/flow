@@ -2,21 +2,23 @@ package com.botoni.flow.ui.adapters;
 
 import android.location.Address;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.botoni.flow.databinding.ItemAddressBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHolder> {
+
     @FunctionalInterface
     public interface OnClickListener {
         void onClick(Address address);
@@ -24,10 +26,24 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
 
     private final OnClickListener listener;
 
-    public LocationAdapter(List<Address> addresses, OnClickListener listener) {
+    public LocationAdapter(OnClickListener listener) {
         super(new AddressDiffCallback());
         this.listener = listener;
-        submitList(addresses);
+    }
+
+    @Override
+    public void submitList(@Nullable List<Address> list) {
+        if (list == null) {
+            super.submitList(null);
+            return;
+        }
+        List<Address> filtered = new ArrayList<>();
+        for (Address address : list) {
+            if (isNotEmpty(address.getLocality()) && isNotEmpty(address.getAdminArea())) {
+                filtered.add(address);
+            }
+        }
+        super.submitList(filtered);
     }
 
     @NonNull
@@ -44,7 +60,11 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
         holder.bind(getItem(position), listener);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    private static boolean isNotEmpty(String text) {
+        return text != null && !text.trim().isEmpty();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ItemAddressBinding binding;
 
         ViewHolder(ItemAddressBinding binding) {
@@ -53,30 +73,13 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
         }
 
         void bind(Address address, OnClickListener listener) {
-            bindCidade(address.getLocality());
-            bindEstado(address.getAdminArea());
-            bindClickListener(address, listener);
-        }
-
-        private void bindCidade(String cidade) {
-            setText(binding.textoNomeCidade, cidade);
-        }
-
-        private void bindEstado(String estado) {
-            setText(binding.textoNomeEstado, estado);
-        }
-
-        private void bindClickListener(Address address, OnClickListener listener) {
+            setText(binding.textoNomeCidade, address.getLocality());
+            setText(binding.textoNomeEstado, address.getAdminArea());
             itemView.setOnClickListener(v -> listener.onClick(address));
         }
 
         private void setText(TextView textView, String text) {
-            if (text == null || text.trim().isEmpty()) {
-                textView.setVisibility(View.GONE);
-            } else {
-                textView.setText(text.trim());
-                textView.setVisibility(View.VISIBLE);
-            }
+            textView.setText(text != null ? text.trim() : "");
         }
     }
 

@@ -122,7 +122,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imagem_icone_vaca_gorda"
                 app:prefixText="R$ "
-                app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
+                app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
                 app:startIconDrawable="@drawable/arroba_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -141,7 +141,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/campo_texto_preco_arroba_vaca"
-                app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
+                app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
                 app:startIconDrawable="@drawable/trending_up_24px">
 
                 <com.google.android.material.textfield.TextInputEditText

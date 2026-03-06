@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
@@ -38,6 +40,14 @@ public class RoutesDataSource {
         return fetch(body);
     }
 
+    /** Extrai a distância em metros do JSON de resposta. */
+    public int parse(String json) throws Exception {
+        return new JSONObject(json)
+                .getJSONArray("routes")
+                .getJSONObject(0)
+                .getInt("distanceMeters");
+    }
+
     /** Lê a chave da API do metadado declarado no AndroidManifest. */
     private static String load(@NonNull Context context) {
         try {
@@ -58,9 +68,12 @@ public class RoutesDataSource {
                 .put("origin", toWaypoint(origin))
                 .put("destination", toWaypoint(destination))
                 .put("travelMode", "DRIVE")
+                .put("routingPreference", "TRAFFIC_AWARE_OPTIMAL")
+                .put("departureTime", java.time.Instant.now().toString())
                 .put("units", "METRIC")
                 .toString();
     }
+
     /** Realiza a requisição POST para a Routes API e retorna o corpo da resposta. */
     private String fetch(@NonNull String body) throws Exception {
         HttpURLConnection conn = (HttpURLConnection) new URL(URL).openConnection();

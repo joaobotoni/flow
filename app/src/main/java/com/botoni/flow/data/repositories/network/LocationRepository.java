@@ -49,11 +49,7 @@ public class LocationRepository {
 
     public double parseDistance(String response) {
         try {
-            JSONObject route = new JSONObject(response)
-                    .getJSONArray("routes")
-                    .getJSONObject(0);
-            int meters = route.getInt("distanceMeters");
-            return meters / 1000.0;
+            return routesDataSource.parse(response) / 1000.0;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -80,8 +80,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/scroll_horizontal_categorias"
-                app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
-                app:startIconDrawable="@drawable/balance_24px">
+                app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
+                app:startIconDrawable="@drawable/swap_vert_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/entrada_texto_peso_animal"
@@ -99,8 +99,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/campo_texto_peso_animal"
-                app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
-                app:startIconDrawable="@drawable/decimal_increase_24px">
+                app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
+                app:startIconDrawable="@drawable/inventory_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/entrada_texto_quantidade_animais"
@@ -329,10 +329,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:text="@string/action_open_sheet"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:letterSpacing="0.02"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintEnd_toStartOf="@id/botao_prosseguir"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+            app:shapeAppearance="?attr/shapeAppearanceCornerSmall" />
 
         <Button
             android:id="@+id/botao_prosseguir"
@@ -340,9 +344,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@string/action_next"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:letterSpacing="0.02"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/botao_abrir_bottom_sheet"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+            app:shapeAppearance="?attr/shapeAppearanceCornerSmall" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

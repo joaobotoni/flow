@@ -192,4 +192,5 @@
     <string name="label_rota">ROTA</string>
     <string name="action_open_sheet">Ver frete</string>
     <string name="action_next">Prosseguir</string>
+    <string name="erro_endereco_nao_encontrado">Endereço de destino não encontrado</string>
 </resources>
