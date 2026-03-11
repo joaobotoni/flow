@@ -13,7 +13,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 
 public class CapacidadeFreteRepository {
     private final AppDatabase database;
-
     @Inject
     public CapacidadeFreteRepository(@ApplicationContext Context context) {
         this.database = AppDatabase.getDatabase(context);

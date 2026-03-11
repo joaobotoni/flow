@@ -1,4 +1,4 @@
-package com.botoni.flow.libs;
+package com.botoni.flow.ui.libs;
 
 import android.os.Bundle;
 import android.view.View;
@@ -15,10 +15,8 @@ public abstract class BottomSheetFragment extends Fragment {
     private boolean isDismissing = false;
     @NonNull
     protected abstract View getBackgroundView();
-
     @NonNull
     protected abstract View getBottomSheetView();
-
     protected abstract void onBind(@NonNull BottomSheetBehavior<View> behavior);
 
     protected abstract void onStateChanged(@NonNull View bottomSheet, int newState);

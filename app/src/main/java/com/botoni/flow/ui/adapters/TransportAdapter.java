@@ -34,7 +34,7 @@ public class TransportAdapter extends ListAdapter<Transport, TransportAdapter.Vi
     }
 
     public static final class ViewHolder extends RecyclerView.ViewHolder {
-        private ItemTransportBinding binding;
+        ItemTransportBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
         }

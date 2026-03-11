@@ -17,12 +17,6 @@ import java.math.BigDecimal;
  */
 public class ViewHelper {
 
-    /**
-     * Extrai o texto de um TextView (ou EditText) de forma segura, removendo espaços em branco.
-     *
-     * @param view O componente de texto (pode ser nulo).
-     * @return O texto contido na view (trim), ou uma string vazia ("") se a view for nula.
-     */
     @NonNull
     public static String getTexto(@Nullable TextView view) {
         if (view == null || view.getText() == null) return "";

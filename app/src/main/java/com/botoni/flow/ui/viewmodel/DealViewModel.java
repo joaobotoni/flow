@@ -8,11 +8,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.botoni.flow.data.repositories.local.CategoriaFreteRepository;
+import com.botoni.flow.data.source.local.entities.CategoriaFrete;
+import com.botoni.flow.domain.entities.Category;
+import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.state.DealUiState;
-import com.botoni.flow.ui.state.RouteState;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -20,62 +25,67 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class DealViewModel extends ViewModel {
-    private final MutableLiveData<DealUiState> uiState = new MutableLiveData<>(new DealUiState());
+    private final TaskHelper taskHelper;
+    private final CategoriaFreteRepository repository;
+    private static final BigDecimal ARROBA = new BigDecimal("310.0");
+    private static final BigDecimal PERCENTUAL = new BigDecimal("30.0");
+    private final MutableLiveData<DealUiState> _state = new MutableLiveData<>(new DealUiState());
+    private final MutableLiveData<List<Category>> _categories = new MutableLiveData<>();
+    private final MutableLiveData<Category> _selected = new MutableLiveData<>();
+    private final MutableLiveData<Exception> _error = new MutableLiveData<>();
 
     @Inject
-    public DealViewModel() {
+    public DealViewModel(CategoriaFreteRepository repository, TaskHelper taskHelper) {
+        this.repository = repository;
+        this.taskHelper = taskHelper;
+        loadCategories();
+    }
+    public LiveData<DealUiState> getState() {
+        return _state;
+    }
+    public LiveData<List<Category>> getCategories() {
+        return _categories;
+    }
+    public LiveData<Category> getSelected() {
+        return _selected;
+    }
+    public LiveData<Exception> getError() {
+        return _error;
     }
 
-    public LiveData<DealUiState> getUiState() {
-        return uiState;
+    private void loadCategories() {
+        taskHelper.execute(
+                this::fetchCategories,
+                _categories::setValue,
+                _error::setValue
+        );
     }
 
-    public void setCategoriaSelected(String categoria) {
-        DealUiState current = uiState.getValue();
-        uiState.setValue(new DealUiState(
-                current.isFreteVisible(),
-                current.getRouteState(),
-                categoria,
-                current.getValorPorKg(),
-                current.getValorPorCabeca(),
-                current.getValorTotal(),
-                current.isVisible()
-        ));
+    private List<Category> fetchCategories() {
+        List<Category> result = new ArrayList<>();
+        for (CategoriaFrete item : repository.getAll()) {
+            result.add(new Category(item.getDescricao(), false));
+        }
+        return result;
     }
 
-    public void setRouteLinked(List<String> points, double distance) {
-        DealUiState current = uiState.getValue();
-        uiState.setValue(new DealUiState(
-                true,
-                new RouteState(points, distance),
-                current.getSelectedCategory(),
-                current.getValorPorKg(),
-                current.getValorPorCabeca(),
-                current.getValorTotal(),
-                current.isVisible()
-        ));
+    public void selectCategory(Category selected) {
+        _selected.setValue(selected);
+        List<Category> updated = new ArrayList<>();
+        for (Category item : Objects.requireNonNull(_categories.getValue())) {
+            updated.add(new Category(item.getDescription(), item == selected));
+        }
+        _categories.setValue(updated);
     }
 
     public void calculate(BigDecimal peso, int quantidade) {
-        BigDecimal precoArroba = new BigDecimal("310.0");
-        BigDecimal percentual = new BigDecimal("30.0");
-
-        DealUiState current = uiState.getValue();
-        BigDecimal valorPorKg = calcularValorTotalPorKg(peso, precoArroba, percentual);
-        BigDecimal valorPorCabeca = calcularValorTotalBezerro(peso, precoArroba, percentual);
-        BigDecimal valorTotal = calcularValorTotalTodosBezerros(valorPorCabeca, quantidade);
-
-        uiState.setValue(new DealUiState(
-                current.isFreteVisible(),
-                current.getRouteState(),
-                current.getSelectedCategory(),
-                valorPorKg,
-                valorPorCabeca,
-                valorTotal,
-                true
-        ));
+        BigDecimal porKg = calcularValorTotalPorKg(peso, ARROBA, PERCENTUAL);
+        BigDecimal porCabeca = calcularValorTotalBezerro(peso, ARROBA, PERCENTUAL);
+        BigDecimal total = calcularValorTotalTodosBezerros(porCabeca, quantidade);
+        _state.setValue(new DealUiState(porKg, porCabeca, total, true));
     }
+
     public void clear() {
-        uiState.setValue(new DealUiState());
+        _state.setValue(new DealUiState());
     }
 }

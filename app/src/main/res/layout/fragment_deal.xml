@@ -53,23 +53,17 @@
                 app:layout_constraintStart_toEndOf="@id/imagem_icone_categoria"
                 app:layout_constraintTop_toTopOf="@id/imagem_icone_categoria" />
 
-            <HorizontalScrollView
-                android:id="@+id/scroll_horizontal_categorias"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lista_categorias"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:scrollbars="none"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imagem_icone_categoria">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/grupo_chips_categorias"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:selectionRequired="true"
-                    app:singleSelection="true" />
-            </HorizontalScrollView>
+                app:layout_constraintTop_toBottomOf="@id/imagem_icone_categoria"
+                tools:listitem="@layout/item_category"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/campo_texto_peso_animal"
@@ -79,7 +73,7 @@
                 android:hint="@string/hint_animal_weight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/scroll_horizontal_categorias"
+                app:layout_constraintTop_toBottomOf="@id/lista_categorias"
                 app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
                 app:startIconDrawable="@drawable/swap_vert_24px">
 
@@ -306,6 +300,7 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_container_resultados"
                 tools:layout="@layout/fragment_route"
                 tools:visibility="visible" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -353,4 +348,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="?attr/shapeAppearanceCornerSmall" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

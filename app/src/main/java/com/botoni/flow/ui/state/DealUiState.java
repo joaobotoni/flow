@@ -3,37 +3,20 @@ package com.botoni.flow.ui.state;
 import java.math.BigDecimal;
 
 public class DealUiState {
-    private boolean freteVisible;
-    private RouteState routeState;
-    private String selectedCategory;
     private BigDecimal valorPorKg;
     private BigDecimal valorPorCabeca;
     private BigDecimal valorTotal;
-    private boolean isVisible;
+    private boolean isCalculated;
 
     public DealUiState() {
     }
 
-    public DealUiState(boolean freteVisible, RouteState routeState, String selectedCategory, BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal, boolean resultadosVisible) {
-        this.freteVisible = freteVisible;
-        this.routeState = routeState;
-        this.selectedCategory = selectedCategory;
+    public DealUiState(BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal, boolean isVisible) {
+
         this.valorPorKg = valorPorKg;
         this.valorPorCabeca = valorPorCabeca;
         this.valorTotal = valorTotal;
-        this.isVisible = resultadosVisible;
-    }
-
-    public boolean isFreteVisible() {
-        return freteVisible;
-    }
-
-    public RouteState getRouteState() {
-        return routeState;
-    }
-
-    public String getSelectedCategory() {
-        return selectedCategory;
+        this.isCalculated = isVisible;
     }
 
     public BigDecimal getValorPorKg() {
@@ -48,20 +31,8 @@ public class DealUiState {
         return valorTotal;
     }
 
-    public boolean isVisible() {
-        return isVisible;
-    }
-
-    public void setFreteVisible(boolean freteVisible) {
-        this.freteVisible = freteVisible;
-    }
-
-    public void setRouteState(RouteState routeState) {
-        this.routeState = routeState;
-    }
-
-    public void setSelectedCategory(String selectedCategory) {
-        this.selectedCategory = selectedCategory;
+    public boolean isCalculated() {
+        return isCalculated;
     }
 
     public void setValorPorKg(BigDecimal valorPorKg) {
@@ -71,12 +42,10 @@ public class DealUiState {
     public void setValorPorCabeca(BigDecimal valorPorCabeca) {
         this.valorPorCabeca = valorPorCabeca;
     }
-
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
-
-    public void setVisible(boolean visible) {
-        this.isVisible = visible;
+    public void setCalculated(boolean calculated) {
+        this.isCalculated = calculated;
     }
 }

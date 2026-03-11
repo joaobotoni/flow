@@ -1,6 +1,5 @@
 package com.botoni.flow.ui.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,39 +7,33 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.botoni.flow.databinding.FragmentRouteBinding;
-import com.botoni.flow.ui.adapters.LocationAdapter;
 import com.botoni.flow.ui.adapters.TransportAdapter;
+import com.botoni.flow.ui.viewmodel.RouteViewModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class RouteFragment extends Fragment {
     private static final String TAG = "RouteFragment";
+    private static final String KEY_DISTANCE = "distance";
+    private static final String KEY_POINTS = "points";
     private static final String STATE_DISTANCE = "state_distance";
-    private static final String STATE_ROUTE = "state_route";
-    private static final String STATE_IS_LINKED = "state_is_linked";
+    private static final String STATE_POINTS = "state_points";
+    private static final String REQUEST_KEY_DEAL_FRAGMENT = "DealFragment";
     private FragmentRouteBinding binding;
-    private Double distance;
-    private String[] route;
-    private boolean isLinked;
-    private TransportAdapter transportAdapter;
-
-    @Override
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        restoreInstanceState(savedInstanceState);
-        registerFragmentResultListener();
-    }
+    private RouteViewModel viewModel;
+    ArrayList<String> points = new ArrayList<>();
+    double distance = 0.0;
 
     @Nullable
     @Override
@@ -52,22 +45,20 @@ public class RouteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        configureRecyclerView();
-        if (isDataReady()) {
-            bindRouteData();
-        }
+        viewModel = new ViewModelProvider(requireActivity()).get(RouteViewModel.class);
+        onBindViews();
+        onAttachFragments();
+        viewModel.getState().observe(getViewLifecycleOwner(), routeState -> {
+            bindRouteData(routeState.getPoints(), routeState.getDistance());
+        });
     }
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (distance != null) {
-            outState.putDouble(STATE_DISTANCE, distance);
-        }
-        if (route != null) {
-            outState.putStringArray(STATE_ROUTE, route);
-        }
-        outState.putBoolean(STATE_IS_LINKED, isLinked);
+        outState.putDouble(STATE_DISTANCE, distance);
+        outState.putStringArrayList(STATE_POINTS, points);
     }
 
     @Override
@@ -76,64 +67,49 @@ public class RouteFragment extends Fragment {
         binding = null;
     }
 
+    private void onBindViews() {
+        setupRecyclerView();
+    }
 
-    private void configureRecyclerView() {
+    private void onAttachFragments() {
+        registerRouteResultListener();
+    }
+
+    private void setupRecyclerView() {
         if (binding == null || !isAdded()) return;
-        transportAdapter = new TransportAdapter();
+        TransportAdapter transportAdapter = new TransportAdapter();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(transportAdapter);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    private void registerFragmentResultListener() {
-        getParentFragmentManager().setFragmentResultListener("DealFragment", this, (key, result) -> {
-            distance = result.getDouble("distance");
-            Optional.ofNullable(result.getStringArrayList("points"))
-                    .ifPresent(list -> route = list.toArray(String[]::new));
-            if (binding != null) {
-                bindRouteData();
-            }
-        });
+    private void registerRouteResultListener() {
+        getParentFragmentManager().setFragmentResultListener(
+                REQUEST_KEY_DEAL_FRAGMENT, getViewLifecycleOwner(), (key, result) -> {
+                    points = result.getStringArrayList(KEY_POINTS);
+                    distance = result.getDouble(KEY_DISTANCE);
+                    if (points != null && !points.isEmpty()) {
+                        viewModel.setRoute(points, distance);
+                    }
+                }
+        );
     }
 
-    private void restoreInstanceState(@Nullable Bundle savedInstanceState) {
-        if (savedInstanceState == null) return;
-        distance = savedInstanceState.getDouble(STATE_DISTANCE);
-        route = savedInstanceState.getStringArray(STATE_ROUTE);
-        isLinked = savedInstanceState.getBoolean(STATE_IS_LINKED, false);
-    }
+    private void bindRouteData(List<String> points, double distance) {
+        if (binding == null || points == null || points.size() < 2) return;
 
-    private boolean isDataReady() {
-        return distance != null && route != null;
-    }
-
-    private void bindRouteData() {
-        String[] origin = parseRoutePoint(route[0]);
-        String[] destination = parseRoutePoint(route[1]);
+        String[] origin = parseRoutePoint(points.get(0));
+        String[] destination = parseRoutePoint(points.get(1));
 
         binding.textoCidadeOrigem.setText(origin[0]);
         binding.textoEstadoOrigem.setText(origin[1]);
-
         binding.textoCidadeDestino.setText(destination[0]);
         binding.textoEstadoDestino.setText(destination[1]);
-
         binding.textoValorDistancia.setText(String.format(Locale.getDefault(), "%.2f", distance));
-
-        if (!isLinked) {
-            notifyLinkedState();
-        }
     }
 
     private String[] parseRoutePoint(String point) {
         return Arrays.stream(point.split(","))
                 .map(String::trim)
                 .toArray(String[]::new);
-    }
-
-    private void notifyLinkedState() {
-        isLinked = true;
-        Bundle result = new Bundle();
-        result.putBoolean("linked", isLinked);
-        getParentFragmentManager().setFragmentResult(TAG, result);
     }
 }
