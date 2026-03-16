@@ -1,5 +1,6 @@
 package com.botoni.flow.ui.adapters;
 
+import static com.botoni.flow.ui.helpers.ViewHelper.noneMatch;
 import static com.botoni.flow.ui.helpers.ViewHelper.setText;
 
 import android.location.Address;
@@ -25,7 +26,6 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
     public interface OnClickListener {
         void onClick(Address address);
     }
-
     private final OnClickListener listener;
 
     public LocationAdapter(OnClickListener listener) {
@@ -41,7 +41,7 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
         }
         List<Address> filtered = new ArrayList<>();
         for (Address address : list) {
-            if (isNotEmpty(address.getLocality()) && isNotEmpty(address.getAdminArea())) {
+            if (noneMatch(address.getLocality(), address.getAdminArea())) {
                 filtered.add(address);
             }
         }
@@ -60,9 +60,7 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
         holder.bind(getItem(position), listener);
     }
 
-    private static boolean isNotEmpty(String text) {
-        return text != null && !text.trim().isEmpty();
-    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ItemAddressBinding binding;

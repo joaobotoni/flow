@@ -24,9 +24,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorSurfaceContainerLow"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="20dp"
+            android:paddingStart="@dimen/dimen_20"
+            android:paddingEnd="@dimen/dimen_20"
+            android:paddingBottom="@dimen/dimen_20"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -35,12 +35,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundColor="?attr/colorSurface"
-                app:boxCornerRadiusBottomEnd="28dp"
-                app:boxCornerRadiusBottomStart="28dp"
-                app:boxCornerRadiusTopEnd="28dp"
-                app:boxCornerRadiusTopStart="28dp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
+                app:boxCornerRadiusBottomEnd="@dimen/dimen_28"
+                app:boxCornerRadiusBottomStart="@dimen/dimen_28"
+                app:boxCornerRadiusTopEnd="@dimen/dimen_28"
+                app:boxCornerRadiusTopStart="@dimen/dimen_28"
+                app:boxStrokeWidth="@dimen/dimen_0"
+                app:boxStrokeWidthFocused="@dimen/dimen_0"
                 app:hintEnabled="false"
                 app:startIconDrawable="@drawable/search_24px">
 
@@ -51,8 +51,8 @@
                     android:gravity="center_vertical"
                     android:hint="@string/hint_search"
                     android:inputType="text"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="0dp" />
+                    android:paddingTop="@dimen/dimen_0"
+                    android:paddingBottom="@dimen/dimen_0" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,7 +60,7 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/dimen_10"
                 tools:listitem="@layout/item_address" />
 
         </LinearLayout>

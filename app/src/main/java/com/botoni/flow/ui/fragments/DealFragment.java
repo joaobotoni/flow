@@ -1,14 +1,8 @@
 package com.botoni.flow.ui.fragments;
 
 import static com.botoni.flow.ui.helpers.AlertHelper.showDialog;
-import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
-import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
 import static com.botoni.flow.ui.helpers.PermissionHelper.hasPermissions;
 import static com.botoni.flow.ui.helpers.PermissionHelper.request;
-import static com.botoni.flow.ui.helpers.TextWatcherHelper.SimpleTextWatcher;
-import static com.botoni.flow.ui.helpers.ViewHelper.getBigDecimal;
-import static com.botoni.flow.ui.helpers.ViewHelper.getInt;
-import static com.botoni.flow.ui.helpers.ViewHelper.getTexto;
 
 import android.Manifest;
 import android.content.Intent;
@@ -23,19 +17,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentDealBinding;
-import com.botoni.flow.domain.entities.Category;
 import com.botoni.flow.ui.adapters.CategoryAdapter;
 import com.botoni.flow.ui.helpers.PermissionHelper;
-import com.botoni.flow.ui.state.DealUiState;
-import com.botoni.flow.ui.viewmodel.DealViewModel;
+import com.botoni.flow.ui.viewmodel.CalfResultViewModel;
 import com.botoni.flow.ui.viewmodel.RouteViewModel;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -49,8 +38,6 @@ public class DealFragment extends Fragment {
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
     private FragmentDealBinding binding;
-    private DealViewModel dealViewModel;
-    private RouteViewModel routeViewModel;
     private CategoryAdapter categoryAdapter;
     private ActivityResultLauncher<String[]> permissionLauncher;
 
@@ -78,10 +65,6 @@ public class DealFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViewModels();
-        initChildFragments(savedInstanceState);
-        initViews();
-        initObservers();
     }
 
     @Override
@@ -90,131 +73,6 @@ public class DealFragment extends Fragment {
         binding = null;
     }
 
-    private void initViewModels() {
-        dealViewModel = new ViewModelProvider(requireActivity()).get(DealViewModel.class);
-        routeViewModel = new ViewModelProvider(requireActivity()).get(RouteViewModel.class);
-    }
-
-    private void initChildFragments(@Nullable Bundle savedInstanceState) {
-        forwardSearchSheetResult();
-        if (savedInstanceState == null) attachRouteFragment();
-    }
-
-    private void initViews() {
-        initCategoryAdapter();
-        initInputWatchers();
-        binding.botaoAbrirBottomSheet.setOnClickListener(v -> openSearchSheet());
-    }
-
-    private void initObservers() {
-        observeCategories();
-        observeFreightVisibility();
-        observeDealState();
-        observeSelectedCategory();
-        observeErrors();
-    }
-
-    private void initCategoryAdapter() {
-        categoryAdapter = new CategoryAdapter(dealViewModel::select);
-        binding.listaCategorias.setAdapter(categoryAdapter);
-    }
-
-    private void initInputWatchers() {
-        binding.entradaTextoPesoAnimal.addTextChangedListener(SimpleTextWatcher(this::onInputChanged));
-        binding.entradaTextoQuantidadeAnimais.addTextChangedListener(SimpleTextWatcher(this::onInputChanged));
-    }
-
-    private void observeCategories() {
-        dealViewModel.getCategories().observe(getViewLifecycleOwner(), categoryAdapter::submitList);
-    }
-
-    private void observeDealState() {
-        dealViewModel.getUiState().observe(getViewLifecycleOwner(), this::onDealStateChanged);
-    }
-
-    private void observeSelectedCategory() {
-        dealViewModel.getSelectedCategory().observe(getViewLifecycleOwner(), this::onCategoryChanged);
-    }
-
-    private void observeFreightVisibility() {
-        MediatorLiveData<Boolean> freightVisible = new MediatorLiveData<>();
-        freightVisible.addSource(dealViewModel.getUiState(), ignored -> freightVisible.setValue(shouldShowFreight()));
-        freightVisible.addSource(routeViewModel.getUiState(), ignored -> freightVisible.setValue(shouldShowFreight()));
-        freightVisible.observe(getViewLifecycleOwner(), show ->
-                binding.layoutContainerFrete.setVisibility(Boolean.TRUE.equals(show) ? View.VISIBLE : View.GONE));
-    }
-
-    private void observeErrors() {
-        dealViewModel.getErrorEvent().observe(getViewLifecycleOwner(),
-                error -> showSnackBar(binding.getRoot(), getString(R.string.error_generic)));
-    }
-
-    private void onDealStateChanged(DealUiState state) {
-        if (state == null) return;
-        setResultsVisible(state.isCalculated());
-        if (state.isCalculated()) {
-            bindResults(state);
-            recommendTransport();
-        }
-    }
-
-    private void onCategoryChanged(Category category) {
-        DealUiState state = dealViewModel.getUiState().getValue();
-        if (state == null || !state.isCalculated()) return;
-        recommendTransport();
-    }
-
-    private void recommendTransport() {
-        Category category = dealViewModel.getSelectedCategory().getValue();
-        Integer quantity = getInt(binding.entradaTextoQuantidadeAnimais);
-        routeViewModel.recommend(category.getId(), quantity);
-    }
-
-    private void bindResults(DealUiState state) {
-        binding.textoValorPorCabeca.setText(formatCurrency(state.getValorPorCabeca()));
-        binding.textoValorPorKg.setText(formatCurrency(state.getValorPorKg()));
-        binding.textoValorTotal.setText(formatCurrency(state.getValorTotal()));
-    }
-
-    private void setResultsVisible(boolean visible) {
-        int visibility = visible ? View.VISIBLE : View.GONE;
-        binding.layoutContainerResultados.setVisibility(visibility);
-        binding.layoutContainerBotoes.setVisibility(visibility);
-    }
-
-    private void forwardSearchSheetResult() {
-        getParentFragmentManager().setFragmentResultListener(
-                KEY_SEARCH_SHEET, getViewLifecycleOwner(),
-                (key, result) -> getChildFragmentManager().setFragmentResult(KEY_DEAL, result)
-        );
-    }
-
-    private void attachRouteFragment() {
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.layout_container_frete, new RouteFragment())
-                .commit();
-    }
-
-    private void openSearchSheet() {
-        SearchBottonSheetFragment sheet = new SearchBottonSheetFragment();
-        sheet.show(getParentFragmentManager(), sheet.getTag());
-    }
-
-    private void onInputChanged() {
-        String weight = getTexto(binding.entradaTextoPesoAnimal);
-        String quantity = getTexto(binding.entradaTextoQuantidadeAnimais);
-        if (allFilled(weight, quantity)) {
-            BigDecimal weightValue = getBigDecimal(binding.entradaTextoPesoAnimal);
-            Integer quantityValue = getInt(binding.entradaTextoQuantidadeAnimais);
-            dealViewModel.calculate(weightValue, quantityValue);
-        } else {
-            dealViewModel.reset();
-        }
-    }
-
-    private boolean allFilled(String... fields) {
-        return Arrays.stream(fields).noneMatch(String::isEmpty);
-    }
 
     private void registerPermissionLauncher() {
         permissionLauncher = PermissionHelper.register(this, (granted, result) -> {
@@ -244,13 +102,5 @@ public class DealFragment extends Fragment {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null));
         startActivity(intent);
-    }
-
-    private boolean shouldShowFreight() {
-        boolean isCalculated = dealViewModel.getUiState().getValue()
-                != null && dealViewModel.getUiState().getValue().isCalculated();
-        boolean hasRoute = routeViewModel.getUiState().getValue()
-                != null && routeViewModel.getUiState().getValue().isFreightVisible();
-        return isCalculated && hasRoute;
     }
 }

@@ -1,111 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="12dp"
-    app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp">
+        app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cartaoIconeVeiculo"
-            style="?attr/materialCardViewFilledStyle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="?attr/shapeAppearanceCornerMedium">
+            android:padding="@dimen/dimen_16">
 
-            <ImageView
-                android:id="@+id/imagemCaminhao"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cartaoIconeVeiculo"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="6dp"
-                app:srcCompat="@drawable/delivery_truck_speed_24px"
-                app:tint="?attr/colorPrimary" />
-        </com.google.android.material.card.MaterialCardView>
+                app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="?attr/shapeAppearanceCornerMedium">
 
-        <!-- Badge de quantidade -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cartaoQuantidadeVeiculos"
-            style="?attr/materialCardViewFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="?attr/colorPrimaryContainer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+                <ImageView
+                    android:id="@+id/imagemCaminhao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:padding="@dimen/dimen_6"
+                    app:srcCompat="@drawable/delivery_truck_speed_24px"
+                    app:tint="?attr/colorPrimary" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cartaoQuantidadeVeiculos"
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+
+                <TextView
+                    android:id="@+id/textoQuantidadeVeiculos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/dimen_8"
+                    android:paddingVertical="@dimen/dimen_4"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:textStyle="bold"
+                    tools:text="3 veículos" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/textoQuantidadeVeiculos"
+                android:id="@+id/textoTipoVeiculo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="?attr/colorOnPrimaryContainer"
+                android:layout_marginTop="@dimen/dimen_12"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
-                tools:text="@plurals/quantidade_veiculos" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/textoTipoVeiculo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cartaoIconeVeiculo"
-            tools:text="Veiculo" />
-
-        <TextView
-            android:id="@+id/textoCapacidadeCabecas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:alpha="0.7"
-            android:text="@string/capacidade_cabecas"
-            android:textAllCaps="true"
-            android:textAppearance="?attr/textAppearanceBodySmall"
-            android:textColor="?attr/colorOnPrimaryContainer"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textoTipoVeiculo" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cartaoPorcentagem"
-            style="?attr/materialCardViewFilledStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            app:cardBackgroundColor="?attr/colorSecondaryContainer"
-            app:layout_constraintBottom_toBottomOf="@+id/textoCapacidadeCabecas"
-            app:layout_constraintStart_toEndOf="@+id/textoCapacidadeCabecas"
-            app:layout_constraintTop_toTopOf="@+id/textoCapacidadeCabecas"
-            app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cartaoIconeVeiculo"
+                tools:text="Veículo" />
 
             <TextView
-                android:id="@+id/textoPorcentagemOcupada"
+                android:id="@+id/textoCapacidadeCabecas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp"
-                android:text="@string/percent"
-                android:textAppearance="?attr/textAppearanceLabelSmall"
-                android:textColor="?attr/colorOnSecondaryContainer"
-                android:textSize="9sp"
-                android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="@dimen/dimen_2"
+                android:alpha="0.7"
+                android:text="@string/capacidade_cabecas"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                android:textSize="@dimen/text_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textoTipoVeiculo" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cartaoPorcentagem"
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_6"
+                app:cardBackgroundColor="?attr/colorSecondaryContainer"
+                app:layout_constraintBottom_toBottomOf="@+id/textoCapacidadeCabecas"
+                app:layout_constraintStart_toEndOf="@+id/textoCapacidadeCabecas"
+                app:layout_constraintTop_toTopOf="@+id/textoCapacidadeCabecas"
+                app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+
+                <TextView
+                    android:id="@+id/textoPorcentagemOcupada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/dimen_6"
+                    android:paddingVertical="@dimen/dimen_2"
+                    android:text="@string/percent"
+                    android:textAppearance="?attr/textAppearanceLabelSmall"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:textSize="@dimen/text_9"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -1,468 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_topo"
+    <LinearLayout
+        android:id="@+id/linha_cards_rota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:id="@+id/divisor_rota_esquerda"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="@id/texto_divisor_rota"
-            app:layout_constraintEnd_toStartOf="@id/texto_divisor_rota"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/texto_divisor_rota" />
-
-        <TextView
-            android:id="@+id/texto_divisor_rota"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cartao_origem"
+            style="?attr/materialCardViewFilledStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.6"
-            android:text="@string/label_rota"
-            android:textAllCaps="true"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/divisor_rota_direita"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="@id/texto_divisor_rota"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/texto_divisor_rota"
-            app:layout_constraintTop_toTopOf="@id/texto_divisor_rota" />
-
-        <LinearLayout
-            android:id="@+id/container_rota"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/texto_divisor_rota">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cartao_origem"
-                style="?attr/materialCardViewFilledStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="4dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
-                app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_conteudo_cartao_origem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/imagem_icone_origem"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/distance_24px"
-                        app:tint="?attr/colorOutline" />
-
-                    <TextView
-                        android:id="@+id/texto_rotulo_origem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:alpha="0.7"
-                        android:text="@string/label_origem"
-                        android:textAllCaps="true"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="10sp"
-                        app:layout_constraintBottom_toBottomOf="@id/imagem_icone_origem"
-                        app:layout_constraintStart_toEndOf="@id/imagem_icone_origem"
-                        app:layout_constraintTop_toTopOf="@id/imagem_icone_origem" />
-
-                    <TextView
-                        android:id="@+id/texto_cidade_origem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/imagem_icone_origem"
-                        tools:text="Cidade" />
-
-                    <TextView
-                        android:id="@+id/texto_estado_origem"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:alpha="0.65"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="13sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/texto_cidade_origem"
-                        tools:text="Estado" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cartao_destino"
-                style="?attr/materialCardViewFilledStyle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_conteudo_cartao_destino"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:id="@+id/imagem_icone_destino"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/distance_24px"
-                        app:tint="?attr/colorPrimary" />
-
-                    <TextView
-                        android:id="@+id/texto_rotulo_destino"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:alpha="0.7"
-                        android:text="@string/label_destino"
-                        android:textAllCaps="true"
-                        android:textColor="?attr/colorOnPrimaryContainer"
-                        android:textSize="10sp"
-                        app:layout_constraintBottom_toBottomOf="@id/imagem_icone_destino"
-                        app:layout_constraintStart_toEndOf="@id/imagem_icone_destino"
-                        app:layout_constraintTop_toTopOf="@id/imagem_icone_destino" />
-
-                    <TextView
-                        android:id="@+id/texto_cidade_destino"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="?attr/colorOnPrimaryContainer"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/imagem_icone_destino"
-                        tools:text="Cidade" />
-
-                    <TextView
-                        android:id="@+id/texto_estado_destino"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:alpha="0.65"
-                        android:textColor="?attr/colorOnPrimaryContainer"
-                        android:textSize="13sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/texto_cidade_destino"
-                        tools:text="Estado" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cartao_distancia"
-            style="?attr/materialCardViewFilledStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/dimen_4"
+            android:layout_weight="1"
             app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/container_rota"
             app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_conteudo_cartao_distancia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="14dp">
+                android:padding="@dimen/dimen_16">
 
                 <ImageView
-                    android:id="@+id/imagem_icone_distancia"
+                    android:id="@+id/imagem_icone_origem"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:contentDescription="@null"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/route_24px"
-                    app:tint="?attr/colorOnSurfaceVariant" />
+                    app:srcCompat="@drawable/distance_24px"
+                    app:tint="?attr/colorOutline" />
 
                 <TextView
-                    android:id="@+id/texto_rotulo_distancia"
+                    android:id="@+id/texto_rotulo_origem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/dimen_6"
                     android:alpha="0.7"
-                    android:text="@string/label_distancia"
+                    android:text="@string/label_origem"
                     android:textAllCaps="true"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="10sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/imagem_icone_distancia"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="@dimen/text_10"
+                    app:layout_constraintBottom_toBottomOf="@id/imagem_icone_origem"
+                    app:layout_constraintStart_toEndOf="@id/imagem_icone_origem"
+                    app:layout_constraintTop_toTopOf="@id/imagem_icone_origem" />
 
                 <TextView
-                    android:id="@+id/texto_unidade_distancia"
+                    android:id="@+id/texto_cidade_origem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="0.65"
-                    android:text="@string/km"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/texto_valor_distancia"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:text="0"
+                    android:layout_marginTop="@dimen/dimen_8"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/text_18"
                     android:textStyle="bold"
-                    app:layout_constraintBaseline_toBaselineOf="@id/texto_unidade_distancia"
-                    app:layout_constraintEnd_toStartOf="@id/texto_unidade_distancia" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imagem_icone_origem"
+                    tools:text="Cidade" />
+
+                <TextView
+                    android:id="@+id/texto_estado_origem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_1"
+                    android:alpha="0.65"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="@dimen/text_13"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/texto_cidade_origem"
+                    tools:text="Estado" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <View
-            android:id="@+id/divisor_frete_esquerda"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="@id/texto_divisor_frete"
-            app:layout_constraintEnd_toStartOf="@id/texto_divisor_frete"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/texto_divisor_frete" />
-
-        <TextView
-            android:id="@+id/texto_divisor_frete"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cartao_destino"
+            style="?attr/materialCardViewFilledStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:alpha="0.6"
-            android:text="@string/label_frete"
-            android:textAllCaps="true"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cartao_distancia" />
-
-        <View
-            android:id="@+id/divisor_frete_direita"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="@id/texto_divisor_frete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/texto_divisor_frete"
-            app:layout_constraintTop_toTopOf="@id/texto_divisor_frete" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cartao_frete_por_animal"
-            style="?attr/materialCardViewFilledStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginStart="@dimen/dimen_4"
+            android:layout_weight="1"
             app:cardBackgroundColor="?attr/colorPrimaryContainer"
-            app:layout_constraintEnd_toStartOf="@id/cartao_frete_total"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/texto_divisor_frete"
             app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_conteudo_cartao_frete_animal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp">
+                android:padding="@dimen/dimen_16">
+
+                <ImageView
+                    android:id="@+id/imagem_icone_destino"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:contentDescription="@null"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/distance_24px"
+                    app:tint="?attr/colorPrimary" />
 
                 <TextView
-                    android:id="@+id/texto_rotulo_frete_por_animal"
+                    android:id="@+id/texto_rotulo_destino"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_6"
                     android:alpha="0.7"
-                    android:text="@string/card_label_unit_value_frete"
+                    android:text="@string/label_destino"
                     android:textAllCaps="true"
                     android:textColor="?attr/colorOnPrimaryContainer"
-                    android:textSize="10sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textSize="@dimen/text_10"
+                    app:layout_constraintBottom_toBottomOf="@id/imagem_icone_destino"
+                    app:layout_constraintStart_toEndOf="@id/imagem_icone_destino"
+                    app:layout_constraintTop_toTopOf="@id/imagem_icone_destino" />
 
                 <TextView
-                    android:id="@+id/texto_simbolo_moeda_frete_animal"
+                    android:id="@+id/texto_cidade_destino"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/currency_symbol"
+                    android:layout_marginTop="@dimen/dimen_8"
                     android:textColor="?attr/colorOnPrimaryContainer"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@id/texto_valor_frete_por_animal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/texto_valor_frete_por_animal"
-                    app:layout_constraintVertical_bias="0.7" />
-
-                <TextView
-                    android:id="@+id/texto_valor_frete_por_animal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/default_decimal_value"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/text_18"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/texto_simbolo_moeda_frete_animal"
-                    app:layout_constraintTop_toBottomOf="@id/texto_rotulo_frete_por_animal" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imagem_icone_destino"
+                    tools:text="Cidade" />
+
+                <TextView
+                    android:id="@+id/texto_estado_destino"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_1"
+                    android:alpha="0.65"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:textSize="@dimen/text_13"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/texto_cidade_destino"
+                    tools:text="Estado" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cartao_frete_total"
-            style="?attr/materialCardViewFilledStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="20dp"
-            app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/cartao_frete_por_animal"
-            app:layout_constraintTop_toBottomOf="@id/texto_divisor_frete"
-            app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+    </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_conteudo_cartao_frete_total"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cartao_distancia"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linha_cards_rota"
+        app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
-                <TextView
-                    android:id="@+id/texto_rotulo_frete_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:text="@string/card_label_unit_total_value_frete"
-                    android:textAllCaps="true"
-                    android:textSize="10sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/texto_simbolo_moeda_frete_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/currency_symbol"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@id/texto_valor_frete_total"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/texto_valor_frete_total"
-                    app:layout_constraintVertical_bias="0.7" />
-
-                <TextView
-                    android:id="@+id/texto_valor_frete_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/default_decimal_value"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@id/texto_simbolo_moeda_frete_total"
-                    app:layout_constraintTop_toBottomOf="@id/texto_rotulo_frete_total" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <View
-            android:id="@+id/divisor_transporte_esquerda"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="@id/texto_divisor_transporte"
-            app:layout_constraintEnd_toStartOf="@id/texto_divisor_transporte"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/texto_divisor_transporte" />
-
-        <TextView
-            android:id="@+id/texto_divisor_transporte"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:alpha="0.6"
-            android:text="@string/label_transporte"
-            android:textAllCaps="true"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cartao_frete_total" />
-
-        <View
-            android:id="@+id/divisor_transporte_direita"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="8dp"
-            android:background="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="@id/texto_divisor_transporte"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/texto_divisor_transporte"
-            app:layout_constraintTop_toTopOf="@id/texto_divisor_transporte" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/texto_divisor_transporte"
-            tools:listitem="@layout/item_transport" />
+            android:paddingHorizontal="@dimen/dimen_16"
+            android:paddingVertical="@dimen/dimen_14">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/imagem_icone_distancia"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/route_24px"
+                app:tint="?attr/colorOnSurfaceVariant" />
+
+            <TextView
+                android:id="@+id/texto_rotulo_distancia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:alpha="0.7"
+                android:text="@string/label_distancia"
+                android:textAllCaps="true"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imagem_icone_distancia"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/texto_unidade_distancia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.65"
+                android:text="@string/km"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="@dimen/text_13"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/texto_valor_distancia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_4"
+                android:text="@string/zero"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@id/texto_unidade_distancia"
+                app:layout_constraintEnd_toStartOf="@id/texto_unidade_distancia" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

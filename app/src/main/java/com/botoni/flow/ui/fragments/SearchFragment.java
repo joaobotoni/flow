@@ -2,7 +2,7 @@ package com.botoni.flow.ui.fragments;
 
 import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SearchTextWatcher;
-import static com.botoni.flow.ui.helpers.ViewHelper.getTexto;
+import static com.botoni.flow.ui.helpers.ViewHelper.requireText;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.botoni.flow.R;
 import com.botoni.flow.data.repositories.network.LocationRepository;
-import com.botoni.flow.databinding.FragmentSearchBottomSheetBinding;
+import com.botoni.flow.databinding.FragmentSearchBinding;
 import com.botoni.flow.ui.adapters.LocationAdapter;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.libs.BottomSheetFragment;
@@ -40,19 +40,19 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class SearchBottonSheetFragment extends BottomSheetFragment {
+public class SearchFragment extends BottomSheetFragment {
 
     private static final String TAG = "SearchBottomSheetFragment";
     private static final String KEY_KEYBOARD_VISIBLE = "state_keyboard_visible";
-    private static final double DESTINATION_LAT = -15.554707386143166;
-    private static final double DESTINATION_LNG = -55.650201110432235;
+    private static final double DESTINATION_LAT = -15.590457773415354;
+    private static final double DESTINATION_LNG = -56.090944897864865;
 
     @Inject
     TaskHelper taskHelper;
     @Inject
     LocationRepository locationRepository;
 
-    private FragmentSearchBottomSheetBinding binding;
+    private FragmentSearchBinding binding;
     private LocationAdapter locationAdapter;
     private boolean keyboardVisible = false;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -67,7 +67,7 @@ public class SearchBottonSheetFragment extends BottomSheetFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentSearchBottomSheetBinding.inflate(inflater, container, false);
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -211,7 +211,7 @@ public class SearchBottonSheetFragment extends BottomSheetFragment {
     @SuppressLint("MissingPermission")
     private void onSearchChanged() {
         if (binding == null) return;
-        String query = getTexto(binding.textInputEditText);
+        String query = requireText(binding.textInputEditText);
         if (query.isEmpty()) {
             clearLocationList();
             return;

@@ -36,6 +36,12 @@ public class TransportAdapter extends ListAdapter<Transport, TransportAdapter.Vi
         holder.bind(getItem(position));
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.applyLayoutForDisplayMode(getItemCount() == 1);
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final ItemTransportBinding binding;
 
@@ -51,6 +57,24 @@ public class TransportAdapter extends ListAdapter<Transport, TransportAdapter.Vi
             setText(binding.textoCapacidadeCabecas, context, R.string.capacidade_cabecas, transport.getCapacity());
             setText(binding.textoPorcentagemOcupada, context, R.string.percent, transport.getPercent());
         }
+
+        void applyLayoutForDisplayMode(boolean isSingleItem) {
+            applyItemWidthConstraint(isSingleItem);
+            applyCardEndMargin(isSingleItem, itemView.getContext());
+        }
+
+        private void applyItemWidthConstraint(boolean isSingleItem) {
+            ViewGroup.LayoutParams params = itemView.getLayoutParams();
+            params.width = isSingleItem ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
+            itemView.setLayoutParams(params);
+        }
+
+        private void applyCardEndMargin(boolean isSingleItem, Context context) {
+            ViewGroup.MarginLayoutParams cardParams = (ViewGroup.MarginLayoutParams) binding.getRoot().getLayoutParams();
+            int margin = isSingleItem ? context.getResources().getDimensionPixelSize(R.dimen.dimen_0) : context.getResources().getDimensionPixelSize(R.dimen.dimen_12);
+            cardParams.setMarginEnd(margin);
+            binding.getRoot().setLayoutParams(cardParams);
+        }
     }
 
     private static class DiffCallback extends DiffUtil.ItemCallback<Transport> {
@@ -61,11 +85,7 @@ public class TransportAdapter extends ListAdapter<Transport, TransportAdapter.Vi
 
         @Override
         public boolean areContentsTheSame(@NonNull Transport oldItem, @NonNull Transport newItem) {
-            return oldItem.getId() == newItem.getId()
-                    && Objects.equals(oldItem.getName(), newItem.getName())
-                    && Objects.equals(oldItem.getQuantity(), newItem.getQuantity())
-                    && Objects.equals(oldItem.getPercent(), newItem.getPercent())
-                    && Objects.equals(oldItem.getCapacity(), newItem.getCapacity());
+            return oldItem.equals(newItem);
         }
     }
 }

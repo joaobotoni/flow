@@ -5,7 +5,7 @@ import java.util.List;
 public class RouteUiState {
     private List<String> points;
     private double distance;
-    private boolean isFreightVisible;
+    private boolean isVisible;
 
     public RouteUiState() {
     }
@@ -13,7 +13,7 @@ public class RouteUiState {
     public RouteUiState(List<String> points, double distance, boolean isFreightVisible) {
         this.points = points;
         this.distance = distance;
-        this.isFreightVisible = isFreightVisible;
+        this.isVisible = isFreightVisible;
     }
 
     public List<String> getPoints() {
@@ -24,7 +24,7 @@ public class RouteUiState {
         return distance;
     }
 
-    public boolean isFreightVisible() {
-        return isFreightVisible;
+    public boolean isVisible() {
+        return isVisible;
     }
 }

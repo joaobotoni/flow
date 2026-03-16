@@ -49,8 +49,7 @@ public class TransportRepository {
     }
 
     private Transport map(CapacidadeFrete c, int count, int loaded) {
-        long id = c.getIdTipoVeiculoFrete();
-        return new Transport(id, database.tipoVeiculoFreteDao().findById(id).getDescricao(),
+        return new Transport(c.getIdTipoVeiculoFrete(), database.tipoVeiculoFreteDao().findById(c.getIdTipoVeiculoFrete()).getDescricao(),
                 count, c.getQtdeFinal(), Math.min(100, loaded * 100 / (count * c.getQtdeFinal())));
     }
 

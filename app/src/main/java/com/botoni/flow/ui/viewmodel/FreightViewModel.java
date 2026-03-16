@@ -6,28 +6,27 @@ import androidx.lifecycle.ViewModel;
 
 import com.botoni.flow.data.repositories.local.TransportRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
-import com.botoni.flow.ui.state.RouteUiState;
+import com.botoni.flow.ui.state.FreightUiState;
 
-import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RouteViewModel extends ViewModel {
-
+public class FreightViewModel extends ViewModel {
     private final TransportRepository repository;
     private final TaskHelper taskExecutor;
-    private final MutableLiveData<RouteUiState> uiState = new MutableLiveData<>(new RouteUiState());
+    private final MutableLiveData<FreightUiState> uiState = new MutableLiveData<>(new FreightUiState());
     private final MutableLiveData<Exception> errorEvent = new MutableLiveData<>();
+
     @Inject
-    public RouteViewModel(TransportRepository repository, TaskHelper taskExecutor) {
+    public FreightViewModel(TransportRepository repository, TaskHelper taskExecutor) {
         this.repository = repository;
         this.taskExecutor = taskExecutor;
     }
 
-    public LiveData<RouteUiState> getUiState() {
+    public LiveData<FreightUiState> getUiState() {
         return uiState;
     }
 
@@ -36,6 +35,6 @@ public class RouteViewModel extends ViewModel {
     }
 
     public void reset() {
-        uiState.setValue(new RouteUiState());
+        uiState.setValue(new FreightUiState());
     }
 }

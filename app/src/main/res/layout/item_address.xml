@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cartao_item_cidade"
     style="?attr/materialCardViewFilledStyle"
-    app:shapeAppearance="?attr/shapeAppearanceCornerLarge"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="4dp"
+    android:layout_marginVertical="@dimen/dimen_4"
     android:clickable="true"
-    app:cardBackgroundColor="?attr/colorSurfaceContainerLow">
+    app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+    app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_conteudo_item"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dimen_16">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/container_icone"
             style="?attr/materialCardViewFilledStyle"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="@dimen/dimen_42"
+            android:layout_height="@dimen/dimen_42"
             app:cardBackgroundColor="?attr/colorPrimaryContainer"
-            app:shapeAppearance="?attr/shapeAppearanceCornerMedium"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:shapeAppearance="?attr/shapeAppearanceCornerMedium">
 
             <ImageView
                 android:id="@+id/imagem_icone_localizacao"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/dimen_20"
+                android:layout_height="@dimen/dimen_20"
+                android:contentDescription="@null"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/location_on_24px"
                 app:tint="?attr/colorPrimary" />
@@ -40,16 +38,12 @@
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
-            android:id="@+id/linear_informacoes_localizacao"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/icone_seta"
-            app:layout_constraintStart_toEndOf="@+id/container_icone"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginStart="@dimen/dimen_16"
+            android:layout_marginEnd="@dimen/dimen_8"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/texto_nome_cidade"
@@ -59,32 +53,29 @@
                 android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_16"
                 tools:text="Brasília" />
 
             <TextView
                 android:id="@+id/texto_nome_estado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="@dimen/dimen_2"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
+                android:textSize="@dimen/text_12"
                 tools:text="Distrito Federal" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/icone_seta"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/dimen_16"
+            android:layout_height="@dimen/dimen_16"
             android:contentDescription="@null"
             app:srcCompat="@drawable/arrow_forward_ios_24px"
-            app:tint="?attr/colorOutlineVariant"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:tint="?attr/colorOutlineVariant" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

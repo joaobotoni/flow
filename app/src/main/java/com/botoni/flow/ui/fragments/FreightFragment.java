@@ -1,5 +1,7 @@
 package com.botoni.flow.ui.fragments;
 
+import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,28 +12,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.botoni.flow.databinding.FragmentRouteBinding;
-import com.botoni.flow.ui.adapters.TransportAdapter;
-import com.botoni.flow.ui.state.RouteUiState;
+import com.botoni.flow.databinding.FragmentFreightBinding;
+import com.botoni.flow.ui.state.CalfResultUiState;
+import com.botoni.flow.ui.state.FreightUiState;
+import com.botoni.flow.ui.viewmodel.CalfResultViewModel;
 import com.botoni.flow.ui.viewmodel.FreightViewModel;
 import com.botoni.flow.ui.viewmodel.RouteViewModel;
-
-import java.util.Arrays;
-import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RouteFragment extends Fragment {
-    private FragmentRouteBinding binding;
-    private RouteViewModel viewModel;
+public class FreightFragment extends Fragment {
+    private FragmentFreightBinding binding;
+    private FreightViewModel viewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentRouteBinding.inflate(inflater, container, false);
+        binding = FragmentFreightBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -49,27 +49,14 @@ public class RouteFragment extends Fragment {
     }
 
     private void initViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(RouteViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(FreightViewModel.class);
     }
-
     private void initObservers() {
         viewModel.getUiState().observe(getViewLifecycleOwner(), this::bindResult);
     }
 
-    private void bindResult(RouteUiState state) {
-        String[] origin = parse(state.getPoints().get(0));
-        String[] destination = parse(state.getPoints().get(1));
-
-        binding.textoCidadeOrigem.setText(origin[0]);
-        binding.textoEstadoOrigem.setText(origin[1]);
-        binding.textoCidadeDestino.setText(destination[0]);
-        binding.textoEstadoDestino.setText(destination[1]);
-        binding.textoValorDistancia.setText(String.format(Locale.getDefault(), "%.2f", state.getDistance()));
-    }
-
-    private String[] parse(String point) {
-        return Arrays.stream(point.split(","))
-                .map(String::trim)
-                .toArray(String[]::new);
+    private void bindResult(FreightUiState state) {
+        binding.textoValorFreteTotal.setText(formatCurrency(state.getValorFreteTotal()));
+        binding.textoValorFretePorAnimal.setText(formatCurrency(state.getValorFretePorAnimal()));
     }
 }

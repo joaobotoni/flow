@@ -5,24 +5,24 @@
     android:id="@+id/chip_card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/dimen_6"
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:checkedIcon="@null"
-    android:layout_marginEnd="6dp"
-    app:strokeColor="@color/chip_stroke_selector"
-    app:strokeWidth="1dp"
     app:cardBackgroundColor="@color/chip_background_selector"
-    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+    app:checkedIcon="@null"
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge"
+    app:strokeColor="@color/chip_stroke_selector"
+    app:strokeWidth="@dimen/dimen_1">
 
     <TextView
         android:id="@+id/chip_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+        android:paddingStart="@dimen/dimen_12"
+        android:paddingTop="@dimen/dimen_6"
+        android:paddingEnd="@dimen/dimen_12"
+        android:paddingBottom="@dimen/dimen_6"
         android:textAppearance="?attr/textAppearanceLabelLarge"
         tools:text="Categoria" />
 

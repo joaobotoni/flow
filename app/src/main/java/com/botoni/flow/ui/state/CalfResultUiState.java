@@ -2,21 +2,21 @@ package com.botoni.flow.ui.state;
 
 import java.math.BigDecimal;
 
-public class DealUiState {
+public class CalfResultUiState {
     private BigDecimal valorPorKg;
     private BigDecimal valorPorCabeca;
     private BigDecimal valorTotal;
-    private boolean isCalculated;
+    private boolean isVisible;
 
-    public DealUiState() {
+    public CalfResultUiState() {
     }
 
-    public DealUiState(BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal, boolean isVisible) {
+    public CalfResultUiState(BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal, boolean isVisible) {
 
         this.valorPorKg = valorPorKg;
         this.valorPorCabeca = valorPorCabeca;
         this.valorTotal = valorTotal;
-        this.isCalculated = isVisible;
+        this.isVisible = isVisible;
     }
 
     public BigDecimal getValorPorKg() {
@@ -31,8 +31,8 @@ public class DealUiState {
         return valorTotal;
     }
 
-    public boolean isCalculated() {
-        return isCalculated;
+    public boolean isVisible() {
+        return isVisible;
     }
 
     public void setValorPorKg(BigDecimal valorPorKg) {
@@ -45,7 +45,7 @@ public class DealUiState {
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
-    public void setCalculated(boolean calculated) {
-        this.isCalculated = calculated;
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
     }
 }
