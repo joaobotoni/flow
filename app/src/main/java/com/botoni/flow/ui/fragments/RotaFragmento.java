@@ -37,8 +37,10 @@ public class RotaFragmento extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(RotaViewModel.class);
-        viewModel.getVisivel().observe(getViewLifecycleOwner(), this::setVisivel);
-        viewModel.getUiState().observe(getViewLifecycleOwner(), this::bind);
+        viewModel.getUiState().observe(getViewLifecycleOwner(), state -> {
+            setVisivel(state != null);
+            bind(state);
+        });
     }
 
     @Override

@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.botoni.flow.databinding.FragmentFreightBinding;
-import com.botoni.flow.ui.state.FreteUiState;
+import com.botoni.flow.ui.state.NegociacaoFreteUiState;
 import com.botoni.flow.ui.viewmodel.FreteViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -49,7 +49,7 @@ public class FreteFragmento extends Fragment {
         binding.getRoot().setVisibility(visivel ? View.VISIBLE : View.GONE);
     }
 
-    private void bind(FreteUiState state) {
+    private void bind(NegociacaoFreteUiState state) {
         if (state == null) return;
         binding.textoValorFreteTotal.setText(formatCurrency(state.valorTotal));
         binding.textoValorFretePorAnimal.setText(formatCurrency(state.valorPorAnimal));

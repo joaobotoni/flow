@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.botoni.flow.R;
+import com.botoni.flow.data.models.Transporte;
 import com.botoni.flow.databinding.FragmentDealBinding;
 import com.botoni.flow.ui.adapters.CategoriaAdapter;
 import com.botoni.flow.ui.helpers.PermissionHelper;
@@ -39,6 +40,7 @@ import com.botoni.flow.ui.viewmodel.RotaViewModel;
 import com.botoni.flow.ui.viewmodel.TransporteViewModel;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -151,9 +153,9 @@ public class NegociacaoFragmento extends Fragment {
                     fluxoViewModel.setBezerroCompleto(v);
                 });
 
-        rotaViewModel.getVisivel().observe(getViewLifecycleOwner(),
-                v -> {
-                    fluxoViewModel.setRotaCompleta(v);
+        rotaViewModel.getUiState().observe(getViewLifecycleOwner(),
+                state -> {
+                    fluxoViewModel.setRotaCompleta(state != null);
                     onCamposFreteAlterados();
                 });
 
@@ -176,7 +178,7 @@ public class NegociacaoFragmento extends Fragment {
         String peso = requireText(binding.entradaTextoPesoAnimal);
         String quantidade = requireText(binding.entradaTextoQuantidadeAnimais);
         if (noneMatch(peso, quantidade)) {
-            bezerroViewModel.calcular(
+            bezerroViewModel.calcularNegociacaoBezerro(
                     getBigDecimal(binding.entradaTextoPesoAnimal),
                     getInt(binding.entradaTextoQuantidadeAnimais));
         } else {
@@ -190,7 +192,7 @@ public class NegociacaoFragmento extends Fragment {
         CategoriaUiState cat = lista == null ? null :
                 lista.stream().filter(c -> c.selecionada).findFirst().orElse(null);
         if (noneMatch(quantidade) && cat != null) {
-            transporteViewModel.calcular(cat.id, getInt(binding.entradaTextoQuantidadeAnimais));
+            transporteViewModel.recomendar(cat.id, getInt(binding.entradaTextoQuantidadeAnimais));
         } else {
             transporteViewModel.limpar();
         }
@@ -201,7 +203,16 @@ public class NegociacaoFragmento extends Fragment {
         List<TransporteUiState> transportes = transporteViewModel.getUiState().getValue();
         String quantidade = requireText(binding.entradaTextoQuantidadeAnimais);
         if (rota != null && transportes != null && !transportes.isEmpty() && noneMatch(quantidade)) {
-            freteViewModel.calcular(transportes, rota.distancia, getInt(binding.entradaTextoQuantidadeAnimais));
+            List<Transporte> transporteList = transportes.stream()
+                    .map(t -> new Transporte(
+                            t.getId(),
+                            t.getNomeVeiculo(),
+                            t.getQuantidade(),
+                            t.getCapacidade(),
+                            t.getOcupacao()))
+                    .collect(Collectors.toList());
+
+            freteViewModel.calcularFrete(transporteList, rota.distancia, getInt(binding.entradaTextoQuantidadeAnimais));
         } else {
             freteViewModel.limpar();
         }

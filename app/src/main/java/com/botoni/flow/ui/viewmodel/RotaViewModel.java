@@ -2,7 +2,6 @@ package com.botoni.flow.ui.viewmodel;
 
 import android.content.Context;
 import android.location.Address;
-import android.location.Geocoder;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -24,36 +23,36 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @HiltViewModel
 public class RotaViewModel extends ViewModel {
-
-    private static final double DESTINO_LAT = -15.574583992567458;
-    private static final double DESTINO_LNG = -56.090944897864865;
-
-    private final Context context;
-    private final LocalizacaoRepository repositorio;
     private final TaskHelper taskHelper;
-
+    private final LocalizacaoRepository repositorio;
+    private final Context context;
+    private static final String DESTINO_QUERY = "Cuiabá";
     private final MutableLiveData<RotaUiState> uiState = new MutableLiveData<>(null);
     private final MutableLiveData<Boolean> visivel = new MutableLiveData<>(false);
     private final MutableLiveData<Exception> erro = new MutableLiveData<>(null);
 
     @Inject
-    public RotaViewModel(@ApplicationContext Context context, LocalizacaoRepository repositorio, TaskHelper taskHelper) {
-        this.context = context;
-        this.repositorio = repositorio;
+    public RotaViewModel(TaskHelper taskHelper, LocalizacaoRepository repositorio, @ApplicationContext Context context) {
         this.taskHelper = taskHelper;
+        this.repositorio = repositorio;
+        this.context = context;
     }
 
     public void selecionar(Address origem) {
-        taskHelper.execute(() -> {
-            try {
-                return montar(origem);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }, state -> {
-            uiState.postValue(state);
-            visivel.postValue(state != null);
-        }, erro::postValue);
+        taskHelper.execute(
+                () -> {
+                    try {
+                        return calcularRota(origem);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                },
+                state -> {
+                    uiState.postValue(state);
+                    visivel.postValue(state != null);
+                },
+                erro::postValue
+        );
     }
 
     public void limpar() {
@@ -62,31 +61,21 @@ public class RotaViewModel extends ViewModel {
         erro.postValue(null);
     }
 
-    public LiveData<RotaUiState> getUiState() {
-        return uiState;
+    public void resetarVisivel() {
+        visivel.postValue(false);
     }
 
-    public LiveData<Boolean> getVisivel() {
-        return visivel;
-    }
+    public LiveData<RotaUiState> getUiState() { return uiState; }
+    public LiveData<Boolean> getVisivel() { return visivel; }
+    public LiveData<Exception> getErro() { return erro; }
 
-    public LiveData<Exception> getErro() {
-        return erro;
-    }
-
-    private RotaUiState montar(Address origem) throws IOException {
-        Address destino = buscarDestino();
-        double distancia = repositorio.parseDistance(repositorio.fetchRoute(origem, destino));
+    private RotaUiState calcularRota(Address origem) throws IOException {
+        Address destino = repositorio.buscarDestino(DESTINO_QUERY);
+        if (destino == null) throw new IOException(context.getString(R.string.erro_endereco_nao_encontrado));
+        String resposta = repositorio.buscarRota(origem, destino);
+        double distancia = repositorio.calcularDistanciaKm(resposta);
         List<String> pontos = Arrays.asList(formatar(origem), formatar(destino));
         return new RotaUiState(pontos, distancia);
-    }
-
-    private Address buscarDestino() throws IOException {
-        List<Address> resultados = new Geocoder(context).getFromLocation(DESTINO_LAT, DESTINO_LNG, 1);
-        if (resultados == null || resultados.isEmpty()) {
-            throw new IOException(context.getString(R.string.erro_endereco_nao_encontrado));
-        }
-        return resultados.get(0);
     }
 
     private String formatar(Address endereco) {

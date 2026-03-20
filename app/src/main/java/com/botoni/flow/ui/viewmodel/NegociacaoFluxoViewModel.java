@@ -16,7 +16,6 @@ public class NegociacaoFluxoViewModel extends ViewModel {
     private final MutableLiveData<Boolean> rotaCompleta = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> categoriaOk = new MutableLiveData<>(false);
     private final MutableLiveData<Boolean> transporteOk = new MutableLiveData<>(false);
-
     private final MediatorLiveData<Boolean> exibirRota = new MediatorLiveData<>(false);
     private final MediatorLiveData<Boolean> exibirFrete = new MediatorLiveData<>(false);
     private final MediatorLiveData<Boolean> exibirTransporte = new MediatorLiveData<>(false);

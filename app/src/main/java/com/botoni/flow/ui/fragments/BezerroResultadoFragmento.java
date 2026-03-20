@@ -13,14 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.botoni.flow.databinding.FragmentCalfResultBinding;
-import com.botoni.flow.ui.state.ResultadoBezerroUiState;
+import com.botoni.flow.ui.state.NegociacaoBezerroUiState;
 import com.botoni.flow.ui.viewmodel.NegociacaoBezerroViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class BezerroResultadoFragmento extends Fragment {
-
     private FragmentCalfResultBinding  binding;
     private NegociacaoBezerroViewModel viewModel;
 
@@ -49,7 +48,7 @@ public class BezerroResultadoFragmento extends Fragment {
         binding.getRoot().setVisibility(visivel ? View.VISIBLE : View.GONE);
     }
 
-    private void bind(ResultadoBezerroUiState state) {
+    private void bind(NegociacaoBezerroUiState state) {
         if (state == null) return;
         binding.textoValorPorCabeca.setText(formatCurrency(state.valorPorCabeca));
         binding.textoValorPorKg.setText(formatCurrency(state.valorPorKg));

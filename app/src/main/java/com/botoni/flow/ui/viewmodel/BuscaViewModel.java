@@ -11,32 +11,48 @@ import com.botoni.flow.data.repositories.LocalizacaoRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.state.BuscaLocalizacaoUiState;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
+
 @HiltViewModel
 public class BuscaViewModel extends ViewModel {
-
     private final LocalizacaoRepository repositorio;
     private final TaskHelper taskHelper;
-
     private final MutableLiveData<BuscaLocalizacaoUiState> uiState = new MutableLiveData<>(null);
     private final MutableLiveData<Boolean> visivel = new MutableLiveData<>(false);
     private final MutableLiveData<Exception> erro = new MutableLiveData<>(null);
-
     @Inject
     public BuscaViewModel(LocalizacaoRepository repositorio, TaskHelper taskHelper) {
         this.repositorio = repositorio;
         this.taskHelper = taskHelper;
     }
 
-    @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
-    public void buscar(String consulta) {
-        taskHelper.execute(() -> montar(consulta), state -> {
-            uiState.postValue(state);
-            visivel.postValue(state != null);
-        }, erro::postValue);
+    public void buscar(String consulta, double latitude, double longitude) {
+        taskHelper.execute(
+                () -> {
+                    String codigoPais;
+                    try {
+                        codigoPais = repositorio.buscarCodigoPais(latitude, longitude);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        return new BuscaLocalizacaoUiState(
+                                repositorio.buscarCidadeEstado(consulta, codigoPais), false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                },
+                state -> {
+                    uiState.postValue(state);
+                    visivel.postValue(state != null);
+                },
+                erro::postValue
+        );
     }
 
     public void limpar() {
@@ -55,10 +71,5 @@ public class BuscaViewModel extends ViewModel {
 
     public LiveData<Exception> getErro() {
         return erro;
-    }
-
-    @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
-    private BuscaLocalizacaoUiState montar(String consulta) {
-        return new BuscaLocalizacaoUiState(repositorio.searchCityAndState(consulta), false);
     }
 }

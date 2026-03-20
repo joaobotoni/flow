@@ -201,4 +201,8 @@
     </plurals>
     <string name="percent"> %1$d%%</string>
     <string name="zero">0</string>
+
+    <!-- Config — coordenadas do destino fixo -->
+    <string name="destino_lat" translatable="false">-15.574583992567458</string>
+    <string name="destino_lng" translatable="false">-56.090944897864865</string>
 </resources>

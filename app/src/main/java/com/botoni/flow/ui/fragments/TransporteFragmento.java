@@ -21,10 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class TransporteFragmento extends Fragment {
-
     private FragmentTransportBinding binding;
-    private TransporteViewModel      viewModel;
-    private TransporteAdapter        adapter;
+    private TransporteViewModel viewModel;
+    private TransporteAdapter adapter;
 
     @Nullable
     @Override
@@ -36,7 +35,7 @@ public class TransporteFragmento extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter   = new TransporteAdapter();
+        adapter = new TransporteAdapter();
         viewModel = new ViewModelProvider(requireActivity()).get(TransporteViewModel.class);
         binding.listTransport.setAdapter(adapter);
         viewModel.getVisivel().observe(getViewLifecycleOwner(), this::setVisivel);

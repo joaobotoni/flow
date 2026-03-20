@@ -1,6 +1,6 @@
 package com.botoni.flow.data.repositories;
 
-import com.botoni.flow.data.model.Transporte;
+import com.botoni.flow.data.models.Transporte;
 import com.botoni.flow.data.source.local.dao.CapacidadeFreteDao;
 import com.botoni.flow.data.source.local.dao.TipoVeiculoFreteDao;
 import com.botoni.flow.data.source.local.entities.CapacidadeFrete;
@@ -14,14 +14,13 @@ import javax.inject.Inject;
 public class TransporteRepository {
     private final CapacidadeFreteDao capacidadeDao;
     private final TipoVeiculoFreteDao tipoVeiculoDao;
-
     @Inject
     public TransporteRepository(CapacidadeFreteDao capacidadeDao, TipoVeiculoFreteDao tipoVeiculoDao) {
         this.capacidadeDao = capacidadeDao;
         this.tipoVeiculoDao = tipoVeiculoDao;
     }
 
-    public List<CapacidadeFrete> getCapacities(long category) {
+    public List<CapacidadeFrete> getCapacidades(long category) {
         return capacidadeDao.findByCategoria(category);
     }
 
@@ -30,12 +29,12 @@ public class TransporteRepository {
     }
 
     public List<Transporte> recomendacao(long category, int quantity) {
-        List<CapacidadeFrete> capacities = getCapacities(category);
+        List<CapacidadeFrete> capacities = getCapacidades(category);
         capacities.sort((a, b) -> Integer.compare(b.getQtdeFinal(), a.getQtdeFinal()));
-        return calcularDistribuicao(capacities, quantity);
+        return distribuicao(capacities, quantity);
     }
 
-    private List<Transporte> calcularDistribuicao(List<CapacidadeFrete> capacities, int total) {
+    private List<Transporte> distribuicao(List<CapacidadeFrete> capacities, int total) {
         List<Transporte> result = new ArrayList<>();
         int remaining = total;
         for (CapacidadeFrete c : capacities) {
@@ -48,17 +47,13 @@ public class TransporteRepository {
             }
             if (count > 0) {
                 int loaded = before - Math.max(remaining, 0);
-                result.add(map(c, count, loaded));
+                int ocupacao = Math.min(100, loaded * 100 / (count * c.getQtdeFinal()));
+                result.add(new Transporte(
+                        c.getIdTipoVeiculoFrete(),
+                        getTipoVeiculo(c.getIdTipoVeiculoFrete()).getDescricao(),
+                        count, c.getQtdeFinal(), ocupacao));
             }
         }
         return result;
-    }
-
-    private Transporte map(CapacidadeFrete c, int count, int loaded) {
-        int percent = Math.min(100, loaded * 100 / (count * c.getQtdeFinal()));
-        return new Transporte(
-                c.getIdTipoVeiculoFrete(),
-                getTipoVeiculo(c.getIdTipoVeiculoFrete()).getDescricao(),
-                count, c.getQtdeFinal(), percent);
     }
 }

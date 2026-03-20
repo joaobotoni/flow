@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.botoni.flow.data.repositories.CategoriaFreteRepository;
-import com.botoni.flow.data.source.local.entities.CategoriaFrete;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.state.CategoriaUiState;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -19,26 +19,27 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class CategoriaViewModel extends ViewModel {
-
-    private final CategoriaFreteRepository repositorio;
     private final TaskHelper taskHelper;
-
+    private final CategoriaFreteRepository repositorio;
     private final MutableLiveData<List<CategoriaUiState>> uiState = new MutableLiveData<>(Collections.emptyList());
     private final MutableLiveData<Boolean> visivel = new MutableLiveData<>(false);
     private final MutableLiveData<Exception> erro = new MutableLiveData<>(null);
-
     @Inject
-    public CategoriaViewModel(CategoriaFreteRepository repositorio, TaskHelper taskHelper) {
+    public CategoriaViewModel(TaskHelper taskHelper, CategoriaFreteRepository repositorio) {
         this.repositorio = repositorio;
         this.taskHelper = taskHelper;
-        carregar();
+        listar();
     }
 
     public void selecionar(CategoriaUiState item) {
-        taskHelper.execute(() -> marcar(item), lista -> {
-            uiState.postValue(lista);
-            visivel.postValue(lista != null && !lista.isEmpty());
-        }, erro::postValue);
+        taskHelper.execute(
+                () -> selecionar(uiState.getValue(), item),
+                lista -> {
+                    uiState.postValue(lista);
+                    visivel.postValue(lista != null && !lista.isEmpty());
+                },
+                erro::postValue
+        );
     }
 
     public void limpar() {
@@ -59,33 +60,23 @@ public class CategoriaViewModel extends ViewModel {
         return erro;
     }
 
-    private void carregar() {
-        taskHelper.execute(this::montar, lista -> {
-            uiState.postValue(lista);
-            visivel.postValue(lista != null && !lista.isEmpty());
-        }, erro::postValue);
+    public void listar() {
+        taskHelper.execute(
+                () -> repositorio.getAll().stream()
+                        .map(e -> new CategoriaUiState(e.getId(), e.getDescricao(), false))
+                        .collect(Collectors.toList()),
+                uiState::postValue,
+                erro::postValue
+        );
     }
 
-    private List<CategoriaUiState> montar() {
-        List<CategoriaUiState> lista = new ArrayList<>();
-        for (CategoriaFrete categoria : repositorio.getAll()) {
-            lista.add(converter(categoria, false));
-        }
-        return lista;
-    }
-
-    private List<CategoriaUiState> marcar(CategoriaUiState selecionada) {
-        List<CategoriaUiState> atual = uiState.getValue();
-        if (atual == null) return Collections.emptyList();
+    public List<CategoriaUiState> selecionar(List<CategoriaUiState> atual, CategoriaUiState selecionada) {
+        if (atual == null || atual.isEmpty()) return Collections.emptyList();
         List<CategoriaUiState> lista = new ArrayList<>();
         for (CategoriaUiState item : atual) {
-            boolean estaSelecionada = selecionada != null && item.id == selecionada.id;
-            lista.add(new CategoriaUiState(item.id, item.descricao, estaSelecionada));
+            boolean estaSelecionada = selecionada != null && item.getId() == selecionada.getId();
+            lista.add(new CategoriaUiState(item.getId(), item.getDescricao(), estaSelecionada));
         }
         return lista;
-    }
-
-    private CategoriaUiState converter(CategoriaFrete categoria, boolean selecionada) {
-        return new CategoriaUiState(categoria.getId(), categoria.getDescricao(), selecionada);
     }
 }

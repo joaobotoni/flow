@@ -55,7 +55,7 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
             setText(binding.textoTipoVeiculo, estado.nomeVeiculo);
             setPluralText(binding.textoQuantidadeVeiculos, context, R.plurals.quantidade_veiculos, estado.quantidade);
             setText(binding.textoCapacidadeCabecas, context, R.string.capacidade_cabecas, estado.capacidade);
-            setText(binding.textoPorcentagemOcupada, context, R.string.percent, estado.percentual);
+            setText(binding.textoPorcentagemOcupada, context, R.string.percent, estado.ocupacao);
         }
 
         void applyLayoutForDisplayMode(boolean isSingleItem) {
@@ -91,7 +91,7 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
                     && Objects.equals(oldItem.nomeVeiculo, newItem.nomeVeiculo)
                     && Objects.equals(oldItem.quantidade, newItem.quantidade)
                     && Objects.equals(oldItem.capacidade, newItem.capacidade)
-                    && Objects.equals(oldItem.percentual, newItem.percentual);
+                    && Objects.equals(oldItem.ocupacao, newItem.ocupacao);
         }
     }
 }

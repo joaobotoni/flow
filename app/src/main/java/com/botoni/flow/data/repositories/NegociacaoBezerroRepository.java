@@ -1,11 +1,13 @@
 package com.botoni.flow.data.repositories;
 
+import com.botoni.flow.data.models.NegociacaoBezerro;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import javax.inject.Inject;
 
-public class NegociacaoPorFaixaRepository {
+public class NegociacaoBezerroRepository {
     private static final BigDecimal PESO_ARROBA_KG = new BigDecimal("30.0");
     private static final BigDecimal ARROBAS_ABATE_ESPERADAS = new BigDecimal("21.00");
     private static final BigDecimal PESO_BASE_KG = new BigDecimal("180.0");
@@ -15,11 +17,14 @@ public class NegociacaoPorFaixaRepository {
     private static final int ESCALA_CALCULO = 15;
     private static final int ESCALA_RESULTADO = 2;
     private static final RoundingMode MODO_ARREDONDAMENTO = RoundingMode.HALF_EVEN;
-
     @Inject
-    public NegociacaoPorFaixaRepository() {
+    public NegociacaoBezerroRepository() {}
+    public NegociacaoBezerro calcularNegociacaoBezerro(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade) {
+        BigDecimal valorPorCabeca = calcularValorTotalBezerro(peso, precoPorArroba, percentualAgio);
+        BigDecimal valorPorKg = calcularValorPorKg(peso, precoPorArroba, percentualAgio);
+        BigDecimal valorTotal = calcularValorTotalLote(valorPorCabeca, quantidade);
+        return new NegociacaoBezerro(valorPorKg, valorPorCabeca, valorTotal);
     }
-
 
     public BigDecimal calcularValorTotalBezerro(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio) {
         validarNulo(pesoKg, "O peso em kg não pode ser nulo");

@@ -27,9 +27,7 @@ public class CategoriaFreteRepository {
         return dao.insert(categoriaFrete);
     }
 
-    public void insertAll(List<CategoriaFrete> categorias) {
-        dao.insertAll(categorias);
-    }
+    public void insertAll(List<CategoriaFrete> categorias) {dao.insertAll(categorias);}
 
     public int update(CategoriaFrete categoriaFrete) {
         return dao.update(categoriaFrete);
@@ -41,12 +39,6 @@ public class CategoriaFreteRepository {
 
     public void deleteAll() {
         dao.deleteAll();
-    }
-
-    public List<String> getDescricoes() {
-        return dao.getAll().stream()
-                .map(CategoriaFrete::getDescricao)
-                .collect(Collectors.toList());
     }
 
 }

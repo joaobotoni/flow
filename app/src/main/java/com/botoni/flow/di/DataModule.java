@@ -7,6 +7,7 @@ import com.botoni.flow.data.source.local.dao.CapacidadeFreteDao;
 import com.botoni.flow.data.source.local.dao.CategoriaFreteDao;
 import com.botoni.flow.data.source.local.dao.FreteDao;
 import com.botoni.flow.data.source.local.dao.TipoVeiculoFreteDao;
+import com.botoni.flow.data.source.network.RoutesDataSource;
 
 import javax.inject.Singleton;
 
@@ -43,5 +44,11 @@ public class DataModule {
     @Singleton
     public TipoVeiculoFreteDao provideTipoVeiculoFreteDao(@ApplicationContext Context context) {
         return AppDatabase.getDatabase(context).tipoVeiculoFreteDao();
+    }
+
+    @Provides
+    @Singleton
+    public RoutesDataSource provideRoutesDataSource(@ApplicationContext Context context) {
+        return new RoutesDataSource(context);
     }
 }
