@@ -1,14 +1,14 @@
 package com.botoni.flow.data.repositories;
 
-import com.botoni.flow.data.models.NegociacaoFrete;
+import com.botoni.flow.data.models.PrecificacaoFrete;
 import com.botoni.flow.data.models.Transporte;
 import com.botoni.flow.data.source.local.dao.FreteDao;
 import com.botoni.flow.data.source.local.entities.Frete;
 
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -23,12 +23,12 @@ public class FreteRepository {
         return dao.getAll();
     }
 
-    public Frete findById(long id) {
-        return dao.findById(id);
+    public Optional<Frete> findById(long id) {
+        return Optional.ofNullable(dao.findById(id));
     }
 
-    public Frete findByValueInRange(long id, double range) {
-        return dao.findByVehicleAndDistance(id, range);
+    public Optional<Frete> findByValueInRange(long id, double range) {
+        return Optional.ofNullable(dao.findByVehicleAndDistance(id, range));
     }
 
     public long insert(Frete frete) {
@@ -51,23 +51,24 @@ public class FreteRepository {
         dao.deleteAll();
     }
 
-    public NegociacaoFrete calcularFrete(List<Transporte> transportes, double distancia, int totalAnimais) {
+    public PrecificacaoFrete calcularFrete(List<Transporte> transportes, double distancia, int totalAnimais) {
         BigDecimal total = calcularTotalFrete(transportes, distancia);
         BigDecimal porAnimal = calcularFretePorAnimal(total, totalAnimais);
-        return new NegociacaoFrete(total, porAnimal);
+        return new PrecificacaoFrete(total, porAnimal);
     }
 
     private BigDecimal calcularTotalFrete(List<Transporte> transportes, double distancia) {
         BigDecimal total = BigDecimal.ZERO;
         for (Transporte transporte : transportes) {
-            Frete frete = findByValueInRange(transporte.getId(), distancia);
-            if (frete == null) continue;
-            BigDecimal subtotal = BigDecimal.valueOf(frete.getValor())
-                    .multiply(BigDecimal.valueOf(transporte.getQuantidade()));
+            BigDecimal subtotal = findByValueInRange(transporte.getId(), distancia)
+                    .map(frete -> BigDecimal.valueOf(frete.getValor())
+                            .multiply(BigDecimal.valueOf(transporte.getQuantidade())))
+                    .orElse(BigDecimal.ZERO);
             total = total.add(subtotal);
         }
         return total;
     }
+
     private BigDecimal calcularFretePorAnimal(BigDecimal total, int totalAnimais) {
         if (totalAnimais <= 0 || total.compareTo(BigDecimal.ZERO) == 0) return BigDecimal.ZERO;
         return total.divide(BigDecimal.valueOf(totalAnimais), 2, RoundingMode.HALF_UP);

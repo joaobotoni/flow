@@ -1,17 +1,16 @@
-package com.botoni.flow.data.models;
+package com.botoni.flow.ui.state;
 
 import java.math.BigDecimal;
 
-public class NegociacaoBezerro {
+public class PrecificacaoBezerroUiState {
     public final BigDecimal valorPorKg;
     public final BigDecimal valorPorCabeca;
     public final BigDecimal valorTotal;
-    public NegociacaoBezerro(BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal) {
+    public PrecificacaoBezerroUiState(BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal) {
         this.valorPorKg = valorPorKg;
         this.valorPorCabeca = valorPorCabeca;
         this.valorTotal = valorTotal;
     }
-
     public BigDecimal getValorPorKg() {
         return valorPorKg;
     }

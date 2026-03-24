@@ -15,8 +15,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
@@ -51,11 +50,9 @@ public class RoutesDataSource {
     /** Lê a chave da API do metadado declarado no AndroidManifest. */
     private static String load(@NonNull Context context) {
         try {
-            ApplicationInfo info = context.getPackageManager()
-                    .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             String key = info.metaData.getString(context.getString(R.string.api_key_google_maps));
-            if (key == null || key.isEmpty())
-                throw new IllegalStateException(context.getString(R.string.erro_chave_api_ausente));
+            if (key == null || key.isEmpty()) throw new IllegalStateException(context.getString(R.string.erro_chave_api_ausente));
             return key;
         } catch (PackageManager.NameNotFoundException e) {
             throw new IllegalStateException(context.getString(R.string.erro_chave_api_ausente));

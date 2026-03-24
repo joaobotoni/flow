@@ -17,6 +17,7 @@ import com.botoni.flow.databinding.ItemTransportBinding;
 import com.botoni.flow.ui.state.TransporteUiState;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class TransporteAdapter extends ListAdapter<TransporteUiState, TransporteAdapter.ViewHolder> {
 

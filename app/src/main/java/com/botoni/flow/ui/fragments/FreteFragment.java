@@ -13,20 +13,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.botoni.flow.databinding.FragmentFreightBinding;
-import com.botoni.flow.ui.state.NegociacaoFreteUiState;
-import com.botoni.flow.ui.viewmodel.FreteViewModel;
+import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
+import com.botoni.flow.ui.viewmodel.FluxoPrecificacaoViewModel;
+import com.botoni.flow.ui.viewmodel.PrecificacaoFreteViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class FreteFragmento extends Fragment {
+public class FreteFragment extends Fragment {
 
     private FragmentFreightBinding binding;
-    private FreteViewModel viewModel;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         binding = FragmentFreightBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -34,9 +35,8 @@ public class FreteFragmento extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(FreteViewModel.class);
-        viewModel.getVisivel().observe(getViewLifecycleOwner(), this::setVisivel);
-        viewModel.getUiState().observe(getViewLifecycleOwner(), this::bind);
+        FluxoPrecificacaoViewModel viewModel = new ViewModelProvider(requireActivity()).get(FluxoPrecificacaoViewModel.class);
+        viewModel.getPrecificacaoFreteUiStateMutableLiveData().observe(getViewLifecycleOwner(), this::bind);
     }
 
     @Override
@@ -45,11 +45,7 @@ public class FreteFragmento extends Fragment {
         binding = null;
     }
 
-    private void setVisivel(boolean visivel) {
-        binding.getRoot().setVisibility(visivel ? View.VISIBLE : View.GONE);
-    }
-
-    private void bind(NegociacaoFreteUiState state) {
+    private void bind(PrecificacaoFreteUiState state) {
         if (state == null) return;
         binding.textoValorFreteTotal.setText(formatCurrency(state.valorTotal));
         binding.textoValorFretePorAnimal.setText(formatCurrency(state.valorPorAnimal));

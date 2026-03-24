@@ -4,11 +4,13 @@ import com.botoni.flow.data.source.local.dao.CapacidadeFreteDao;
 import com.botoni.flow.data.source.local.entities.CapacidadeFrete;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 public class CapacidadeFreteRepository {
     private final CapacidadeFreteDao dao;
+
     @Inject
     public CapacidadeFreteRepository(CapacidadeFreteDao dao) {
         this.dao = dao;
@@ -18,10 +20,9 @@ public class CapacidadeFreteRepository {
         return dao.getAll();
     }
 
-    public CapacidadeFrete findById(long id) {
-        return dao.findById(id);
+    public Optional<CapacidadeFrete> findById(long id) {
+        return Optional.ofNullable(dao.findById(id));
     }
-
     public List<CapacidadeFrete> findByCategoria(long id) {
         return dao.findByCategoria(id);
     }

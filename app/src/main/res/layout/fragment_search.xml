@@ -62,7 +62,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/dimen_10"
                 tools:listitem="@layout/item_address" />
-
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

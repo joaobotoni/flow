@@ -4,10 +4,13 @@ import com.botoni.flow.data.source.local.dao.TipoVeiculoFreteDao;
 import com.botoni.flow.data.source.local.entities.TipoVeiculoFrete;
 
 import java.util.List;
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 public class TipoVeiculoFreteRepository {
     private final TipoVeiculoFreteDao dao;
+
     @Inject
     public TipoVeiculoFreteRepository(TipoVeiculoFreteDao dao) {
         this.dao = dao;
@@ -17,8 +20,8 @@ public class TipoVeiculoFreteRepository {
         return dao.getAll();
     }
 
-    public TipoVeiculoFrete findById(long id) {
-        return dao.findById(id);
+    public Optional<TipoVeiculoFrete> findById(long id) {
+        return Optional.ofNullable(dao.findById(id));
     }
 
     public long insert(TipoVeiculoFrete tipoVeiculo) {

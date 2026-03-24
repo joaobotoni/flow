@@ -1,10 +1,9 @@
 package com.botoni.flow.di;
 
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
@@ -19,16 +18,13 @@ import dagger.hilt.components.SingletonComponent;
 public class ExecutorModule {
     @Provides
     @Singleton
-    public static Executor provideExecutor() {
+    public ExecutorService provideExecutorService() {
         return Executors.newFixedThreadPool(4);
     }
 
     @Provides
     @Singleton
-    public static Handler provideHandler() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            return Handler.createAsync(Looper.getMainLooper());
-        }
+    public Handler provideMainHandler() {
         return new Handler(Looper.getMainLooper());
     }
 }

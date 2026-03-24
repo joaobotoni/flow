@@ -12,7 +12,6 @@ public class TransporteUiState {
         this.nomeVeiculo = nomeVeiculo;
         this.quantidade = quantidade;
         this.capacidade = capacidade;
-
         this.ocupacao = ocupacao;
     }
 

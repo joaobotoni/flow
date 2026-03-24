@@ -129,7 +129,7 @@
                 tools:visibility="visible" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/layout_container_frete"
+                android:id="@+id/layout_container_transporte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20"
@@ -137,11 +137,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_container_rota"
-                tools:layout="@layout/fragment_freight"
+                tools:layout="@layout/fragment_transport"
                 tools:visibility="visible" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/layout_container_transporte"
+                android:id="@+id/layout_container_frete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20"
@@ -149,8 +149,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_container_frete"
-                tools:layout="@layout/fragment_transport"
+                app:layout_constraintTop_toBottomOf="@id/layout_container_transporte"
+                tools:layout="@layout/fragment_freight"
                 tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

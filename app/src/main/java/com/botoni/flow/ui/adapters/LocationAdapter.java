@@ -24,7 +24,7 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
 
     @FunctionalInterface
     public interface OnClickListener {
-        void onClick(Address address);
+        void onClick(Address address) throws Exception;
     }
     private final OnClickListener listener;
 

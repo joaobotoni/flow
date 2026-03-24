@@ -1,6 +1,7 @@
 package com.botoni.flow.data.models;
 
 public class Transporte {
+
     public final long id;
     public final String nomeVeiculo;
     public final int quantidade;
