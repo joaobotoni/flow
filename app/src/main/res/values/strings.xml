@@ -19,7 +19,7 @@
 
     <!-- Input Hints -->
     <string name="hint_animal_weight">Peso do Animal (kg)</string>
-    <string name="hint_animal_quantity">Quantidade de Animais</string>
+    <string name="hint_animal_quantity">Quantidade</string>
     <string name="hint_arroba_price">Preço da Arroba</string>
     <string name="hint_percentage">Ágio</string>
     <string name="hint_weight">Peso (%s)</string>
@@ -189,20 +189,24 @@
     <string name="finalizar_rota">Finalizar rota</string>
     <string name="editar">Editar</string>
     <string name="label_rota">ROTA</string>
+    <string name="label_result">VALOR FINAL</string>
     <string name="label_frete">FRETE</string>
     <string name="label_transporte">TRANSPORTE</string>
-    <string name="action_open_sheet">Ver frete</string>
+    <string name="action_open_frete">Simular frete</string>
     <string name="action_next">Prosseguir</string>
     <string name="erro_endereco_nao_encontrado">Endereço de destino não encontrado</string>
     <string name="capacidade_cabecas">Capacidade: %1$d cabeças</string>
+    <string name="hint_distancia">Distância em km</string>
+    <string name="hint_valor_frete">Frete</string>
+    <string name="action_voltar">Voltar</string>
+    <string name="titulo_frete">SIMULAR FRETE</string>
     <plurals name="quantidade_veiculos">
         <item quantity="one">%1$d veículo</item>
         <item quantity="other">%1$d veículos</item>
     </plurals>
     <string name="percent"> %1$d%%</string>
     <string name="zero">0</string>
+    <string name="label_explorar_rotas">Toque para explorar rotas</string>
 
-    <!-- Config — coordenadas do destino fixo -->
-    <string name="destino_lat" translatable="false">-15.574583992567458</string>
-    <string name="destino_lng" translatable="false">-56.090944897864865</string>
+
 </resources>

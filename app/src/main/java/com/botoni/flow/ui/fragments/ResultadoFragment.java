@@ -12,32 +12,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.botoni.flow.databinding.FragmentCalfResultBinding;
+import com.botoni.flow.databinding.FragmentResultBinding;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
-import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
 import com.botoni.flow.ui.viewmodel.FluxoPrecificacaoViewModel;
-import com.botoni.flow.ui.viewmodel.PrecificacaoBezerroViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class BezerroResultadoFragment extends Fragment {
+public class ResultadoFragment extends Fragment {
 
-    private FragmentCalfResultBinding binding;
+    private FragmentResultBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentCalfResultBinding.inflate(inflater, container, false);
+        binding = FragmentResultBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FluxoPrecificacaoViewModel viewModel = new ViewModelProvider(requireActivity()).get(FluxoPrecificacaoViewModel.class);
-        viewModel.getPrecificacaoBezerroUiStateMutableLiveData().observe(getViewLifecycleOwner(), this::bind);
     }
 
 
@@ -45,7 +41,7 @@ public class BezerroResultadoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-}
+    }
 
     private void bind(PrecificacaoBezerroUiState state) {
         if (state == null) return;

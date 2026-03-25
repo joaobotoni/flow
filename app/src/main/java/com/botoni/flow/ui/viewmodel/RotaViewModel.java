@@ -2,6 +2,7 @@ package com.botoni.flow.ui.viewmodel;
 
 import android.location.Address;
 
+import com.botoni.flow.data.models.Rota;
 import com.botoni.flow.data.repositories.LocalizacaoRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.libs.BaseViewModel;
@@ -23,17 +24,22 @@ public class RotaViewModel extends BaseViewModel<RotaUiState> {
 
     public void selecionar(Address origem) {
         taskHelper.execute(
-                () -> calcularRota(origem),
+                () -> calcularRotaA(origem),
                 state::postValue,
                 error::postValue
         );
     }
 
-    private RotaUiState calcularRota(Address origem) throws Exception {
-        Address destino = repositorio.selecionarCidadeEstado(DESTINO_QUERY).orElseThrow();
-        String resposta = repositorio.obterRota(origem, destino);
-        double distancia = repositorio.calcularDistanciaKm(resposta);
-        return new RotaUiState(cidade(origem), estado(origem), cidade(destino), estado(destino), distancia);
+    private RotaUiState calcularRotaA(Address origem) throws Exception {
+        Address destino = repositorio.enderecoPorNome(DESTINO_QUERY).orElseThrow();
+        Rota resposta = repositorio.calcularRota(origem, destino);
+        return new RotaUiState(
+                resposta.getCidadeOrigem(),
+                resposta.getEstadoOrigem(),
+                resposta.getCidadeDestino(),
+                resposta.getEstadoDestino(),
+                resposta.getDistancia()
+        );
     }
 
     private String cidade(Address endereco) {

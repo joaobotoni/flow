@@ -64,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imagem_icone_categoria"
-                tools:listitem="@layout/item_category" />
+                tools:listitem="@layout/item_categoria" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/campo_texto_peso_animal"
@@ -87,11 +87,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/campo_texto_quantidade_animais"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_10"
+                android:layout_marginEnd="8dp"
                 android:hint="@string/hint_animal_quantity"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/campo_valor_frete"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/campo_texto_peso_animal"
                 app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
@@ -104,29 +107,25 @@
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/layout_container_valores"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/campo_valor_frete"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_24"
-                android:visibility="gone"
+                android:hint="@string/hint_valor_frete"
+                app:layout_constraintBottom_toBottomOf="@+id/campo_texto_quantidade_animais"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/campo_texto_quantidade_animais"
-                tools:layout="@layout/fragment_calf_result"
-                tools:visibility="visible" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/campo_texto_quantidade_animais"
+                app:layout_constraintTop_toTopOf="@+id/campo_texto_quantidade_animais"
+                app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
+                app:startIconDrawable="@drawable/payments_24px">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/layout_container_rota"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_20"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_container_valores"
-                tools:layout="@layout/fragment_route"
-                tools:visibility="visible" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/entrada_texto_valor_frete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/layout_container_transporte"
@@ -136,8 +135,8 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_container_rota"
-                tools:layout="@layout/fragment_transport"
+                app:layout_constraintTop_toBottomOf="@id/campo_valor_frete"
+                tools:layout="@layout/fragment_transporte"
                 tools:visibility="visible" />
 
             <androidx.fragment.app.FragmentContainerView
@@ -146,11 +145,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layout_container_transporte"
-                tools:layout="@layout/fragment_freight"
+                tools:layout="@layout/fragment_frete"
+                tools:visibility="visible" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/layout_container_valores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_container_frete"
+                tools:layout="@layout/fragment_result"
                 tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -164,19 +175,20 @@
         android:paddingHorizontal="@dimen/dimen_20"
         android:paddingTop="@dimen/dimen_12"
         android:paddingBottom="@dimen/dimen_20"
-        android:visibility="gone"
+        android:visibility="visible"
+        tools:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/botao_abrir_bottom_sheet"
+            android:id="@+id/botao_action_precificacao_frete"
             style="?attr/materialButtonTonalStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_4"
             android:fontFamily="sans-serif-medium"
-            android:text="@string/action_open_sheet"
+            android:text="@string/action_open_frete"
             android:textSize="@dimen/text_14"
             app:layout_constraintEnd_toStartOf="@id/botao_prosseguir"
             app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +204,7 @@
             android:text="@string/action_next"
             android:textSize="@dimen/text_14"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/botao_abrir_bottom_sheet"
+            app:layout_constraintStart_toEndOf="@id/botao_action_precificacao_frete"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="?attr/shapeAppearanceCornerSmall" />
     </androidx.constraintlayout.widget.ConstraintLayout>

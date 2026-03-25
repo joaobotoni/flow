@@ -23,43 +23,52 @@ public class TransporteRepository {
         this.tipoVeiculoDao = tipoVeiculoDao;
     }
 
-    public List<CapacidadeFrete> getCapacidades(long category) {
-        return capacidadeDao.findByCategoria(category);
+    public List<CapacidadeFrete> listarCapacidadesPorCategoria(long idCategoria) {
+        return capacidadeDao.findByCategoria(idCategoria);
     }
 
-    public Optional<String> getDescricaoTipoVeiculo(long capacidade) {
-        return Optional.ofNullable(tipoVeiculoDao.findById(capacidade))
+    public Optional<String> buscarDescricaoVeiculo(long idTipoVeiculo) {
+        return Optional.ofNullable(tipoVeiculoDao.findById(idTipoVeiculo))
                 .map(TipoVeiculoFrete::getDescricao);
     }
 
-    public List<Transporte> recomendacao(long categoria, int quantidade) {
-        List<CapacidadeFrete> capacidades = getCapacidades(categoria);
+    public List<Transporte> recomendarTransportes(long idCategoria, int totalAnimais) {
+        List<CapacidadeFrete> capacidades = listarCapacidadesPorCategoria(idCategoria);
         capacidades.sort(Comparator.comparingInt(CapacidadeFrete::getQtdeFinal).reversed());
-        return distribuicao(capacidades, quantidade);
+        return distribuirAnimais(capacidades, totalAnimais);
     }
 
-    private List<Transporte> distribuicao(List<CapacidadeFrete> capacidades, int total) {
-        List<Transporte> resultado = new ArrayList<>();
-        int restante = total;
-        for (CapacidadeFrete c : capacidades) {
+    private List<Transporte> distribuirAnimais(List<CapacidadeFrete> capacidades, int totalAnimais) {
+        List<Transporte> transportes = new ArrayList<>();
+        int restante = totalAnimais;
+
+        for (CapacidadeFrete capacidade : capacidades) {
             if (restante <= 0) break;
-            int anterior = restante;
-            int quantidade = 0;
-            while (restante >= c.getQtdeInicial()) {
-                restante -= c.getQtdeFinal();
-                quantidade++;
+
+            int antes = restante;
+            int veiculos = 0;
+
+            while (restante >= capacidade.getQtdeInicial()) {
+                restante -= capacidade.getQtdeFinal();
+                veiculos++;
             }
-            if (quantidade > 0) {
-                int carregado = anterior - Math.max(restante, 0);
-                int ocupacao = Math.min(100, carregado * 100 / (quantidade * c.getQtdeFinal()));
-                String descricao = getDescricaoTipoVeiculo(c.getIdTipoVeiculoFrete())
-                        .orElseThrow(() -> new RuntimeException("Veículo não encontrado"));
-                resultado.add(new Transporte(
-                        c.getIdTipoVeiculoFrete(),
+
+            if (veiculos > 0) {
+                int animaisCarregados = antes - Math.max(restante, 0);
+                int ocupacao = Math.min(100, animaisCarregados * 100 / (veiculos * capacidade.getQtdeFinal()));
+                String descricao = buscarDescricaoVeiculo(capacidade.getIdTipoVeiculoFrete())
+                        .orElseThrow(() -> new RuntimeException("Tipo de veículo não encontrado"));
+
+                transportes.add(new Transporte(
+                        capacidade.getIdTipoVeiculoFrete(),
                         descricao,
-                        quantidade, c.getQtdeFinal(), ocupacao));
+                        veiculos,
+                        capacidade.getQtdeFinal(),
+                        ocupacao
+                ));
             }
         }
-        return resultado;
+
+        return transportes;
     }
 }

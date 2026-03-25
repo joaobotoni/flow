@@ -127,9 +127,9 @@ public class FluxoPrecificacaoViewModel extends ViewModel {
     public void buscarEndereco(String consulta, double latitude, double longitude) {
         taskHelper.execute(
                 () -> {
-                    String codigo = localizacaoRepository.buscarCodigoPais(latitude, longitude).orElseThrow(() ->
+                    String codigo = localizacaoRepository.paisDeCoordenadas(latitude, longitude).orElseThrow(() ->
                             new RuntimeException("Código do pais não encontrado"));
-                    return new BuscaLocalizacaoUiState(localizacaoRepository.buscarCidadeEstado(consulta, codigo), false);
+                    return new BuscaLocalizacaoUiState(localizacaoRepository.enderecosPorTexto(consulta, codigo), false);
                 },
                 buscaLocalizacaoUiStateMutableLiveData::postValue,
                 error::postValue
@@ -139,7 +139,7 @@ public class FluxoPrecificacaoViewModel extends ViewModel {
     public void selecionarEndereco(Address origem) {
         taskHelper.execute(
                 () -> {
-                    Address destino = localizacaoRepository.selecionarCidadeEstado(DESTINO_QUERY)
+                    Address destino = localizacaoRepository.enderecoPorNome(DESTINO_QUERY)
                             .orElseThrow(() -> new IllegalArgumentException("Destino não encontrado para a busca: " + DESTINO_QUERY));
                     Rota rota = localizacaoRepository.calcularRota(origem, destino);
                     return new RotaUiState(
@@ -157,7 +157,7 @@ public class FluxoPrecificacaoViewModel extends ViewModel {
 
     public void recomendarTransporte(long categoria, int quantidade) {
         taskHelper.execute(
-                () -> transporteRepository.recomendacao(categoria, quantidade)
+                () -> transporteRepository.recomendarTransportes(categoria, quantidade)
                         .stream()
                         .map(t -> new TransporteUiState(
                                 t.getId(),

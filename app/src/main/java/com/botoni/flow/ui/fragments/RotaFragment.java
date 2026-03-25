@@ -10,10 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.botoni.flow.databinding.FragmentRouteBinding;
+import com.botoni.flow.databinding.FragmentRotaBinding;
 import com.botoni.flow.ui.state.RotaUiState;
 import com.botoni.flow.ui.viewmodel.FluxoPrecificacaoViewModel;
-import com.botoni.flow.ui.viewmodel.RotaViewModel;
 
 import java.util.Locale;
 
@@ -22,21 +21,19 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class RotaFragment extends Fragment {
 
-    private FragmentRouteBinding binding;
+    private FragmentRotaBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentRouteBinding.inflate(inflater, container, false);
+        binding = FragmentRotaBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FluxoPrecificacaoViewModel viewModel = new ViewModelProvider(requireActivity()).get(FluxoPrecificacaoViewModel.class);
-        viewModel.getRotaUiStateMutableLiveData().observe(getViewLifecycleOwner(), this::bind);
     }
 
     @Override

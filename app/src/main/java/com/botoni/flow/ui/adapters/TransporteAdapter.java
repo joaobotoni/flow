@@ -13,11 +13,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.botoni.flow.R;
-import com.botoni.flow.databinding.ItemTransportBinding;
+import com.botoni.flow.databinding.ItemTransporteBinding;
 import com.botoni.flow.ui.state.TransporteUiState;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 public class TransporteAdapter extends ListAdapter<TransporteUiState, TransporteAdapter.ViewHolder> {
 
@@ -28,7 +27,7 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemTransportBinding.inflate(
+        return new ViewHolder(ItemTransporteBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -44,9 +43,9 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemTransportBinding binding;
+        private final ItemTransporteBinding binding;
 
-        ViewHolder(ItemTransportBinding binding) {
+        ViewHolder(ItemTransporteBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

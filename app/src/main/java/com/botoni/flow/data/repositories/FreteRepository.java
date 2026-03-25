@@ -13,54 +13,55 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 public class FreteRepository {
+    private static final int CASAS_DECIMAIS = 2;
     private final FreteDao dao;
     @Inject
     public FreteRepository(FreteDao dao) {
         this.dao = dao;
     }
 
-    public List<Frete> getAll() {
+    public List<Frete> listar() {
         return dao.getAll();
     }
 
-    public Optional<Frete> findById(long id) {
+    public Optional<Frete> buscarPorId(long id) {
         return Optional.ofNullable(dao.findById(id));
     }
 
-    public Optional<Frete> findByValueInRange(long id, double range) {
-        return Optional.ofNullable(dao.findByVehicleAndDistance(id, range));
+    public Optional<Frete> buscarPorVeiculoEDistancia(long idVeiculo, double distancia) {
+        return Optional.ofNullable(dao.findByVehicleAndDistance(idVeiculo, distancia));
     }
 
-    public long insert(Frete frete) {
+    public long inserir(Frete frete) {
         return dao.insert(frete);
     }
 
-    public void insertAll(List<Frete> fretes) {
+    public void inserirTodos(List<Frete> fretes) {
         dao.insertAll(fretes);
     }
 
-    public int update(Frete frete) {
+    public int atualizar(Frete frete) {
         return dao.update(frete);
     }
 
-    public int delete(Frete frete) {
+    public int remover(Frete frete) {
         return dao.delete(frete);
     }
 
-    public void deleteAll() {
+    public void removerTodos() {
         dao.deleteAll();
     }
 
     public PrecificacaoFrete calcularFrete(List<Transporte> transportes, double distancia, int totalAnimais) {
-        BigDecimal total = calcularTotalFrete(transportes, distancia);
-        BigDecimal porAnimal = calcularFretePorAnimal(total, totalAnimais);
+        BigDecimal total = somarFretes(transportes, distancia);
+        BigDecimal porAnimal = valorPorAnimal(total, totalAnimais);
         return new PrecificacaoFrete(total, porAnimal);
     }
 
-    private BigDecimal calcularTotalFrete(List<Transporte> transportes, double distancia) {
+    private BigDecimal somarFretes(List<Transporte> transportes, double distancia) {
         BigDecimal total = BigDecimal.ZERO;
         for (Transporte transporte : transportes) {
-            BigDecimal subtotal = findByValueInRange(transporte.getId(), distancia)
+            BigDecimal subtotal = buscarPorVeiculoEDistancia(transporte.getId(), distancia)
                     .map(frete -> BigDecimal.valueOf(frete.getValor())
                             .multiply(BigDecimal.valueOf(transporte.getQuantidade())))
                     .orElse(BigDecimal.ZERO);
@@ -69,8 +70,8 @@ public class FreteRepository {
         return total;
     }
 
-    private BigDecimal calcularFretePorAnimal(BigDecimal total, int totalAnimais) {
+    private BigDecimal valorPorAnimal(BigDecimal total, int totalAnimais) {
         if (totalAnimais <= 0 || total.compareTo(BigDecimal.ZERO) == 0) return BigDecimal.ZERO;
-        return total.divide(BigDecimal.valueOf(totalAnimais), 2, RoundingMode.HALF_UP);
+        return total.divide(BigDecimal.valueOf(totalAnimais), CASAS_DECIMAIS, RoundingMode.HALF_UP);
     }
 }

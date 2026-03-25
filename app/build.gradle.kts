@@ -47,6 +47,9 @@ secrets {
 
 dependencies {
     implementation(libs.room.runtime)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+    implementation(libs.fragment)
     ksp(libs.room.compiler)
 
     implementation(libs.hilt.android)

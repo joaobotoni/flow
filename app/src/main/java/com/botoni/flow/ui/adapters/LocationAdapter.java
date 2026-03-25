@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.botoni.flow.databinding.ItemAddressBinding;
+import com.botoni.flow.databinding.ItemEnderecoBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
 
     @FunctionalInterface
     public interface OnClickListener {
-        void onClick(Address address) throws Exception;
+        void onClick(Address address);
     }
     private final OnClickListener listener;
 
@@ -51,7 +51,7 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemAddressBinding binding = ItemAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemEnderecoBinding binding = ItemEnderecoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
@@ -63,9 +63,9 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemAddressBinding binding;
+        private final ItemEnderecoBinding binding;
 
-        ViewHolder(ItemAddressBinding binding) {
+        ViewHolder(ItemEnderecoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

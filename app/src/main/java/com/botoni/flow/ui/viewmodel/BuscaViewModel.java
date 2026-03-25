@@ -22,9 +22,9 @@ public class BuscaViewModel extends BaseViewModel<BuscaLocalizacaoUiState> {
     public void buscar(String consulta, double latitude, double longitude) {
         taskHelper.execute(
                 () -> {
-                    String codigo = repositorio.buscarCodigoPais(latitude, longitude).orElseThrow(() ->
+                    String codigo = repositorio.paisDeCoordenadas(latitude, longitude).orElseThrow(() ->
                             new RuntimeException("Código do pais não encontrado"));
-                    return new BuscaLocalizacaoUiState(repositorio.buscarCidadeEstado(consulta, codigo), false);
+                    return new BuscaLocalizacaoUiState(repositorio.enderecosPorTexto(consulta, codigo), false);
                 },
                 state::postValue,
                 error::postValue

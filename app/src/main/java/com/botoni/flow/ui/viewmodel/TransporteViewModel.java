@@ -24,7 +24,7 @@ public class TransporteViewModel extends BaseViewModel<List<TransporteUiState>> 
 
     public void recomendar(long categoria, int quantidade) {
         taskHelper.execute(
-                () -> repositorio.recomendacao(categoria, quantidade)
+                () -> repositorio.recomendarTransportes(categoria, quantidade)
                         .stream()
                         .map(t -> new TransporteUiState(
                                 t.getId(),

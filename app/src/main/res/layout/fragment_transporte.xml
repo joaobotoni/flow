@@ -47,5 +47,5 @@
         android:layout_marginTop="@dimen/dimen_10"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/divisor_topo"
-        tools:listitem="@layout/item_transport" />
+        tools:listitem="@layout/item_transporte" />
 </androidx.constraintlayout.widget.ConstraintLayout>

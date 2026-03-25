@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.botoni.flow.databinding.ItemCategoryBinding;
+
 import com.botoni.flow.data.source.local.entities.CategoriaFrete;
+import com.botoni.flow.databinding.ItemCategoriaBinding;
 import com.botoni.flow.ui.state.CategoriaUiState;
 
 import java.util.Objects;
@@ -33,7 +34,7 @@ public class CategoriaAdapter extends ListAdapter<CategoriaUiState, CategoriaAda
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemCategoryBinding.inflate(
+        return new ViewHolder(ItemCategoriaBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -43,9 +44,9 @@ public class CategoriaAdapter extends ListAdapter<CategoriaUiState, CategoriaAda
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private final ItemCategoryBinding binding;
+        private final ItemCategoriaBinding binding;
 
-        ViewHolder(ItemCategoryBinding binding) {
+        ViewHolder(ItemCategoriaBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
