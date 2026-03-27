@@ -74,7 +74,7 @@ public class PrecificacaoFreteTest {
         BigDecimal arroba = new BigDecimal("310");
         BigDecimal percentual = new BigDecimal("30");
         int quantidadeCabecas = 100;
-        double distanciaKm = 300.00;
+        double distanciaKm = 481.09;
         int pesoTotal = quantidadeCabecas * peso.intValue();
 
         List<Transporte> transportes = transporteRepository.recomendarTransportes(1L, quantidadeCabecas);

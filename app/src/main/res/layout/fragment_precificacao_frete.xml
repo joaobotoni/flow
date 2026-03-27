@@ -134,7 +134,7 @@
                         android:id="@+id/fundo_icone_cartao"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        app:shapeAppearance="?attr/shapeAppearanceCornerExtraExtraLarge"
+                        app:shapeAppearance="?attr/shapeAppearanceCornerLarge"
                         app:cardBackgroundColor="?attr/colorPrimary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

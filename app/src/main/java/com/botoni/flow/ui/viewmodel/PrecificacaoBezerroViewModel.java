@@ -17,10 +17,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class PrecificacaoBezerroViewModel extends ViewModel {
-
     private final PrecificacaoBezerroRepository repositorio;
     private final TaskHelper taskHelper;
-
     private final MutableLiveData<PrecificacaoBezerroUiState> state = new MutableLiveData<>();
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
 

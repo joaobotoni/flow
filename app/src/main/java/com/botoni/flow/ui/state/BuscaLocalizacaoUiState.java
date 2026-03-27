@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class BuscaLocalizacaoUiState {
-    public final List<Address> localizacoes;
-    public final boolean carregando;
+    private final List<Address> localizacoes;
+    private final boolean carregando;
     public BuscaLocalizacaoUiState() {
         this.localizacoes = Collections.emptyList();
         this.carregando = false;

@@ -34,9 +34,7 @@ public class ResultadoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         viewModel = new ViewModelProvider(requireActivity()).get(PrecificacaoBezerroViewModel.class);
-
         configurarObservadores();
     }
 
@@ -52,8 +50,8 @@ public class ResultadoFragment extends Fragment {
 
     private void bind(PrecificacaoBezerroUiState state) {
         if (state == null) return;
-        binding.textoValorPorCabeca.setText(formatCurrency(state.valorPorCabeca));
-        binding.textoValorPorKg.setText(formatCurrency(state.valorPorKg));
-        binding.textoValorTotal.setText(formatCurrency(state.valorTotal));
+        binding.textoValorPorCabeca.setText(formatCurrency(state.getValorPorCabeca()));
+        binding.textoValorPorKg.setText(formatCurrency(state.getValorPorKg()));
+        binding.textoValorTotal.setText(formatCurrency(state.getValorTotal()));
     }
 }

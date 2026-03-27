@@ -1,6 +1,7 @@
 package com.botoni.flow.ui.adapters;
 
-import static com.botoni.flow.ui.helpers.ViewHelper.noneMatch;
+import static com.botoni.flow.ui.helpers.ViewHelper.isNotEmpty;
+import static com.botoni.flow.ui.helpers.ViewHelper.noneEmpty;
 import static com.botoni.flow.ui.helpers.ViewHelper.setText;
 
 import android.location.Address;
@@ -41,7 +42,7 @@ public class LocationAdapter extends ListAdapter<Address, LocationAdapter.ViewHo
         }
         List<Address> filtered = new ArrayList<>();
         for (Address address : list) {
-            if (noneMatch(address.getLocality(), address.getAdminArea())) {
+            if (noneEmpty(address.getLocality(), address.getAdminArea())) {
                 filtered.add(address);
             }
         }

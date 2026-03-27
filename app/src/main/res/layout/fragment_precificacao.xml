@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_8"
-                android:text="@string/title_category"
+                android:text="@string/title_negociacao"
                 android:textSize="@dimen/text_22"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/imagem_icone_categoria"

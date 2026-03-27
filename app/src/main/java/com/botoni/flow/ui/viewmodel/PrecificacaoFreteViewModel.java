@@ -19,11 +19,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class PrecificacaoFreteViewModel extends ViewModel {
+
     private final FreteRepository repositorio;
     private final TaskHelper taskHelper;
     private final MutableLiveData<PrecificacaoFreteUiState> state = new MutableLiveData<>();
     private final MutableLiveData<BigDecimal> incidencia = new MutableLiveData<>();
+    private final MutableLiveData<BigDecimal> freteSelecionado = new MutableLiveData<>();
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
+    private final MutableLiveData<Double> distanciaManual = new MutableLiveData<>();
 
     @Inject
     public PrecificacaoFreteViewModel(TaskHelper taskHelper, FreteRepository repositorio) {
@@ -31,16 +34,22 @@ public class PrecificacaoFreteViewModel extends ViewModel {
         this.taskHelper = taskHelper;
     }
 
-    public LiveData<PrecificacaoFreteUiState> getState() {
-        return state;
+    public LiveData<PrecificacaoFreteUiState> getState() { return state; }
+    public LiveData<BigDecimal> getIncidencia() { return incidencia; }
+    public LiveData<BigDecimal> getFreteSelecionado() { return freteSelecionado; }
+    public LiveData<Throwable> getError() { return error; }
+    public LiveData<Double> getDistanciaManual() { return distanciaManual; }
+
+    public void setDistanciaManual(double distancia) {
+        distanciaManual.setValue(distancia);
     }
 
-    public LiveData<BigDecimal> getIncidencia() {
-        return incidencia;
+    public void selecionarFrete(BigDecimal valor) {
+        freteSelecionado.setValue(valor);
     }
 
-    public LiveData<Throwable> getError() {
-        return error;
+    public void consumirFreteSelecionado() {
+        freteSelecionado.setValue(null);
     }
 
     public void calcularFrete(List<Transporte> transportes, double distancia, int cargaTotal) {

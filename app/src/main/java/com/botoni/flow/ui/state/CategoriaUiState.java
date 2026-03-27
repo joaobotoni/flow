@@ -6,9 +6,9 @@ import com.botoni.flow.data.source.local.entities.CategoriaFrete;
 import java.util.List;
 
 public class CategoriaUiState {
-    public final long id;
-    public final String descricao;
-    public final boolean selecionada;
+    private final long id;
+    private final String descricao;
+    private final boolean selecionada;
     public CategoriaUiState(long id, String descricao, boolean selecionada) {
         this.id = id;
         this.descricao = descricao;

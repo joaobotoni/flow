@@ -3,9 +3,9 @@ package com.botoni.flow.data.models;
 import java.math.BigDecimal;
 
 public class PrecificacaoBezerro {
-    public final BigDecimal valorPorKg;
-    public final BigDecimal valorPorCabeca;
-    public final BigDecimal valorTotal;
+    private final BigDecimal valorPorKg;
+    private final BigDecimal valorPorCabeca;
+    private final BigDecimal valorTotal;
     public PrecificacaoBezerro(BigDecimal valorPorKg, BigDecimal valorPorCabeca, BigDecimal valorTotal) {
         this.valorPorKg = valorPorKg;
         this.valorPorCabeca = valorPorCabeca;

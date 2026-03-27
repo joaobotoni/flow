@@ -4,7 +4,7 @@
 
     <!-- Main Titles -->
     <string name="title_main">Preencha os campos abaixo</string>
-    <string name="title_category">CATEGORIA</string>
+    <string name="title_negociacao">NEGOCIAÇÃO</string>
     <string name="title_details">Detalhes</string>
     <string name="title_summary">Resumo</string>
     <string name="title_select">Selecionar</string>
@@ -126,6 +126,7 @@
     <string name="error_network">Erro de conexão</string>
     <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
     <string name="error_field_invalid">%s inválido</string>
+    <string name="error_field_category">Selecione a categoria</string>
     <string name="error_min_value">Valor mínimo: %s</string>
     <string name="error_max_value">Valor máximo: %s</string>
     <string name="error_location_permission_required">Permissão necessária para calcular o frete.</string>

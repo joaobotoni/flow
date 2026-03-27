@@ -1,9 +1,13 @@
 package com.botoni.flow.ui.fragments;
 
+import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SimpleTextWatcher;
+import static com.botoni.flow.ui.helpers.ViewHelper.anyEmpty;
 import static com.botoni.flow.ui.helpers.ViewHelper.getBigDecimal;
 import static com.botoni.flow.ui.helpers.ViewHelper.getInt;
-import static com.botoni.flow.ui.helpers.ViewHelper.noneMatch;
+import static com.botoni.flow.ui.helpers.ViewHelper.isEmpty;
+import static com.botoni.flow.ui.helpers.ViewHelper.isNotEmpty;
+import static com.botoni.flow.ui.helpers.ViewHelper.setText;
 import static com.botoni.flow.ui.helpers.ViewHelper.setVisible;
 
 import android.os.Bundle;
@@ -15,28 +19,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentPrecificacaoBinding;
 import com.botoni.flow.ui.adapters.CategoriaAdapter;
+import com.botoni.flow.ui.helpers.AlertHelper;
+import com.botoni.flow.ui.state.CategoriaUiState;
 import com.botoni.flow.ui.viewmodel.CategoriaViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoBezerroViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoFreteViewModel;
+import com.botoni.flow.ui.viewmodel.TransporteViewModel;
 
 import java.math.BigDecimal;
 
 import dagger.hilt.android.AndroidEntryPoint;
-
 @AndroidEntryPoint
 public class PrecificacaoFragment extends Fragment {
-    private static final BigDecimal ARROBA = new BigDecimal("310");
-    private static final BigDecimal PERCENT = new BigDecimal("30");
+
+    private static final BigDecimal VALOR_ARROBA_PADRAO = new BigDecimal("310");
+    private static final BigDecimal PERCENTUAL_PADRAO = new BigDecimal("30");
+
     private FragmentPrecificacaoBinding binding;
-    private PrecificacaoBezerroViewModel precificacaoBezerroViewModel;
-    private PrecificacaoFreteViewModel precificacaoFreteViewModel;
+    private PrecificacaoBezerroViewModel bezerroViewModel;
+    private PrecificacaoFreteViewModel freteViewModel;
     private CategoriaViewModel categoriaViewModel;
+    private TransporteViewModel transporteViewModel;
     private CategoriaAdapter categoriaAdapter;
 
     @Nullable
@@ -51,12 +59,12 @@ public class PrecificacaoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        iniciarViewModels();
-        iniciarFragmentosFilhos();
-        iniciarAdapter();
-        configurarObservadores();
-        configurarWatchers();
-        configurarNavegacao();
+        inicializarViewModels();
+        inicializarFragmentosFilhos();
+        inicializarAdapterCategorias();
+        inicializarWatchers();
+        inicializarNavegacao();
+        inicializarObservadores();
     }
 
     @Override
@@ -65,118 +73,101 @@ public class PrecificacaoFragment extends Fragment {
         binding = null;
     }
 
-    private void iniciarViewModels() {
-        precificacaoBezerroViewModel = new ViewModelProvider(requireActivity()).get(PrecificacaoBezerroViewModel.class);
-        precificacaoFreteViewModel = new ViewModelProvider(requireActivity()).get(PrecificacaoFreteViewModel.class);
-        categoriaViewModel = new ViewModelProvider(requireActivity()).get(CategoriaViewModel.class);
+    private void inicializarViewModels() {
+        ViewModelProvider provider = new ViewModelProvider(requireActivity());
+        bezerroViewModel = provider.get(PrecificacaoBezerroViewModel.class);
+        freteViewModel = provider.get(PrecificacaoFreteViewModel.class);
+        categoriaViewModel = provider.get(CategoriaViewModel.class);
+        transporteViewModel = provider.get(TransporteViewModel.class);
     }
 
-    private void iniciarFragmentosFilhos() {
+    private void inicializarFragmentosFilhos() {
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.layout_container_valores, new ResultadoFragment())
                 .commit();
     }
 
-    private void iniciarAdapter() {
+    private void inicializarAdapterCategorias() {
         categoriaAdapter = new CategoriaAdapter(categoriaViewModel::selecionar);
         binding.listaCategorias.setAdapter(categoriaAdapter);
     }
 
-    private void configurarObservadores() {
-        observarListaCategorias();
-        observarCategoriaSelecionada();
-        observarIncidenciaFrete();
-        observarResultadoBezerro();
+    private void inicializarWatchers() {
+        var watcher = SimpleTextWatcher(this::aoEntradasAlteradas);
+        binding.entradaTextoPesoAnimal.addTextChangedListener(watcher);
+        binding.entradaTextoValorFrete.addTextChangedListener(watcher);
+        binding.entradaTextoQuantidadeAnimais.addTextChangedListener(watcher);
     }
 
-    private void observarListaCategorias() {
+    private void inicializarNavegacao() {
+        binding.botaoActionPrecificacaoFrete.setOnClickListener(v -> navegarParaSelecaoFrete());
+    }
+
+    private void inicializarObservadores() {
         categoriaViewModel.getState().observe(getViewLifecycleOwner(), categoriaAdapter::submitList);
+        categoriaViewModel.getCategoriaSelecionada().observe(getViewLifecycleOwner(), this::aoCategoriaSelecionada);
+        freteViewModel.getIncidencia().observe(getViewLifecycleOwner(), this::calcularBezerro);
+        freteViewModel.getFreteSelecionado().observe(getViewLifecycleOwner(), this::aoFreteSelecionado);
+        bezerroViewModel.getState().observe(getViewLifecycleOwner(),
+                state -> setVisible(isNotEmpty(state), binding.layoutContainerValores));
     }
 
-    private void observarCategoriaSelecionada() {
-        categoriaViewModel.getCategoriaSelecionada().observe(getViewLifecycleOwner(),
-                categoria -> calcularBezerro(precificacaoFreteViewModel.getIncidencia().getValue()));
+    private void aoCategoriaSelecionada(CategoriaUiState categoria) {
+        calcularTransporte(categoria);
+        calcularBezerro(freteViewModel.getIncidencia().getValue());
     }
 
-    private void observarIncidenciaFrete() {
-        precificacaoFreteViewModel.getIncidencia().observe(getViewLifecycleOwner(), this::calcularBezerro);
-    }
-
-    private void observarResultadoBezerro() {
-        precificacaoBezerroViewModel.getState().observe(getViewLifecycleOwner(),
-                state -> setVisible(state != null, binding.layoutContainerValores));
-    }
-
-    private void configurarWatchers() {
-        binding.entradaTextoPesoAnimal.addTextChangedListener(SimpleTextWatcher(this::onPesoAlterado));
-        binding.entradaTextoValorFrete.addTextChangedListener(SimpleTextWatcher(this::onFreteAlterado));
-        binding.entradaTextoQuantidadeAnimais.addTextChangedListener(SimpleTextWatcher(this::onQuantidadeAlterada));
-    }
-
-    private void onPesoAlterado() {
+    private void aoEntradasAlteradas() {
         calcularFrete();
-        calcularBezerro(precificacaoFreteViewModel.getIncidencia().getValue());
+        calcularTransporte(categoriaViewModel.getCategoriaSelecionada().getValue());
+        calcularBezerro(freteViewModel.getIncidencia().getValue());
     }
 
-    private void onFreteAlterado() {
-        calcularFrete();
-        calcularBezerro(precificacaoFreteViewModel.getIncidencia().getValue());
-    }
-
-    private void onQuantidadeAlterada() {
-        calcularFrete();
-        calcularBezerro(precificacaoFreteViewModel.getIncidencia().getValue());
+    private void aoFreteSelecionado(BigDecimal valor) {
+        if (isEmpty(valor)) return;
+        setText(binding.entradaTextoValorFrete, formatCurrency(valor));
+        freteViewModel.consumirFreteSelecionado();
     }
 
     private void calcularFrete() {
-        if (!camposFretePreenchidos()) {
-            precificacaoFreteViewModel.limpar();
+        if (isDadosInsuficientes()) {
+            freteViewModel.limpar();
             return;
         }
-        precificacaoFreteViewModel.calcularIncidencia(freteAtual(), pesoTotalAtual());
+        freteViewModel.calcularIncidencia(obterFrete(), obterPesoTotal());
     }
 
     private void calcularBezerro(BigDecimal incidencia) {
-        if (incidencia == null || !camposBezerroPreenchidos()) {
-            precificacaoBezerroViewModel.limpar();
+        if (isDadosInsuficientes()) {
+            bezerroViewModel.limpar();
             return;
         }
-        precificacaoBezerroViewModel.calcularNegociacaoBezerroComDescontoDoFrete(pesoAtual(), ARROBA, PERCENT, quantidadeAtual(), incidencia);
+        bezerroViewModel.calcularNegociacaoBezerroComDescontoDoFrete(
+                obterPesoUnitario(), VALOR_ARROBA_PADRAO, PERCENTUAL_PADRAO, obterQuantidade(), incidencia);
     }
 
-    private boolean camposFretePreenchidos() {
-        return noneMatch(binding.entradaTextoPesoAnimal, binding.entradaTextoValorFrete, binding.entradaTextoQuantidadeAnimais)
-                && pesoAtual().compareTo(BigDecimal.ZERO) > 0
-                && freteAtual().compareTo(BigDecimal.ZERO) > 0
-                && quantidadeAtual() > 0;
+    private void calcularTransporte(CategoriaUiState categoria) {
+        if (isEmpty(categoria) || isEmpty(obterQuantidade())) return;
+        transporteViewModel.recomendar(categoria.getId(), obterQuantidade());
     }
 
-    private boolean camposBezerroPreenchidos() {
-        return noneMatch(binding.entradaTextoPesoAnimal, binding.entradaTextoQuantidadeAnimais)
-                && pesoAtual().compareTo(BigDecimal.ZERO) > 0
-                && quantidadeAtual() > 0;
+    private boolean isDadosInsuficientes() {
+        return isEmpty(obterPesoUnitario()) || isEmpty(obterQuantidade());
     }
 
-    private BigDecimal pesoAtual() {
-        return getBigDecimal(binding.entradaTextoPesoAnimal);
+    private void navegarParaSelecaoFrete() {
+        CategoriaUiState categoria = categoriaViewModel.getCategoriaSelecionada().getValue();
+        if (isEmpty(categoria)) {
+            AlertHelper.showSnackBar(requireView(), getString(R.string.error_field_category));
+            return;
+        }
+        var direcao = PrecificacaoFragmentDirections
+                .actionPrecificacaoFragmentToPrecificacaoFreteFragment(obterPesoTotal());
+        NavHostFragment.findNavController(this).navigate(direcao);
     }
 
-    private BigDecimal freteAtual() {
-        return getBigDecimal(binding.entradaTextoValorFrete);
-    }
-
-    private int quantidadeAtual() {
-        return getInt(binding.entradaTextoQuantidadeAnimais);
-    }
-
-    private int pesoTotalAtual() {
-        return quantidadeAtual() * pesoAtual().intValue();
-    }
-
-    private void configurarNavegacao() {
-        binding.botaoActionPrecificacaoFrete.setOnClickListener(v -> {
-            NavController navController = NavHostFragment.findNavController(this);
-            navController.navigate(R.id.action_precificacaoFragment_to_precificacaoFreteFragment);
-        });
-    }
+    private BigDecimal obterPesoUnitario() { return getBigDecimal(binding.entradaTextoPesoAnimal); }
+    private BigDecimal obterFrete() { return getBigDecimal(binding.entradaTextoValorFrete); }
+    private int obterQuantidade() { return getInt(binding.entradaTextoQuantidadeAnimais); }
+    private int obterPesoTotal() { return obterQuantidade() * obterPesoUnitario().intValue(); }
 }

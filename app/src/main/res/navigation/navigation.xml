@@ -8,24 +8,22 @@
     <fragment
         android:id="@+id/precificacaoFragment"
         android:name="com.botoni.flow.ui.fragments.PrecificacaoFragment"
-        tools:layout="@layout/fragment_precificacao"
-        android:label="PrecificacaoFragment" >
+        android:label="PrecificacaoFragment"
+        tools:layout="@layout/fragment_precificacao">
         <action
             android:id="@+id/action_precificacaoFragment_to_precificacaoFreteFragment"
             app:destination="@id/precificacaoFreteFragment"
             app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/precificacaoFreteFragment"
         android:name="com.botoni.flow.ui.fragments.PrecificacaoFreteFragment"
-        tools:layout="@layout/fragment_precificacao_frete"
-        android:label="PrecificacaoFreteFragment" >
-        <action
-            android:id="@+id/action_precificacaoFreteFragment_to_precificacaoFragment"
-            app:destination="@id/precificacaoFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
+        android:label="PrecificacaoFreteFragment"
+        tools:layout="@layout/fragment_precificacao_frete">
+        <argument android:name="cargaTotal" app:argType="integer" />
     </fragment>
 </navigation>

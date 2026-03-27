@@ -43,11 +43,11 @@ public class RotaFragment extends Fragment {
     }
     private void bind(RotaUiState state) {
         if (state == null) return;
-        binding.textoCidadeOrigem.setText(state.cidadeOrigem);
-        binding.textoEstadoOrigem.setText(state.estadoOrigem);
-        binding.textoCidadeDestino.setText(state.cidadeDestino);
-        binding.textoEstadoDestino.setText(state.estadoDestino);
-        binding.textoValorDistancia.setText(String.format(Locale.getDefault(), "%.2f km", state.distancia));
+        binding.textoCidadeOrigem.setText(state.getCidadeOrigem());
+        binding.textoEstadoOrigem.setText(state.getEstadoOrigem());
+        binding.textoCidadeDestino.setText(state.getCidadeDestino());
+        binding.textoEstadoDestino.setText(state.getEstadoDestino());
+        binding.textoValorDistancia.setText(String.format(Locale.getDefault(), "%.2f km", state.getDistancia()));
     }
 
     @Override

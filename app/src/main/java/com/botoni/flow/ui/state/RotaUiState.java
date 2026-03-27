@@ -4,11 +4,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class RotaUiState {
-    public final String cidadeOrigem;
-    public final String estadoOrigem;
-    public final String cidadeDestino;
-    public final String estadoDestino;
-    public final double distancia;
+    private final String cidadeOrigem;
+    private final String estadoOrigem;
+    private final String cidadeDestino;
+    private final String estadoDestino;
+    private final double distancia;
 
     public RotaUiState(String cidadeOrigem, String estadoOrigem,
                        String cidadeDestino, String estadoDestino,
@@ -18,5 +18,25 @@ public class RotaUiState {
         this.cidadeDestino = cidadeDestino;
         this.estadoDestino = estadoDestino;
         this.distancia = distancia;
+    }
+
+    public String getCidadeOrigem() {
+        return cidadeOrigem;
+    }
+
+    public String getEstadoOrigem() {
+        return estadoOrigem;
+    }
+
+    public String getCidadeDestino() {
+        return cidadeDestino;
+    }
+
+    public String getEstadoDestino() {
+        return estadoDestino;
+    }
+
+    public double getDistancia() {
+        return distancia;
     }
 }

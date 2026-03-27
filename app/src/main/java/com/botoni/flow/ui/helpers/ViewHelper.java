@@ -12,8 +12,10 @@ import androidx.annotation.StringRes;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class ViewHelper {
+
     @NonNull
     public static String requireText(@Nullable TextView view) {
         if (view == null || view.getText() == null) return "";
@@ -35,18 +37,36 @@ public class ViewHelper {
         return NumberHelper.getDecimal(requireText(view));
     }
 
-    public static boolean noneMatch(@Nullable String... texts) {
-        if (texts == null) return false;
-        for (String text : texts) {
-            if (text == null || text.trim().isEmpty()) return false;
-        }
-        return true;
+    public static <T> boolean isEmpty(@Nullable T value) {
+        if (value == null) return true;
+        if (value instanceof String) return ((String) value).trim().isEmpty();
+        if (value instanceof TextView) return requireText((TextView) value).isEmpty();
+        if (value instanceof Collection) return ((Collection<?>) value).isEmpty();
+        if (value instanceof Object[]) return ((Object[]) value).length == 0;
+        if (value instanceof Integer) return ((Integer) value) == 0;
+        if (value instanceof Double) return ((Double) value) == 0.0;
+        if (value instanceof BigDecimal) return ((BigDecimal) value).compareTo(BigDecimal.ZERO) == 0;
+        return false;
     }
 
-    public static boolean noneMatch(@Nullable TextView... views) {
-        if (views == null) return false;
-        for (TextView view : views) {
-            if (view == null || requireText(view).isEmpty()) return false;
+    public static <T> boolean isNotEmpty(@Nullable T value) {
+        return !isEmpty(value);
+    }
+
+    @SafeVarargs
+    public static <T> boolean anyEmpty(@Nullable T... values) {
+        if (values == null) return true;
+        for (T value : values) {
+            if (isEmpty(value)) return true;
+        }
+        return false;
+    }
+
+    @SafeVarargs
+    public static <T> boolean noneEmpty(@Nullable T... values) {
+        if (values == null) return false;
+        for (T value : values) {
+            if (isEmpty(value)) return false;
         }
         return true;
     }
@@ -55,7 +75,8 @@ public class ViewHelper {
         textView.setText(text != null ? text.trim() : "");
     }
 
-    public static void setPluralText(@NonNull TextView textView, @NonNull Context context, @PluralsRes int resId, @Nullable Integer quantity) {
+    public static void setPluralText(@NonNull TextView textView, @NonNull Context context,
+                                     @PluralsRes int resId, @Nullable Integer quantity) {
         if (quantity == null) {
             textView.setText("");
             return;
@@ -72,6 +93,13 @@ public class ViewHelper {
             }
         }
         textView.setText(context.getString(resId, Arrays.asList(args).toArray()));
+    }
+
+
+    public static void clearText(TextView... views) {
+        for (TextView view : views) {
+            if (view != null) view.setText("");
+        }
     }
 
     public static void setVisible(boolean visible, View... views) {

@@ -52,8 +52,8 @@ public class CategoriaAdapter extends ListAdapter<CategoriaUiState, CategoriaAda
         }
 
         void bind(CategoriaUiState estado, OnClickListener listener) {
-            setText(binding.chipText, estado.descricao);
-            binding.chipCard.setChecked(estado.selecionada);
+            setText(binding.chipText, estado.getDescricao());
+            binding.chipCard.setChecked(estado.isSelecionada());
             binding.chipCard.setOnClickListener(v -> listener.onClick(estado));
         }
     }
@@ -61,14 +61,14 @@ public class CategoriaAdapter extends ListAdapter<CategoriaUiState, CategoriaAda
     private static class DiffCallback extends DiffUtil.ItemCallback<CategoriaUiState> {
         @Override
         public boolean areItemsTheSame(@NonNull CategoriaUiState oldItem, @NonNull CategoriaUiState newItem) {
-            return oldItem.id == newItem.id;
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull CategoriaUiState oldItem, @NonNull CategoriaUiState newItem) {
-            return oldItem.id == newItem.id
-                    && Objects.equals(oldItem.descricao, newItem.descricao)
-                    && oldItem.selecionada == newItem.selecionada;
+            return oldItem.getId() == newItem.getId()
+                    && Objects.equals(oldItem.getDescricao(), newItem.getDescricao())
+                    && oldItem.isSelecionada() == newItem.isSelecionada();
         }
     }
 }
