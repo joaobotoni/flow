@@ -131,7 +131,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/layout_container_valor_com_frete"
+                android:id="@+id/layout_container_valor_bezerro_com_frete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_10"
@@ -150,7 +150,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_container_valor_com_frete"
+                app:layout_constraintTop_toBottomOf="@id/layout_container_valor_bezerro_com_frete"
                 tools:layout="@layout/fragment_resumo_valores"
                 tools:visibility="visible" />
 

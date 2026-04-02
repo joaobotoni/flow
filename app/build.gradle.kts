@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.fragment)
     implementation(libs.ext.junit)
     implementation(libs.androidx.runner)
+    implementation(libs.material)
     ksp(libs.room.compiler)
 
     implementation(libs.hilt.android)

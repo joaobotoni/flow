@@ -9,6 +9,7 @@ import static com.botoni.flow.ui.helpers.ViewHelper.clearText;
 import static com.botoni.flow.ui.helpers.ViewHelper.getDouble;
 import static com.botoni.flow.ui.helpers.ViewHelper.isEmpty;
 import static com.botoni.flow.ui.helpers.ViewHelper.isNotEmpty;
+import static com.botoni.flow.ui.helpers.ViewHelper.orElse;
 import static com.botoni.flow.ui.helpers.ViewHelper.setText;
 import static com.botoni.flow.ui.helpers.ViewHelper.setVisible;
 
@@ -35,6 +36,7 @@ import com.botoni.flow.databinding.FragmentPrecificacaoFreteBinding;
 import com.botoni.flow.ui.mappers.domain.TransporteMapper;
 import com.botoni.flow.ui.mappers.presentation.FreteResumoMapper;
 import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
+import com.botoni.flow.ui.state.ResumoValoresUiState;
 import com.botoni.flow.ui.state.RotaUiState;
 import com.botoni.flow.ui.viewmodel.PrecificacaoFreteViewModel;
 import com.botoni.flow.ui.viewmodel.ResumoValoresViewModel;
@@ -42,6 +44,7 @@ import com.botoni.flow.ui.viewmodel.RotaViewModel;
 import com.botoni.flow.ui.viewmodel.TransporteViewModel;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 
 import javax.inject.Inject;
 
@@ -54,6 +57,7 @@ public class PrecificacaoFreteFragment extends Fragment {
     private static final String CHAVE_VIEWMODEL_SIMULACAO = "viewmodel_simulacao_frete";
     static final String CHAVE_RESULTADO_FRETE = "resultado_selecao_frete";
     static final String EXTRA_VALOR_FRETE = "valor_frete";
+
     private static final String[] PERMISSOES_LOCALIZACAO = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
@@ -64,28 +68,26 @@ public class PrecificacaoFreteFragment extends Fragment {
     @Inject
     TransporteMapper transporteMapper;
 
-    private FragmentPrecificacaoFreteBinding binding;
-    private TextWatcher distanciaWatcher;
-    private ActivityResultLauncher<String[]> permissaoLauncher;
-
     private PrecificacaoFreteViewModel simulacaoFreteViewModel;
     private RotaViewModel rotaViewModel;
     private TransporteViewModel transporteViewModel;
     private ResumoValoresViewModel resumoSimulacaoFreteViewModel;
 
+    private FragmentPrecificacaoFreteBinding binding;
+    private TextWatcher distanciaWatcher;
+    private ActivityResultLauncher<String[]> permissaoLauncher;
     private int cargaTotalDoLote;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        registrarLauncherDePermissao();
-        registrarCallbackVoltar();
+        configurarCicloDeVidaInicial();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        solicitarPermissoesDeLocalizacaoSeNecessario();
+        verificarPermissoesDeLocalizacao();
     }
 
     @Nullable
@@ -98,18 +100,13 @@ public class PrecificacaoFreteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lerArgumentosDeNavegacao();
-        vincularViewModels();
-        montarFragmentosFilhos();
-        registrarListeners();
-        observarEstadoDasTelas();
+        iniciarSetup();
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        restaurarDistanciaSalvaSePossivel();
-        sincronizarVisibilidadeComEstadoAtual();
+        recuperarEstadoDaInterface();
     }
 
     @Override
@@ -118,32 +115,24 @@ public class PrecificacaoFreteFragment extends Fragment {
         binding = null;
     }
 
-    private void registrarLauncherDePermissao() {
-        permissaoLauncher = register(this, (concedida, result) -> {
-            if (!concedida) tratarPermissaoNegada();
-        });
+    private void configurarCicloDeVidaInicial() {
+        prepararLauncherDePermissao();
+        configurarComportamentoBotaoVoltar();
     }
 
-    private void registrarCallbackVoltar() {
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                NavHostFragment.findNavController(PrecificacaoFreteFragment.this).popBackStack();
-            }
-        });
+    private void iniciarSetup() {
+        extrairArgumentosDeNavegacao();
+        instanciarViewModels();
+        iniciarFragmentosEstaticos();
+        registrarEventosDeInterface();
+        configurarObservadores();
     }
 
-    private void solicitarPermissoesDeLocalizacaoSeNecessario() {
-        if (!hasPermissions(requireContext(), PERMISSOES_LOCALIZACAO)) {
-            request(requireContext(), permissaoLauncher, PERMISSOES_LOCALIZACAO);
-        }
-    }
-
-    private void lerArgumentosDeNavegacao() {
+    private void extrairArgumentosDeNavegacao() {
         cargaTotalDoLote = PrecificacaoFreteFragmentArgs.fromBundle(requireArguments()).getCargaTotal();
     }
 
-    private void vincularViewModels() {
+    private void instanciarViewModels() {
         ViewModelProvider provider = new ViewModelProvider(requireActivity());
         rotaViewModel = provider.get(RotaViewModel.class);
         transporteViewModel = provider.get(TransporteViewModel.class);
@@ -151,167 +140,270 @@ public class PrecificacaoFreteFragment extends Fragment {
         resumoSimulacaoFreteViewModel = provider.get(CHAVE_RESUMO_SIMULACAO_FRETE, ResumoValoresViewModel.class);
     }
 
-    private void montarFragmentosFilhos() {
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.layout_container_rota, new RotaFragment())
-                .replace(R.id.layout_container_transporte, new TransporteFragment())
-                .replace(R.id.layout_container_frete, criarFragmentoResumoSimulacaoFrete())
-                .commit();
+    private void iniciarFragmentosEstaticos() {
+        substituirFragmento(R.id.layout_container_rota, new RotaFragment());
+        substituirFragmento(R.id.layout_container_transporte, new TransporteFragment());
+        substituirFragmento(R.id.layout_container_frete, criarFragmentoResumoFrete());
     }
 
-    private ResumoValoresFragment criarFragmentoResumoSimulacaoFrete() {
+    private void substituirFragmento(int containerId, Fragment fragment) {
+        getChildFragmentManager().beginTransaction().replace(containerId, fragment).commit();
+    }
+
+    private ResumoValoresFragment criarFragmentoResumoFrete() {
         return ResumoValoresFragment.newInstance(
                 CHAVE_RESUMO_SIMULACAO_FRETE,
                 getString(R.string.titulo_resumo_frete),
                 getString(R.string.card_label_total_value),
-                getString(R.string.card_label_unit_value_frete)
-        );
+                getString(R.string.card_label_unit_value_frete));
     }
 
-    private void registrarListeners() {
-        binding.cartaoExplorarRota.setOnClickListener(v -> abrirBuscaDeLocalizacao());
-        binding.botaoVoltar.setOnClickListener(v -> NavHostFragment.findNavController(this).popBackStack());
-        binding.botaoContinuar.setOnClickListener(v -> confirmarSelecaoFrete());
-
-        distanciaWatcher = SimpleTextWatcher(this::aoDistanciaManualAlterada);
-        binding.entradaTextoDistancia.addTextChangedListener(distanciaWatcher);
+    private void registrarEventosDeInterface() {
+        configurarTextWatcherDistancia();
+        configurarEventosDeClique();
     }
 
-    private void observarEstadoDasTelas() {
-        observarRota();
-        observarTransporte();
-        observarFreteCalculado();
+    private void configurarTextWatcherDistancia() {
+        distanciaWatcher = SimpleTextWatcher(this::processarAlteracaoDistanciaManual);
+        adicionarWatcherDistancia();
     }
 
-    private void observarRota() {
-        rotaViewModel.getState().observe(getViewLifecycleOwner(), this::aoRotaObtida);
+    private void configurarEventosDeClique() {
+        binding.cartaoExplorarRota.setOnClickListener(v -> abrirTelaBuscaDeLocalizacao());
+        binding.botaoVoltar.setOnClickListener(v -> executarNavegacaoVoltar());
+        binding.botaoContinuar.setOnClickListener(v -> processarConfirmacaoDeFrete());
     }
 
-    private void observarTransporte() {
-        transporteViewModel.getState().observe(getViewLifecycleOwner(), transportes -> {
-            sincronizarVisibilidadeComEstadoAtual();
-            calcularFrete();
-        });
-    }
-
-    private void observarFreteCalculado() {
+    private void configurarObservadores() {
+        observarEstadoRota();
+        observarEstadoTransporte();
         observarEstadoSimulacaoFrete();
-        observarVisibilidadeResumoFrete();
+    }
+
+    private void observarEstadoRota() {
+        rotaViewModel.getState().observe(getViewLifecycleOwner(), this::processarNovaRota);
+    }
+
+    private void observarEstadoTransporte() {
+        transporteViewModel.getState().observe(getViewLifecycleOwner(), this::processarAtualizacaoTransporte);
     }
 
     private void observarEstadoSimulacaoFrete() {
-        simulacaoFreteViewModel.getState().observe(getViewLifecycleOwner(), this::aoFreteCalculado);
+        simulacaoFreteViewModel.getState().observe(getViewLifecycleOwner(), this::atualizarEstadoResumoFrete);
+        resumoSimulacaoFreteViewModel.getState().observe(getViewLifecycleOwner(), this::atualizarVisibilidadeResumoFrete);
     }
 
-    private void observarVisibilidadeResumoFrete() {
-        resumoSimulacaoFreteViewModel.getState().observe(getViewLifecycleOwner(), resumo ->
-                setVisible(isNotEmpty(resumo), binding.layoutContainerFrete));
-    }
-
-    private void restaurarDistanciaSalvaSePossivel() {
-        if (isNotEmpty(lerDistanciaManual())) return;
-        Double distanciaSalva = simulacaoFreteViewModel.getDistancia().getValue();
-        if (isNotEmpty(distanciaSalva) && distanciaSalva > 0) {
-            setText(binding.entradaTextoDistancia, String.valueOf(distanciaSalva));
-        }
-    }
-
-    private void sincronizarVisibilidadeComEstadoAtual() {
-        boolean temRota = isNotEmpty(rotaViewModel.getState().getValue());
-        boolean temDistanciaManual = isNotEmpty(lerDistanciaManual());
-        setVisible(temRota && !temDistanciaManual, binding.layoutContainerRota);
-        setVisible(temRota || temDistanciaManual, binding.layoutContainerTransporte);
-    }
-
-    private void aoRotaObtida(RotaUiState rota) {
-        if (rotaConflitaComDistanciaManual(rota)) {
+    private void processarNovaRota(RotaUiState rota) {
+        if (existeConflitoEntreRotaEDistancia(rota)) {
             rotaViewModel.limpar();
             return;
         }
         if (isNotEmpty(rota)) {
-            limparDistanciaManualSemDisparar();
+            limparCampoDistanciaSilenciosamente();
         }
-        sincronizarVisibilidadeComEstadoAtual();
-        calcularFrete();
+        sincronizarInterfaceEFluxoDeCalculo();
     }
 
-    private void aoDistanciaManualAlterada() {
+    private void processarAtualizacaoTransporte(Object transportes) {
+        sincronizarInterfaceEFluxoDeCalculo();
+    }
+
+    private void processarAlteracaoDistanciaManual() {
         double distancia = lerDistanciaManual();
-        simulacaoFreteViewModel.setDistancia(distancia);
-        if (isNotEmpty(distancia)) rotaViewModel.limpar();
-        sincronizarVisibilidadeComEstadoAtual();
-        calcularFrete();
+        salvarDistanciaNoViewModel(distancia);
+        if (isNotEmpty(distancia)) {
+            rotaViewModel.limpar();
+        }
+        sincronizarInterfaceEFluxoDeCalculo();
     }
 
-    private void aoFreteCalculado(PrecificacaoFreteUiState estadoFrete) {
-        resumoSimulacaoFreteViewModel.setState(isEmpty(estadoFrete) ? null : freteResumoMapper.mapper(estadoFrete));
+    private void sincronizarInterfaceEFluxoDeCalculo() {
+        atualizarVisibilidadeDosPaineis();
+        iniciarFluxoDeCalculoDoFrete();
     }
 
-    private void confirmarSelecaoFrete() {
-        PrecificacaoFreteUiState estado = simulacaoFreteViewModel.getState().getValue();
-        if (isEmpty(estado)) return;
-        BigDecimal valorTotal = estado.getValorTotal();
-        if (isEmpty(valorTotal)) return;
-
-        Bundle resultado = new Bundle();
-        resultado.putString(EXTRA_VALOR_FRETE, valorTotal.toPlainString());
-        getParentFragmentManager().setFragmentResult(CHAVE_RESULTADO_FRETE, resultado);
-        NavHostFragment.findNavController(this).popBackStack();
-    }
-
-    private void calcularFrete() {
-        double distanciaAtiva = resolverDistanciaAtiva();
-        if (isEmpty(distanciaAtiva)) {
-            resumoSimulacaoFreteViewModel.setState(null);
-            simulacaoFreteViewModel.limpar();
+    private void iniciarFluxoDeCalculoDoFrete() {
+        double distanciaAtiva = determinarDistanciaParaCalculo();
+        if (isDistanciaInvalida(distanciaAtiva)) {
+            limparDadosDaSimulacao();
             return;
         }
+        executarCalculoDoFreteNoViewModel(distanciaAtiva);
+    }
+
+    private void executarCalculoDoFreteNoViewModel(double distanciaAtiva) {
         simulacaoFreteViewModel.calcularFrete(
-                transporteMapper.mapTo(transporteViewModel.getState().getValue()),
+                transporteMapper.mapTo(orElse(transporteViewModel.getState().getValue(), Collections.emptyList())),
                 distanciaAtiva,
                 cargaTotalDoLote);
     }
 
-    private double resolverDistanciaAtiva() {
-        double distanciaManual = lerDistanciaManual();
-        if (isNotEmpty(distanciaManual)) return distanciaManual;
-        RotaUiState rota = rotaViewModel.getState().getValue();
-        return isNotEmpty(rota) ? rota.getDistancia() : 0.0;
+    private void limparDadosDaSimulacao() {
+        resumoSimulacaoFreteViewModel.setState(null);
+        simulacaoFreteViewModel.limpar();
     }
 
-    private boolean rotaConflitaComDistanciaManual(RotaUiState rota) {
-        return isNotEmpty(rota) && isNotEmpty(lerDistanciaManual());
+    private void atualizarEstadoResumoFrete(PrecificacaoFreteUiState estadoFrete) {
+        resumoSimulacaoFreteViewModel.setState(isEmpty(estadoFrete) ? null : freteResumoMapper.mapper(estadoFrete));
     }
 
-    private void limparDistanciaManualSemDisparar() {
-        if (isEmpty(lerDistanciaManual())) return;
-        binding.entradaTextoDistancia.removeTextChangedListener(distanciaWatcher);
+    private void atualizarVisibilidadeResumoFrete(ResumoValoresUiState resumo) {
+        setVisible(isNotEmpty(resumo), binding.layoutContainerFrete);
+    }
+
+    private void processarConfirmacaoDeFrete() {
+        PrecificacaoFreteUiState estadoAtual = simulacaoFreteViewModel.getState().getValue();
+        if (isEstadoFreteInvalidoParaConfirmacao(estadoAtual)) return;
+        enviarResultadoParaTelaAnterior(orElse(estadoAtual.getValorTotal(), BigDecimal.ZERO));
+        executarNavegacaoVoltar();
+    }
+
+    private void enviarResultadoParaTelaAnterior(BigDecimal valorTotal) {
+        Bundle resultado = criarBundleDeResultado(valorTotal);
+        getParentFragmentManager().setFragmentResult(CHAVE_RESULTADO_FRETE, resultado);
+    }
+
+    private Bundle criarBundleDeResultado(BigDecimal valorTotal) {
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_VALOR_FRETE, valorTotal.toPlainString());
+        return bundle;
+    }
+
+    private void recuperarEstadoDaInterface() {
+        aplicarDistanciaSalvaNaInterface();
+        atualizarVisibilidadeDosPaineis();
+    }
+
+    private void aplicarDistanciaSalvaNaInterface() {
+        if (isDistanciaManualPreenchida()) return;
+        double distanciaSalva = lerDistanciaSalvaNoViewModel();
+        if (distanciaSalva > 0) {
+            atribuirTextoDistancia(String.valueOf(distanciaSalva));
+        }
+    }
+
+    private void atualizarVisibilidadeDosPaineis() {
+        boolean temRota = isRotaDefinida();
+        boolean temDistanciaManual = isDistanciaManualPreenchida();
+        setVisible(temRota && !temDistanciaManual, binding.layoutContainerRota);
+        setVisible(temRota || temDistanciaManual, binding.layoutContainerTransporte);
+    }
+
+    private void limparCampoDistanciaSilenciosamente() {
+        if (isDistanciaManualVazia()) return;
+        removerWatcherDistancia();
         clearText(binding.entradaTextoDistancia);
-        simulacaoFreteViewModel.setDistancia(0);
-        binding.entradaTextoDistancia.addTextChangedListener(distanciaWatcher);
+        salvarDistanciaNoViewModel(0);
+        adicionarWatcherDistancia();
     }
 
-    private void tratarPermissaoNegada() {
+    private void prepararLauncherDePermissao() {
+        permissaoLauncher = register(this, (concedida, result) -> {
+            if (!concedida) tratarRecusaDePermissao();
+        });
+    }
+
+    private void configurarComportamentoBotaoVoltar() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                executarNavegacaoVoltar();
+            }
+        });
+    }
+
+    private void verificarPermissoesDeLocalizacao() {
+        if (!hasPermissions(requireContext(), PERMISSOES_LOCALIZACAO)) {
+            solicitarPermissoesAoUsuario();
+        }
+    }
+
+    private void solicitarPermissoesAoUsuario() {
+        request(requireContext(), permissaoLauncher, PERMISSOES_LOCALIZACAO);
+    }
+
+    private void tratarRecusaDePermissao() {
         showDialog(
                 requireContext(),
                 getString(R.string.dialog_title_permission_location),
                 getString(R.string.dialog_message_permission_location),
-                (d, w) -> abrirConfiguracoesDaPermissao(),
-                (d, w) -> requireActivity().finish());
+                (d, w) -> navegarParaConfiguracoesDoApp(),
+                (d, w) -> encerrarAtividadeAtual());
     }
 
-    private void abrirConfiguracoesDaPermissao() {
-        Intent intent = new Intent(
-                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.fromParts("package", requireContext().getPackageName(), null));
-        startActivity(intent);
+    private void navegarParaConfiguracoesDoApp() {
+        Uri uriConfiguracoes = Uri.fromParts("package", requireContext().getPackageName(), null);
+        startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, uriConfiguracoes));
     }
 
-    private void abrirBuscaDeLocalizacao() {
+    private void abrirTelaBuscaDeLocalizacao() {
         new BuscaLocalizacaoFragment().show(getChildFragmentManager(), null);
+    }
+
+    private void executarNavegacaoVoltar() {
+        NavHostFragment.findNavController(this).popBackStack();
+    }
+
+    private void encerrarAtividadeAtual() {
+        requireActivity().finish();
+    }
+
+    private void adicionarWatcherDistancia() {
+        binding.entradaTextoDistancia.addTextChangedListener(distanciaWatcher);
+    }
+
+    private void removerWatcherDistancia() {
+        binding.entradaTextoDistancia.removeTextChangedListener(distanciaWatcher);
+    }
+
+    private void atribuirTextoDistancia(String texto) {
+        setText(binding.entradaTextoDistancia, texto);
+    }
+
+    private void salvarDistanciaNoViewModel(double distancia) {
+        simulacaoFreteViewModel.setDistancia(distancia);
+    }
+
+    private double determinarDistanciaParaCalculo() {
+        double distanciaManual = lerDistanciaManual();
+        if (isNotEmpty(distanciaManual)) return distanciaManual;
+        return lerDistanciaDefinidaNaRota();
     }
 
     private double lerDistanciaManual() {
         return getDouble(binding.entradaTextoDistancia);
+    }
+
+    private double lerDistanciaDefinidaNaRota() {
+        RotaUiState rota = rotaViewModel.getState().getValue();
+        return isNotEmpty(rota) ? rota.getDistancia() : 0.0;
+    }
+
+    private double lerDistanciaSalvaNoViewModel() {
+        return orElse(simulacaoFreteViewModel.getDistancia().getValue(), 0.0);
+    }
+
+    private boolean existeConflitoEntreRotaEDistancia(RotaUiState rota) {
+        return isNotEmpty(rota) && isDistanciaManualPreenchida();
+    }
+
+    private boolean isEstadoFreteInvalidoParaConfirmacao(PrecificacaoFreteUiState estado) {
+        return isEmpty(estado) || isEmpty(estado.getValorTotal());
+    }
+
+    private boolean isDistanciaManualPreenchida() {
+        return isNotEmpty(lerDistanciaManual());
+    }
+
+    private boolean isDistanciaManualVazia() {
+        return isEmpty(lerDistanciaManual());
+    }
+
+    private boolean isRotaDefinida() {
+        return isNotEmpty(rotaViewModel.getState().getValue());
+    }
+
+    private boolean isDistanciaInvalida(double distancia) {
+        return isEmpty(distancia);
     }
 }

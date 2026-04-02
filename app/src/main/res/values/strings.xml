@@ -184,9 +184,12 @@
 
     <string name="hint_search">Pesquisar endereço</string>
     <string name="label_distancia">Distância</string>
+    <string name="label_peso">Peso</string>
     <string name="label_tempo">Tempo</string>
     <string name="botao_editar">Editar</string>
     <string name="botao_finalizar_rota">Finalizar rota</string>
+    <string name="bezerros_contagem">%1$d / %2$d bezerros</string>
+
 
     <string name="api_key_google_maps">com.google.android.geo.API_KEY</string>
     <string name="km">km</string>
@@ -214,5 +217,9 @@
     <string name="zero">0</string>
     <string name="label_explorar_rotas">Toque para explorar rotas</string>
 
+    <!-- Precificacao Review Screen -->
+    <string name="peso_bezerro">Peso do bezerro</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="finalizar">Finalizar</string>
 
 </resources>

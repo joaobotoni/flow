@@ -71,6 +71,11 @@ public class ViewHelper {
         return true;
     }
 
+    @NonNull
+    public static <T> T orElse(@Nullable T value, @NonNull T fallback) {
+        return value != null ? value : fallback;
+    }
+
     public static void setText(@NonNull TextView textView, @Nullable String text) {
         textView.setText(text != null ? text.trim() : "");
     }

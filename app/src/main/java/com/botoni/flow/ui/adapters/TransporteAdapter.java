@@ -81,9 +81,7 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
 
         private void applyCardEndMargin(boolean isSingleItem, Context context) {
             ViewGroup.MarginLayoutParams cardParams = (ViewGroup.MarginLayoutParams) binding.getRoot().getLayoutParams();
-            int margin = isSingleItem
-                    ? context.getResources().getDimensionPixelSize(R.dimen.dimen_0)
-                    : context.getResources().getDimensionPixelSize(R.dimen.dimen_12);
+            int margin = isSingleItem ? context.getResources().getDimensionPixelSize(R.dimen.dimen_0) : context.getResources().getDimensionPixelSize(R.dimen.dimen_12);
             cardParams.setMarginEnd(margin);
             binding.getRoot().setLayoutParams(cardParams);
         }

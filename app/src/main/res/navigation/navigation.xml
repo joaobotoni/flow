@@ -17,6 +17,14 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_precificacaoFragment_to_detalhePrecificacaoFragment"
+            app:destination="@id/detalhePrecificacaoFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -25,5 +33,13 @@
         android:label="PrecificacaoFreteFragment"
         tools:layout="@layout/fragment_precificacao_frete">
         <argument android:name="cargaTotal" app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalhePrecificacaoFragment"
+        android:name="com.botoni.flow.ui.fragments.DetalhePrecificacaoFragment"
+        android:label="DetalhePrecificacaoFragment"
+        tools:layout="@layout/fragment_detalhe_precificacao">
+        <argument android:name="quantidadeBezerros" app:argType="integer" />
     </fragment>
 </navigation>
