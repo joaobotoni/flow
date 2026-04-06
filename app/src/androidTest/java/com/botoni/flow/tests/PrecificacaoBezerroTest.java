@@ -64,11 +64,11 @@ public class PrecificacaoBezerroTest {
 
         List<Transporte> transportes = transporteRepository.recomendarTransportes(1L, quantidadeCabecas);
 
-        PrecificacaoBezerro bezerroSemFrete = precificacaoBezerroRepository.calcularNegociacaoBezerro(peso, arroba, percentual, quantidadeCabecas);
+        PrecificacaoBezerro bezerroSemFrete = precificacaoBezerroRepository.calcularNegociacaoBezerroComFrete(peso, arroba, percentual, quantidadeCabecas);
         BigDecimal valorTotalFrete = freteRepository.calcularFreteTotal(transportes, distanciaKm);
         BigDecimal incidenciaFrete = freteRepository.calcularIncidenciaFretePorAnimal(valorTotalFrete, pesoTotal);
 
-        PrecificacaoBezerro bezerroComFrete = precificacaoBezerroRepository.calcularNegociacaoBezerroComDescontoDoFrete(peso, arroba, percentual, quantidadeCabecas, incidenciaFrete);
+        PrecificacaoBezerro bezerroComFrete = precificacaoBezerroRepository.calcularNegociacaoBezerro(peso, arroba, percentual, quantidadeCabecas, incidenciaFrete);
 
         System.out.println("RESUMO DA NEGOCIAÇÃO (ANTES DO FRETE)");
         System.out.println("Veículos Usados: " + transportes.size());
@@ -94,7 +94,7 @@ public class PrecificacaoBezerroTest {
         int pesoTotal = quantidadeCabecas * peso.intValue();
 
         List<Transporte> transportes = transporteRepository.recomendarTransportes(1L, quantidadeCabecas);
-        PrecificacaoBezerro bezerro = precificacaoBezerroRepository.calcularNegociacaoBezerro(peso, arroba, percentual, quantidadeCabecas);
+        PrecificacaoBezerro bezerro = precificacaoBezerroRepository.calcularNegociacaoBezerroComFrete(peso, arroba, percentual, quantidadeCabecas);
         BigDecimal valorTotalFrete = freteRepository.calcularFreteTotal(transportes, distanciaKm);
         BigDecimal incidenciaFrete = freteRepository.calcularIncidenciaFretePorAnimal(valorTotalFrete, pesoTotal);
 

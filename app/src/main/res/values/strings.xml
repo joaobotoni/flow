@@ -54,7 +54,7 @@
     <string name="add_location_label">Adicionar localização</string>
     <string name="card_label_unit_value_frete">Valor por kg</string>
     <string name="card_label_unit_total_value_frete">Valor total frete</string>
-    <string name="titulo_resumo_bezerro">Valores do Bezerro</string>
+    <string name="titulo_resumo_bezerro">Valor do Bezerro sem frete</string>
     <string name="titulo_resumo_frete">Valor do Frete</string>
     <string name="titulo_resumo_com_frete">Valor do Bezerro com Frete</string>
     <string name="rotulo_valor_final_por_cabeca">Valor por cabeça</string>
@@ -131,6 +131,8 @@
     <string name="error_network">Erro de conexão</string>
     <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
     <string name="error_field_invalid">%s inválido</string>
+    <string name="limite_bezerros_atingido">Limite de bezerros atingido.</string>
+    <string name="quantidade_incompleta">Adicione todos os bezerros antes de finalizar.</string>
     <string name="error_field_category">Selecione a categoria</string>
     <string name="error_min_value">Valor mínimo: %s</string>
     <string name="error_max_value">Valor máximo: %s</string>

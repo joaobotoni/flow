@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.botoni.flow.data.models.PrecificacaoBezerro;
 import com.botoni.flow.data.repositories.PrecificacaoBezerroRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.mappers.domain.PrecificacaoBezerroMapper;
@@ -25,7 +24,6 @@ public class PrecificacaoBezerroViewModel extends ViewModel {
     private final MutableLiveData<PrecificacaoBezerroUiState> state = new MutableLiveData<>();
     private final MutableLiveData<PrecificacaoBezerroUiState> stateComFrete = new MutableLiveData<>();
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
-
     @Inject
     public PrecificacaoBezerroViewModel(PrecificacaoBezerroRepository repositorio,
                                         TaskHelper taskHelper,
@@ -47,22 +45,22 @@ public class PrecificacaoBezerroViewModel extends ViewModel {
         return error;
     }
 
-    public void calcularNegociacao(BigDecimal peso, BigDecimal arroba,
-                                   BigDecimal percent, Integer quantidade) {
+    public void calcularNegociacaoComFrete(BigDecimal peso, BigDecimal arroba,
+                                           BigDecimal percent, Integer quantidade) {
         taskHelper.execute(
                 () -> precificacaoBezerroMapper
-                        .mapFrom(repositorio.calcularNegociacaoBezerro(peso, arroba, percent, quantidade)),
+                        .mapFrom(repositorio.calcularNegociacaoBezerroComFrete(peso, arroba, percent, quantidade)),
                 state::postValue,
                 error::postValue
         );
     }
 
-    public void calcularNegociacaoComDescontoDoFrete(BigDecimal peso, BigDecimal arroba,
-                                                     BigDecimal percent, Integer quantidade,
-                                                     BigDecimal valorIncidenteFrete) {
+    public void calcularNegociacao(BigDecimal peso, BigDecimal arroba,
+                                   BigDecimal percent, Integer quantidade,
+                                   BigDecimal valorIncidenteFrete) {
         taskHelper.execute(
                 () -> precificacaoBezerroMapper
-                        .mapFrom(repositorio.calcularNegociacaoBezerroComDescontoDoFrete(
+                        .mapFrom(repositorio.calcularNegociacaoBezerro(
                                 peso, arroba, percent, quantidade, valorIncidenteFrete)),
                 stateComFrete::postValue,
                 error::postValue

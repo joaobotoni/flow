@@ -11,7 +11,6 @@ import com.botoni.flow.ui.state.DetalhePrecoBezerroUiState;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -21,98 +20,104 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class DetalhePrecificacaoViewModel extends ViewModel {
     private final TaskHelper taskHelper;
     private final PrecificacaoBezerroRepository repository;
-    private final MutableLiveData<List<DetalhePrecoBezerroUiState>> lista = new MutableLiveData<>(new ArrayList<>());
-    private final MutableLiveData<BigDecimal> valorTotal = new MutableLiveData<>(BigDecimal.ZERO);
-    private final MutableLiveData<DetalhePrecoBezerroUiState> itemParaEditar = new MutableLiveData<>();
+    private final MutableLiveData<List<DetalhePrecoBezerroUiState>> state = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<BigDecimal> total = new MutableLiveData<>(BigDecimal.ZERO);
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
-
     @Inject
     public DetalhePrecificacaoViewModel(PrecificacaoBezerroRepository repository, TaskHelper taskHelper) {
         this.repository = repository;
         this.taskHelper = taskHelper;
     }
 
-    public LiveData<List<DetalhePrecoBezerroUiState>> getLista() {
-        return lista;
+    public LiveData<List<DetalhePrecoBezerroUiState>> getState() {
+        return state;
     }
 
-    public LiveData<BigDecimal> getValorTotal() {
-        return valorTotal;
+    public LiveData<BigDecimal> getTotal() {
+        return total;
     }
 
-    public LiveData<DetalhePrecoBezerroUiState> getItemParaEditar() {
-        return itemParaEditar;
+    public LiveData<Throwable> getError() {
+        return error;
     }
 
     public void adicionarItem(BigDecimal peso, BigDecimal arroba, BigDecimal percent) {
+        List<DetalhePrecoBezerroUiState> lista = listaAtual();
         taskHelper.execute(
-                () -> calcularNovoItem(peso, arroba, percent),
-                this::anexarItemNaLista,
+                () -> adicionarNaLista(lista, peso, arroba, percent),
+                this::publicar,
                 error::postValue
         );
     }
 
-    public void atualizarItem(int id, BigDecimal novoPeso, BigDecimal arroba, BigDecimal percent) {
+    public void atualizarItem(int id, BigDecimal peso, BigDecimal arroba, BigDecimal percent) {
+        List<DetalhePrecoBezerroUiState> lista = listaAtual();
         taskHelper.execute(
-                () -> calcularItemAtualizado(id, novoPeso, arroba, percent),
-                this::substituirItemNaLista,
+                () -> update(lista, id, calcularItem(id, peso, arroba, percent)),
+                this::publicar,
                 error::postValue
         );
     }
 
     public void removerItem(int id) {
-        List<DetalhePrecoBezerroUiState> listaAtual = obterListaAtual();
-        List<DetalhePrecoBezerroUiState> listaFiltrada = filtrarItemPorId(listaAtual, id);
-        lista.postValue(listaFiltrada);
-        valorTotal.postValue(calcularSomaTotal(listaFiltrada));
+        List<DetalhePrecoBezerroUiState> lista = listaAtual();
+        taskHelper.execute(
+                () -> remove(lista, id),
+                this::publicar,
+                error::postValue
+        );
     }
 
-    public void editarItem(DetalhePrecoBezerroUiState detalhe) {
-        itemParaEditar.postValue(detalhe);
-        removerItem(detalhe.getId());
+    private List<DetalhePrecoBezerroUiState> adicionarNaLista(
+            List<DetalhePrecoBezerroUiState> lista, BigDecimal peso, BigDecimal arroba, BigDecimal percent) {
+        lista.add(calcularItem(lista.size(), peso, arroba, percent));
+        return lista;
     }
 
-    private DetalhePrecoBezerroUiState calcularItemAtualizado(int id, BigDecimal peso, BigDecimal arroba, BigDecimal percent) {
-        BigDecimal total = repository.calcularValorTotalBezerro(peso, arroba, percent);
-        BigDecimal porKg = repository.calcularValorPorKg(peso, arroba, percent);
-        return new DetalhePrecoBezerroUiState(id, peso, total, porKg);
+    private List<DetalhePrecoBezerroUiState> update(
+            List<DetalhePrecoBezerroUiState> lista, int id, DetalhePrecoBezerroUiState item) {
+        lista.set(id, item);
+        return lista;
     }
 
-    private void substituirItemNaLista(DetalhePrecoBezerroUiState itemAtualizado) {
-        List<DetalhePrecoBezerroUiState> listaAtualizada = obterListaAtual().stream()
-                .map(item -> item.getId() == itemAtualizado.getId() ? itemAtualizado : item)
-                .collect(Collectors.toList());
-        lista.postValue(listaAtualizada);
-        valorTotal.postValue(calcularSomaTotal(listaAtualizada));
+    private List<DetalhePrecoBezerroUiState> remove(List<DetalhePrecoBezerroUiState> lista, int id) {
+        lista.remove(id);
+        return reindexar(lista);
     }
 
-    private DetalhePrecoBezerroUiState calcularNovoItem(BigDecimal peso, BigDecimal arroba, BigDecimal percent) {
-        BigDecimal total = repository.calcularValorTotalBezerro(peso, arroba, percent);
-        BigDecimal porKg = repository.calcularValorPorKg(peso, arroba, percent);
-        return new DetalhePrecoBezerroUiState(peso, total, porKg);
+    private void publicar(List<DetalhePrecoBezerroUiState> lista) {
+        state.postValue(lista);
+        total.postValue(
+                lista.stream()
+                        .map(DetalhePrecoBezerroUiState::getValorTotal)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+        );
     }
 
-    private void anexarItemNaLista(DetalhePrecoBezerroUiState novoItem) {
-        List<DetalhePrecoBezerroUiState> listaAtualizada = new ArrayList<>(obterListaAtual());
-        listaAtualizada.add(novoItem);
-        lista.postValue(listaAtualizada);
-        valorTotal.postValue(calcularSomaTotal(listaAtualizada));
+    private List<DetalhePrecoBezerroUiState> reindexar(List<DetalhePrecoBezerroUiState> lista) {
+        List<DetalhePrecoBezerroUiState> reindexada = new ArrayList<>();
+        for (int i = 0; i < lista.size(); i++) {
+            DetalhePrecoBezerroUiState item = lista.get(i);
+            reindexada.add(new DetalhePrecoBezerroUiState(i, item.getPeso(), item.getValorTotal(), item.getValorPorKg()));
+        }
+        return reindexada;
     }
 
-    private List<DetalhePrecoBezerroUiState> filtrarItemPorId(List<DetalhePrecoBezerroUiState> origem, int id) {
-        return origem.stream()
-                .filter(item -> item.getId() != id)
-                .collect(Collectors.toList());
+    private DetalhePrecoBezerroUiState calcularItem(int id, BigDecimal peso, BigDecimal arroba, BigDecimal percent) {
+        return new DetalhePrecoBezerroUiState(
+                id, peso,
+                repository.calcularValorTotalBezerroComFrete(peso, arroba, percent),
+                repository.calcularValorPorKgComFrete(peso, arroba, percent)
+        );
     }
 
-    private BigDecimal calcularSomaTotal(List<DetalhePrecoBezerroUiState> itens) {
-        return itens.stream()
-                .map(DetalhePrecoBezerroUiState::getValorTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    private List<DetalhePrecoBezerroUiState> listaAtual() {
+        List<DetalhePrecoBezerroUiState> lista = state.getValue();
+        return lista != null ? new ArrayList<>(lista) : new ArrayList<>();
     }
 
-    private List<DetalhePrecoBezerroUiState> obterListaAtual() {
-        List<DetalhePrecoBezerroUiState> atual = lista.getValue();
-        return atual != null ? atual : new ArrayList<>();
+    public int size() {
+        List<DetalhePrecoBezerroUiState> lista = state.getValue();
+        return lista != null ? lista.size() : 0;
     }
 }

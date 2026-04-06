@@ -6,9 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.botoni.flow.ui.helpers.NumberHelper;
 import com.botoni.flow.ui.state.DetalhePrecoBezerroUiState;
-import com.botoni.flow.utils.pdf.PdfGenerator;
-import com.botoni.flow.utils.pdf.PdfPageConfig;
-import com.botoni.flow.utils.pdf.TextAlignment;
+import com.botoni.flow.utils.pdf.*;
 import com.botoni.flow.utils.pdf.bands.FooterBand;
 import com.botoni.flow.utils.pdf.bands.RowBand;
 import com.botoni.flow.utils.pdf.bands.SpacerBand;
@@ -38,13 +36,13 @@ public class PdfDetalhePrecificacaoBuilder {
         PdfGenerator generator = new PdfGenerator(PdfPageConfig.a4Portrait());
         generator.setFooter(new FooterBand("Flow — Precificação  •  " + dataGeracao));
 
-        generator.addBand(new TitleBand("Relatório de Precificação de Bezerros"));
+        generator.addBand(new TitleBand("Relatório de Detalhe Precificação de Bezerros"));
         generator.addBand(new SpacerBand(10f));
         generator.addBand(new TextBand("Data: " + dataGeracao, 10f, TextAlignment.LEFT));
         generator.addBand(new TextBand("Total de animais: " + itens.size(), 10f, TextAlignment.LEFT));
         generator.addBand(new SpacerBand(14f));
 
-        generator.addBand(new RowBand(11f, 26f,
+        generator.addBand(new  RowBand(11f, 26f,
                 new RowBand.Column("#", 0.5f, TextAlignment.CENTER),
                 new RowBand.Column("Peso (kg)", 1.5f, TextAlignment.CENTER),
                 new RowBand.Column("R$/kg", 1.5f, TextAlignment.RIGHT),

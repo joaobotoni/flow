@@ -21,44 +21,44 @@ public class PrecificacaoBezerroRepository {
     public PrecificacaoBezerroRepository() {
     }
 
-    public PrecificacaoBezerro calcularNegociacaoBezerroComDescontoDoFrete(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade, BigDecimal valorFrete) {
-        BigDecimal valorPorCabeca = calcularValorBezerroComDescontoDoFrete(peso, precoPorArroba, percentualAgio, valorFrete);
-        BigDecimal valorPorKg = calcularValorPorKgComDescontoDoFrete(peso, precoPorArroba, percentualAgio, valorFrete);
+    public PrecificacaoBezerro calcularNegociacaoBezerro(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade, BigDecimal valorFrete) {
+        BigDecimal valorPorCabeca = calcularValorBezerro(peso, precoPorArroba, percentualAgio, valorFrete);
+        BigDecimal valorPorKg = calcularValorPorKg(peso, precoPorArroba, percentualAgio, valorFrete);
         BigDecimal valorTotal = calcularValorTotalLote(valorPorCabeca, quantidade);
         return new PrecificacaoBezerro(valorPorKg, valorPorCabeca, valorTotal);
     }
 
-    public BigDecimal calcularValorBezerroComDescontoDoFrete(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete) {
-        return calcularValorPorKgComDescontoDoFrete(pesoKg, precoPorArroba, percentualAgio, valorFrete)
+    public BigDecimal calcularValorBezerro(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete) {
+        return calcularValorPorKg(pesoKg, precoPorArroba, percentualAgio, valorFrete)
                 .multiply(pesoKg)
                 .setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
     }
 
 
-    public BigDecimal calcularValorPorKgComDescontoDoFrete(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete) {
-        return pesoKg.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calcularValorTotalBezerro(pesoKg, precoPorArroba, percentualAgio)
+    public BigDecimal calcularValorPorKg(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete) {
+        return pesoKg.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calcularValorTotalBezerroComFrete(pesoKg, precoPorArroba, percentualAgio)
                 .divide(pesoKg, ESCALA_CALCULO, MODO_ARREDONDAMENTO)
                 .subtract(valorFrete);
     }
 
-    public PrecificacaoBezerro calcularNegociacaoBezerro(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade) {
-        BigDecimal valorPorCabeca = calcularValorTotalBezerro(peso, precoPorArroba, percentualAgio);
-        BigDecimal valorPorKg = calcularValorPorKg(peso, precoPorArroba, percentualAgio);
+    public PrecificacaoBezerro calcularNegociacaoBezerroComFrete(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade) {
+        BigDecimal valorPorCabeca = calcularValorTotalBezerroComFrete(peso, precoPorArroba, percentualAgio);
+        BigDecimal valorPorKg = calcularValorPorKgComFrete(peso, precoPorArroba, percentualAgio);
         BigDecimal valorTotal = calcularValorTotalLote(valorPorCabeca, quantidade);
         return new PrecificacaoBezerro(valorPorKg, valorPorCabeca, valorTotal);
     }
 
 
-    public BigDecimal calcularValorTotalBezerro(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio) {
+    public BigDecimal calcularValorTotalBezerroComFrete(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio) {
         return calcularValorBasePorPeso(pesoKg, precoPorArroba)
                 .add(calcularValorTotalAgio(pesoKg, precoPorArroba, percentualAgio))
                 .setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
     }
 
-    public BigDecimal calcularValorPorKg(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio) {
+    public BigDecimal calcularValorPorKgComFrete(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio) {
         return pesoKg.compareTo(BigDecimal.ZERO) == 0
                 ? BigDecimal.ZERO
-                : calcularValorTotalBezerro(pesoKg, precoPorArroba, percentualAgio)
+                : calcularValorTotalBezerroComFrete(pesoKg, precoPorArroba, percentualAgio)
                 .divide(pesoKg, ESCALA_CALCULO, MODO_ARREDONDAMENTO);
     }
 

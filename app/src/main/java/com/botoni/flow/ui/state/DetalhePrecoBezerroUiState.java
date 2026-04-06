@@ -4,18 +4,10 @@ import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DetalhePrecoBezerroUiState {
-    private static final AtomicInteger COUNTER = new AtomicInteger(0);
     private final int id;
     private final BigDecimal peso;
     private final BigDecimal valorTotal;
     private final BigDecimal valorPorKg;
-
-    public DetalhePrecoBezerroUiState(BigDecimal peso, BigDecimal valorTotal, BigDecimal valorPorKg) {
-        this.id = COUNTER.incrementAndGet();
-        this.peso = peso;
-        this.valorTotal = valorTotal;
-        this.valorPorKg = valorPorKg;
-    }
 
     public DetalhePrecoBezerroUiState(int id, BigDecimal peso, BigDecimal valorTotal, BigDecimal valorPorKg) {
         this.id = id;

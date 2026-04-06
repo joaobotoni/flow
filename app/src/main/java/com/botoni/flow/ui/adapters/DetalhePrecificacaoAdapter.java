@@ -62,9 +62,7 @@ public class DetalhePrecificacaoAdapter extends ListAdapter<DetalhePrecoBezerroU
 
         @Override
         public boolean areItemsTheSame(@NonNull DetalhePrecoBezerroUiState oldItem, @NonNull DetalhePrecoBezerroUiState newItem) {
-            return Objects.equals(oldItem.getPeso(), newItem.getPeso())
-                    && Objects.equals(oldItem.getValorPorKg(), newItem.getValorPorKg())
-                    && Objects.equals(oldItem.getValorTotal(), newItem.getValorTotal());
+            return oldItem.getId() == newItem.getId();
         }
 
         @Override

@@ -78,7 +78,7 @@ public class PrecificacaoFreteTest {
         int pesoTotal = quantidadeCabecas * peso.intValue();
 
         List<Transporte> transportes = transporteRepository.recomendarTransportes(1L, quantidadeCabecas);
-        PrecificacaoBezerro bezerro = precificacaoBezerroRepository.calcularNegociacaoBezerro(peso, arroba, percentual, quantidadeCabecas);
+        PrecificacaoBezerro bezerro = precificacaoBezerroRepository.calcularNegociacaoBezerroComFrete(peso, arroba, percentual, quantidadeCabecas);
         BigDecimal valorTotalFrete = freteRepository.calcularFreteTotal(transportes, distanciaKm);
         BigDecimal incidenciaFrete = freteRepository.calcularIncidenciaFretePorAnimal(valorTotalFrete, pesoTotal);
 

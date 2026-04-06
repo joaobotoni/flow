@@ -22,7 +22,7 @@ import com.botoni.flow.ui.adapters.DetalhePrecificacaoAdapter;
 import com.botoni.flow.ui.helpers.FileHelper;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.helpers.ViewHelper;
-import com.botoni.flow.ui.reports.PdfDetalhePrecificacaoBuilder;
+import com.botoni.flow.ui.reports.*;
 import com.botoni.flow.ui.state.DetalhePrecoBezerroUiState;
 import com.botoni.flow.ui.viewmodel.DetalhePrecificacaoViewModel;
 import com.botoni.flow.ui.viewmodel.ResultadoViewModel;
@@ -100,18 +100,26 @@ public class DetalhePrecificacaoFragment extends Fragment {
     }
 
     private void configurarObservadores() {
-        viewModel.getLista().observe(getViewLifecycleOwner(), this::atualizarLista);
-        viewModel.getValorTotal().observe(getViewLifecycleOwner(), resultadoViewModel::setState);
+        viewModel.getState().observe(getViewLifecycleOwner(), this::atualizarLista);
+        viewModel.getTotal().observe(getViewLifecycleOwner(), resultadoViewModel::setState);
     }
 
     private void onAdicionarClicado() {
         if (campoPesoVazio()) return;
+        if (listaCheia()) {
+            showSnackBar(requireView(), getString(R.string.limite_bezerros_atingido));
+            return;
+        }
         viewModel.adicionarItem(lerPeso(), ARROBA, AGIO);
         limparCampoPeso();
     }
 
     private void onFinalizarClicado() {
         if (!listaValida()) return;
+        if (!listaCompleta()){
+            showSnackBar(requireView(), getString(R.string.quantidade_incompleta));
+            return;
+        }
         gerarECompartilharPdf(capturarListaAtual(), capturarTotalAtual());
     }
 
@@ -151,8 +159,7 @@ public class DetalhePrecificacaoFragment extends Fragment {
 
     private void abrirDialogEdicao(DetalhePrecoBezerroUiState detalhe) {
         DialogEdicaoPesoFragment dialog = DialogEdicaoPesoFragment.newInstance(detalhe);
-        dialog.setOnConfirmListener(novoPeso ->
-                viewModel.atualizarItem(detalhe.getId(), novoPeso, ARROBA, AGIO));
+        dialog.setOnConfirmListener(novoPeso -> viewModel.atualizarItem(detalhe.getId(), novoPeso, ARROBA, AGIO));
         dialog.show(getChildFragmentManager(), null);
     }
 
@@ -167,16 +174,16 @@ public class DetalhePrecificacaoFragment extends Fragment {
     }
 
     private boolean listaValida() {
-        List<DetalhePrecoBezerroUiState> lista = viewModel.getLista().getValue();
+        List<DetalhePrecoBezerroUiState> lista = viewModel.getState().getValue();
         return lista != null && !lista.isEmpty();
     }
 
     private List<DetalhePrecoBezerroUiState> capturarListaAtual() {
-        return new ArrayList<>(viewModel.getLista().getValue());
+        return new ArrayList<>(viewModel.getState().getValue());
     }
 
     private BigDecimal capturarTotalAtual() {
-        BigDecimal total = viewModel.getValorTotal().getValue();
+        BigDecimal total = viewModel.getTotal().getValue();
         return total != null ? total : BigDecimal.ZERO;
     }
 
@@ -194,5 +201,13 @@ public class DetalhePrecificacaoFragment extends Fragment {
 
     private void limparCampoPeso() {
         ViewHelper.clearText(binding.entradaPesoBezerro);
+    }
+
+    private boolean listaCheia() {
+        return viewModel.size() >= quantidadeTotal;
+    }
+
+    private boolean listaCompleta() {
+        return viewModel.size() == quantidadeTotal;
     }
 }

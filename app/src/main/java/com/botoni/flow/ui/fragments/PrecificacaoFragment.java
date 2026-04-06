@@ -118,7 +118,7 @@ public class PrecificacaoFragment extends Fragment {
 
     private void iniciarFragmentosEstaticos() {
         substituirFragmento(R.id.layout_container_valor_frete, criarFragmentoResumoFrete());
-        substituirFragmento(R.id.layout_container_valor_bezerro_com_frete, criarFragmentoResumoComFrete());
+        substituirFragmento(R.id.layout_container_valor_bezerro, criarFragmentoResumoBezerroSemFrete());
         substituirFragmento(R.id.layout_container_valor_total_final, criarFragmentoResultadoFinal());
     }
 
@@ -179,19 +179,19 @@ public class PrecificacaoFragment extends Fragment {
 
     private void observarCalculosBezerro() {
         bezerroViewModel.getState().observe(getViewLifecycleOwner(), estado -> {
-            atualizarEstadoResumoBezerro(estado);
+            atualizarEstadoResumoComFrete(estado);
             if (isFreteNaoDeclarado()) atualizarEstadoResultadoFinal(estado);
         });
 
         bezerroViewModel.getStateComFrete().observe(getViewLifecycleOwner(), estado -> {
-            atualizarEstadoResumoComFrete(estado);
+            atualizarEstadoResumoBezerro(estado);
             if (isFreteDeclarado()) atualizarEstadoResultadoFinal(estado);
         });
     }
 
     private void observarResumosUi() {
         resumoFreteViewModel.getState().observe(getViewLifecycleOwner(), this::atualizarVisibilidadeContainerFrete);
-        resumoBezerroViewModel.getState().observe(getViewLifecycleOwner(), this::processarAtualizacaoResumoBezerro);
+        resumoBezerroViewModel.getState().observe(getViewLifecycleOwner(), this::processarAtualizacaoResumoBezerroSemFrete);
         resumoComFreteViewModel.getState().observe(getViewLifecycleOwner(), this::processarAtualizacaoResumoComFrete);
     }
 
@@ -238,13 +238,14 @@ public class PrecificacaoFragment extends Fragment {
     private void processarIncidenciaFrete(BigDecimal incidencia) {
         if (incidenciaDeveSerIgnorada(incidencia)) {
             limparResumoComFreteUiState();
+            calcularBezerroComDescontoFrete(BigDecimal.ZERO);
             return;
         }
         calcularBezerroComDescontoFrete(incidencia);
     }
 
     private void calcularBezerroComDescontoFrete(BigDecimal incidencia) {
-        bezerroViewModel.calcularNegociacaoComDescontoDoFrete(lerPesoUnitario(), ARROBA, AGIO, lerQuantidade(), incidencia);
+        bezerroViewModel.calcularNegociacao(lerPesoUnitario(), ARROBA, AGIO, lerQuantidade(), incidencia);
     }
 
     private void atualizarEstadoResumoBezerro(PrecificacaoBezerroUiState estado) {
@@ -259,27 +260,27 @@ public class PrecificacaoFragment extends Fragment {
         resultadoFinalViewModel.setState(isEmpty(estado) ? null : estado.getValorTotal());
     }
 
-    private void processarAtualizacaoResumoBezerro(ResumoValoresUiState resumo) {
-        if (isFreteNaoDeclarado()) {
-            aplicarLayoutCenarioSemFrete(resumo);
-        }
+    private void processarAtualizacaoResumoBezerroSemFrete(ResumoValoresUiState resumo) {
+        substituirFragmento(R.id.layout_container_valor_bezerro, criarFragmentoResumoBezerroSemFrete());
+        atualizarVisibilidadeContainerSemFrete(resumo);
         atualizarVisibilidadeContainerResultado(resumo);
     }
 
     private void processarAtualizacaoResumoComFrete(ResumoValoresUiState resumo) {
         if (isFreteDeclarado()) {
             aplicarLayoutCenarioComFrete(resumo);
+        } else {
+            aplicarLayoutCenarioSemFrete();
         }
     }
 
-    private void aplicarLayoutCenarioSemFrete(ResumoValoresUiState resumo) {
-        substituirFragmento(R.id.layout_container_valor_bezerro_com_frete, criarFragmentoResumoBezerro());
+    private void aplicarLayoutCenarioComFrete(ResumoValoresUiState resumo) {
+        substituirFragmento(R.id.layout_container_valor_bezerro_com_frete, criarFragmentoResumoBezerroComFrete());
         atualizarVisibilidadeContainerComFrete(resumo);
     }
 
-    private void aplicarLayoutCenarioComFrete(ResumoValoresUiState resumo) {
-        substituirFragmento(R.id.layout_container_valor_bezerro_com_frete, criarFragmentoResumoComFrete());
-        atualizarVisibilidadeContainerComFrete(resumo);
+    private void aplicarLayoutCenarioSemFrete() {
+        setVisible(false, binding.layoutContainerValorBezerroComFrete);
     }
 
     private void atualizarVisibilidadeContainerFrete(ResumoValoresUiState resumo) {
@@ -288,6 +289,10 @@ public class PrecificacaoFragment extends Fragment {
 
     private void atualizarVisibilidadeContainerComFrete(ResumoValoresUiState resumo) {
         setVisible(isNotEmpty(resumo), binding.layoutContainerValorBezerroComFrete);
+    }
+
+    private void atualizarVisibilidadeContainerSemFrete(ResumoValoresUiState resumo) {
+        setVisible(isNotEmpty(resumo), binding.layoutContainerValorBezerro);
     }
 
     private void atualizarVisibilidadeContainerResultado(ResumoValoresUiState resumo) {
@@ -358,7 +363,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void calcularValorBaseBezerro() {
-        bezerroViewModel.calcularNegociacao(lerPesoUnitario(), ARROBA, AGIO, lerQuantidade());
+        bezerroViewModel.calcularNegociacaoComFrete(lerPesoUnitario(), ARROBA, AGIO, lerQuantidade());
     }
 
     private void calcularValorBaseFrete() {
@@ -387,18 +392,18 @@ public class PrecificacaoFragment extends Fragment {
                 getString(R.string.card_label_unit_value_frete));
     }
 
-    private ResumoValoresFragment criarFragmentoResumoComFrete() {
+    private ResumoValoresFragment criarFragmentoResumoBezerroSemFrete() {
         return ResumoValoresFragment.newInstance(
-                CHAVE_RESUMO_COM_FRETE,
-                getString(R.string.titulo_resumo_com_frete),
+                CHAVE_RESUMO_BEZERRO,
+                getString(R.string.titulo_resumo_bezerro),
                 getString(R.string.rotulo_valor_final_por_cabeca),
                 getString(R.string.rotulo_valor_final_por_kg));
     }
 
-    private ResumoValoresFragment criarFragmentoResumoBezerro() {
+    private ResumoValoresFragment criarFragmentoResumoBezerroComFrete() {
         return ResumoValoresFragment.newInstance(
-                CHAVE_RESUMO_BEZERRO,
-                getString(R.string.titulo_resumo_bezerro),
+                CHAVE_RESUMO_COM_FRETE,
+                getString(R.string.titulo_resumo_com_frete),
                 getString(R.string.card_label_total_value),
                 getString(R.string.card_label_unit_value_frete));
     }
