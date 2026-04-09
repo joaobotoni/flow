@@ -82,6 +82,7 @@
                     android:id="@+id/entrada_texto_peso_animal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789,"
                     android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -105,6 +106,7 @@
                     android:id="@+id/entrada_texto_quantidade_animais"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789,"
                     android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -126,6 +128,7 @@
                     android:id="@+id/entrada_texto_valor_frete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789,"
                     android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -166,7 +169,6 @@
                 tools:layout="@layout/fragment_resumo_valores"
                 tools:visibility="visible" />
 
-            <!-- 4º fragment: ancora no 3º fragment -->
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/layout_container_valor_total_final"
                 android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.botoni.flow.ui.fragments;
 
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
 import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SimpleTextWatcher;
 import static com.botoni.flow.ui.helpers.ViewHelper.anyEmpty;
@@ -27,7 +28,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentPrecificacaoBinding;
 import com.botoni.flow.ui.adapters.CategoriaAdapter;
-import com.botoni.flow.ui.helpers.AlertHelper;
 import com.botoni.flow.ui.mappers.presentation.BezerroResumoMapper;
 import com.botoni.flow.ui.mappers.presentation.FreteResumoMapper;
 import com.botoni.flow.ui.state.CategoriaUiState;
@@ -49,21 +49,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class PrecificacaoFragment extends Fragment {
-
     private static final BigDecimal ARROBA = new BigDecimal("310");
     private static final BigDecimal AGIO = new BigDecimal("30");
     private static final String CHAVE_RESUMO_BEZERRO = "resumo_bezerro";
     private static final String CHAVE_RESUMO_FRETE = "resumo_frete";
     private static final String CHAVE_RESUMO_COM_FRETE = "resumo_com_frete";
     private static final String CHAVE_RESULTADO_FINAL = "resultado_final";
-
     @Inject BezerroResumoMapper bezerroResumoMapper;
     @Inject FreteResumoMapper freteResumoMapper;
-
     private FragmentPrecificacaoBinding binding;
     private TextWatcher entradaWatcher;
     private CategoriaAdapter categoriaAdapter;
-
     private PrecificacaoBezerroViewModel bezerroViewModel;
     private PrecificacaoFreteViewModel freteViewModel;
     private CategoriaViewModel categoriaViewModel;
@@ -146,7 +142,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void configurarClickBotaoProsseguir() {
-        binding.botaoProsseguir.setOnClickListener(v -> validarENavegarParaDetalhes());
+        binding.botaoProsseguir.setOnClickListener(v -> validarENavegarParaNegociacao());
     }
 
     private void configurarListenerResultadoFrete() {
@@ -180,13 +176,10 @@ public class PrecificacaoFragment extends Fragment {
     private void observarCalculosBezerro() {
         bezerroViewModel.getState().observe(getViewLifecycleOwner(), estado -> {
             atualizarEstadoResumoComFrete(estado);
-            if (isFreteNaoDeclarado()) atualizarEstadoResultadoFinal(estado);
+            atualizarEstadoResultadoFinal(estado);
         });
 
-        bezerroViewModel.getStateComFrete().observe(getViewLifecycleOwner(), estado -> {
-            atualizarEstadoResumoBezerro(estado);
-            if (isFreteDeclarado()) atualizarEstadoResultadoFinal(estado);
-        });
+        bezerroViewModel.getStateComFrete().observe(getViewLifecycleOwner(), this::atualizarEstadoResumoBezerro);
     }
 
     private void observarResumosUi() {
@@ -320,15 +313,15 @@ public class PrecificacaoFragment extends Fragment {
         adicionarWatcherFrete();
     }
 
-    private void validarENavegarParaDetalhes() {
+    private void validarENavegarParaNegociacao() {
         if (falhaValidacaoCategoria()) return;
         if (falhaValidacaoEntradas()) return;
-        executarNavegacaoDetalhes();
+        executarNavegacaoNegociacao();
     }
 
-    private void executarNavegacaoDetalhes() {
+    private void executarNavegacaoNegociacao() {
         NavHostFragment.findNavController(this).navigate(
-                PrecificacaoFragmentDirections.actionPrecificacaoFragmentToDetalhePrecificacaoFragment(lerQuantidade()));
+                PrecificacaoFragmentDirections.actionPrecificacaoFragmentToNegociacaoFragment(lerQuantidade(), lerPesoUnitario().toPlainString()));
     }
 
     private void validarENavegarParaFrete() {
@@ -354,7 +347,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void exibirAlertaErro(int mensagemId) {
-        AlertHelper.showSnackBar(requireView(), getString(mensagemId));
+        showSnackBar(requireView(), getString(mensagemId));
     }
 
     private void executarNavegacaoFrete() {
@@ -428,6 +421,7 @@ public class PrecificacaoFragment extends Fragment {
         return bundle.getString(PrecificacaoFreteFragment.EXTRA_VALOR_FRETE);
     }
 
+
     private BigDecimal lerPesoUnitario() {
         return getBigDecimal(binding.entradaTextoPesoAnimal);
     }
@@ -458,10 +452,6 @@ public class PrecificacaoFragment extends Fragment {
 
     private boolean incidenciaDeveSerIgnorada(BigDecimal incidencia) {
         return anyEmpty(incidencia, lerPesoUnitario(), lerQuantidade());
-    }
-
-    private boolean isFreteNaoDeclarado() {
-        return isEmpty(lerValorFrete());
     }
 
     private boolean isFreteDeclarado() {

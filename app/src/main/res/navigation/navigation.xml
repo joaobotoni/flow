@@ -19,8 +19,8 @@
             app:popExitAnim="@android:anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_precificacaoFragment_to_detalhePrecificacaoFragment"
-            app:destination="@id/detalhePrecificacaoFragment"
+            android:id="@+id/action_precificacaoFragment_to_negociacaoFragment"
+            app:destination="@id/negociacaoFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
@@ -32,8 +32,29 @@
         android:name="com.botoni.flow.ui.fragments.PrecificacaoFreteFragment"
         android:label="PrecificacaoFreteFragment"
         tools:layout="@layout/fragment_precificacao_frete">
-        <argument android:name="cargaTotal" app:argType="integer" />
+        <argument
+            android:name="cargaTotal"
+            app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/negociacaoFragment"
+        android:name="com.botoni.flow.ui.fragments.NegociacaoFragment"
+        android:label="NegociacaoFragment"
+        tools:layout="@layout/fragment_negociacao">
+
+        <action
+            android:id="@+id/action_negociacaoFragment_to_detalhePrecificacaoFragment"
+            app:destination="@id/detalhePrecificacaoFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+
+        <argument android:name="quantidadeBezerros" app:argType="integer" />
+        <argument android:name="pesoMedio" app:argType="string" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/detalhePrecificacaoFragment"

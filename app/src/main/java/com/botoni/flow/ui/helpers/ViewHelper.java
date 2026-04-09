@@ -28,6 +28,11 @@ public class ViewHelper {
     }
 
     @NonNull
+    public static Float getFloat(@Nullable EditText view) {
+        return NumberHelper.getFloat(requireText(view));
+    }
+
+    @NonNull
     public static Double getDouble(@Nullable EditText view) {
         return NumberHelper.getDouble(requireText(view));
     }

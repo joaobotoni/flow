@@ -25,6 +25,16 @@ public class NumberHelper {
     }
 
     @NonNull
+    public static Float getFloat(@Nullable String value) {
+        if (value == null || value.trim().isEmpty()) return 0.0f;
+        try {
+            return Float.parseFloat(value.trim());
+        } catch (NumberFormatException e) {
+            return 0.0f;
+        }
+    }
+
+    @NonNull
     public static Double getDouble(@Nullable String value) {
         if (value == null || value.trim().isEmpty()) return 0.0;
         try {
@@ -52,5 +62,11 @@ public class NumberHelper {
     public static String formatCurrency(@Nullable BigDecimal value) {
         if (value == null) return "0,00";
         return CURRENCY_FORMAT.format(value);
+    }
+
+    @NonNull
+    public static String formatInteger(@Nullable Integer value) {
+        if (value == null) return "0";
+        return String.valueOf(value);
     }
 }
