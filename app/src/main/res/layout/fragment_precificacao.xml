@@ -64,7 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imagem_icone_categoria"
-                tools:listitem="@layout/item_categoria" />
+                tools:listitem="@layout/item_opcao" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/campo_texto_peso_animal"

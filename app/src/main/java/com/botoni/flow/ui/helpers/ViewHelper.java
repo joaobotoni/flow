@@ -24,22 +24,22 @@ public class ViewHelper {
 
     @NonNull
     public static Integer getInt(@Nullable EditText view) {
-        return NumberHelper.getInt(requireText(view));
+        return FormatHelper.getInt(requireText(view));
     }
 
     @NonNull
     public static Float getFloat(@Nullable EditText view) {
-        return NumberHelper.getFloat(requireText(view));
+        return FormatHelper.getFloat(requireText(view));
     }
 
     @NonNull
     public static Double getDouble(@Nullable EditText view) {
-        return NumberHelper.getDouble(requireText(view));
+        return FormatHelper.getDouble(requireText(view));
     }
 
     @NonNull
     public static BigDecimal getBigDecimal(@Nullable EditText view) {
-        return NumberHelper.getDecimal(requireText(view));
+        return FormatHelper.getDecimal(requireText(view));
     }
 
     public static <T> boolean isEmpty(@Nullable T value) {

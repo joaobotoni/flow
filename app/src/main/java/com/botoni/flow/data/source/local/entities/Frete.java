@@ -2,26 +2,49 @@ package com.botoni.flow.data.source.local.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "xgp_frete")
+import com.google.gson.annotations.SerializedName;
+
+@Entity(
+        tableName = "xgp_frete",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = TipoVeiculoFrete.class,
+                        parentColumns = "id_tipo_veiculo_frete",
+                        childColumns = "id_tipo_veiculo_frete",
+                        onDelete = ForeignKey.RESTRICT
+                )
+        },
+        indices = {
+                @Index("id_tipo_veiculo_frete")
+        }
+)
 public class Frete {
     @ColumnInfo(name = "id_frete")
+    @SerializedName(value = "ID_FRETE")
     @PrimaryKey(autoGenerate = true)
-    private Long id;
+    private int id;
     @ColumnInfo(name = "id_tipo_veiculo_frete")
-    private Long idTipoVeiculoFrete;
+    @SerializedName(value = "ID_TIPO_VEICULO_FRETE")
+    private int idTipoVeiculoFrete;
     @ColumnInfo(name = "tipo_cobranca")
+    @SerializedName(value = "TIPO_COBRANCA")
     private int tipoCobranca;
     @ColumnInfo(name = "km_inicial")
+    @SerializedName(value = "KM_INICIAL")
     private double kmInicial;
     @ColumnInfo(name = "km_final")
+    @SerializedName(value = "KM_FINAL")
     private double kmFinal;
     @ColumnInfo(name = "valor")
+    @SerializedName(value = "VALOR")
     private double valor;
 
 
-    public Frete(Long idTipoVeiculoFrete, int tipoCobranca, double kmInicial, double kmFinal, double valor) {
+    public Frete(int idTipoVeiculoFrete, int tipoCobranca, double kmInicial, double kmFinal, double valor) {
         this.idTipoVeiculoFrete = idTipoVeiculoFrete;
         this.tipoCobranca = tipoCobranca;
         this.kmInicial = kmInicial;
@@ -29,19 +52,19 @@ public class Frete {
         this.valor = valor;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getIdTipoVeiculoFrete() {
+    public int getIdTipoVeiculoFrete() {
         return idTipoVeiculoFrete;
     }
 
-    public void setIdTipoVeiculoFrete(Long idTipoVeiculoFrete) {
+    public void setIdTipoVeiculoFrete(int idTipoVeiculoFrete) {
         this.idTipoVeiculoFrete = idTipoVeiculoFrete;
     }
 

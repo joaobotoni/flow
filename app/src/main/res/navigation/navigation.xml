@@ -60,5 +60,7 @@
         android:label="DetalhePrecificacaoFragment"
         tools:layout="@layout/fragment_detalhe_precificacao">
         <argument android:name="quantidadeBezerros" app:argType="integer" />
+        <argument android:name="pesoMedio" app:argType="string" />
+        <argument android:name="valorTotalFrete" app:argType="string" defaultValue="0" />
     </fragment>
 </navigation>

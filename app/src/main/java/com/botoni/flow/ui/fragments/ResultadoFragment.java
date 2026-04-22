@@ -1,6 +1,6 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
+import static com.botoni.flow.ui.helpers.FormatHelper.formatCurrency;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -5,29 +5,32 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
 @Entity(tableName = "xgp_categoria_frete")
 public class CategoriaFrete {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_categoria_frete")
-    private Long id;
+    @SerializedName(value = "ID_CATEGORIA_FRETE")
+    private int id;
     @ColumnInfo(name = "descricao")
+    @SerializedName(value = "DESCRICAO")
     private String descricao;
     public CategoriaFrete() {}
 
-    public CategoriaFrete(Long id, String descricao) {
+    public CategoriaFrete(int id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
-
     public CategoriaFrete(String descricao) {
         this.descricao = descricao;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

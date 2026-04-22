@@ -1,15 +1,14 @@
 [versions]
-agp = "9.1.0"
+agp = "9.2.0"
 hiltAndroid = "2.59.2"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
-material = "1.14.0-alpha10"
+material = "1.13.0"
 activity = "1.13.0"
 constraintlayout = "2.2.1"
 roomCompiler = "2.8.4"
-ksp = "2.3.4"
 hilt = "2.59.2"
 gms = "21.3.0"
 secrets = "2.0.1"
@@ -22,7 +21,7 @@ mockitoKotlin = "6.3.0"
 mockk = "1.14.9"
 androidxTestCore = "1.7.0"
 runner = "1.7.0"
-
+gson = "2.13.2"
 
 
 [libraries]
@@ -48,11 +47,10 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hiltAndroid" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
-
+gson = {group = "com.google.code.gson", name = "gson", version.ref = "gson"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 secrects = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationFragmentKtx" }

@@ -1,7 +1,7 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
-import static com.botoni.flow.ui.helpers.NumberHelper.formatInteger;
+import static com.botoni.flow.ui.helpers.FormatHelper.formatCurrency;
+import static com.botoni.flow.ui.helpers.FormatHelper.formatInteger;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SimpleTextWatcher;
 import static com.botoni.flow.ui.helpers.ViewHelper.anyEmpty;
 import static com.botoni.flow.ui.helpers.ViewHelper.getBigDecimal;
@@ -44,6 +44,13 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+import com.botoni.flow.ui.helpers.AlertHelper;
+import com.botoni.flow.ui.helpers.FileHelper;
+import com.botoni.flow.ui.helpers.TaskHelper;
+import com.botoni.flow.ui.reports.PdfPrecificacaoBuilder;
+import com.botoni.flow.ui.state.RotaUiState;
+import com.botoni.flow.ui.viewmodel.RotaViewModel;
+
 @AndroidEntryPoint
 public class NegociacaoFragment extends Fragment {
     private static final BigDecimal ARROBA = new BigDecimal("310");
@@ -53,9 +60,13 @@ public class NegociacaoFragment extends Fragment {
     private static final String CHAVE_RESUMO_FRETE = "resumo_frete";
     private static final String CHAVE_RESUMO_COM_FRETE = "resumo_com_frete";
     private static final String CHAVE_RESULTADO_FINAL = "resultado_final";
-    @Inject BezerroResumoMapper bezerroResumoMapper;
-    @Inject FreteResumoMapper freteResumoMapper;
-
+    private static final String CHAVE_VIEWMODEL_SIMULACAO = "viewmodel_simulacao_frete";
+    @Inject
+    BezerroResumoMapper bezerroResumoMapper;
+    @Inject
+    FreteResumoMapper freteResumoMapper;
+    @Inject
+    TaskHelper taskHelper;
     private FragmentNegociacaoBinding binding;
     private TextWatcher entradaWatcher;
     private TextWatcher valorPorCabWatcher;
@@ -64,10 +75,10 @@ public class NegociacaoFragment extends Fragment {
     private BigDecimal pesoUnitario;
     private int quantidade;
     private BigDecimal incidenciaFrete = BigDecimal.ZERO;
-
     private NegociacaoViewModel negociacaoViewModel;
     private PrecificacaoBezerroViewModel bezerroViewModel;
     private PrecificacaoFreteViewModel freteViewModel;
+    private RotaViewModel rotaViewModel;
     private ResumoValoresViewModel resumoBezerroViewModel;
     private ResumoValoresViewModel resumoFreteViewModel;
     private ResumoValoresViewModel resumoComFreteViewModel;
@@ -97,23 +108,31 @@ public class NegociacaoFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
     private void iniciarSetup() {
         instanciarViewModels();
         extrairArgumentosDeNavegacao();
         configurarComponentesIniciais();
         registrarEventos();
         configurarObservadores();
+        iniciarCalculoInicialFrete();
+    }
+
+    private void iniciarCalculoInicialFrete() {
+        preencherValorFrete();
+        if (isFreteDeclarado()) processarFluxoCalculosComFrete();
     }
 
     private void instanciarViewModels() {
         negociacaoViewModel = new ViewModelProvider(this).get(NegociacaoViewModel.class);
         ViewModelProvider provider = new ViewModelProvider(requireActivity());
         bezerroViewModel = provider.get(PrecificacaoBezerroViewModel.class);
-        freteViewModel = provider.get(PrecificacaoFreteViewModel.class);
+        freteViewModel = provider.get(CHAVE_VIEWMODEL_SIMULACAO, PrecificacaoFreteViewModel.class);
         resumoBezerroViewModel = provider.get(CHAVE_RESUMO_BEZERRO, ResumoValoresViewModel.class);
         resumoFreteViewModel = provider.get(CHAVE_RESUMO_FRETE, ResumoValoresViewModel.class);
         resumoComFreteViewModel = provider.get(CHAVE_RESUMO_COM_FRETE, ResumoValoresViewModel.class);
         resultadoFinalViewModel = provider.get(CHAVE_RESULTADO_FINAL, ResultadoViewModel.class);
+        rotaViewModel = provider.get(RotaViewModel.class);
     }
 
     private void extrairArgumentosDeNavegacao() {
@@ -165,6 +184,7 @@ public class NegociacaoFragment extends Fragment {
     private void configurarEventosDeClique() {
         binding.botaoVoltar.setOnClickListener(v -> executarNavegacaoVoltar());
         binding.botaoContinuar.setOnClickListener(v -> executarNavegacaoDetalhes());
+        binding.botaoFinalizar.setOnClickListener(v -> onFinalizarClicado());
     }
 
     private void configurarObservadores() {
@@ -325,12 +345,38 @@ public class NegociacaoFragment extends Fragment {
     private void redefinirIncidenciaFrete() {
         incidenciaFrete = BigDecimal.ZERO;
         limparResumoComFreteUiState();
+        if (existeOverrideAtivo()) {
+            restaurarEditTextsParaOverride();
+            return;
+        }
         calcularBezerroComDescontoFrete(BigDecimal.ZERO);
     }
 
     private void aplicarIncidenciaFrete(BigDecimal incidencia) {
         incidenciaFrete = incidencia;
+        if (existeOverrideAtivo()) {
+            atualizarDisplayComFreteOverride();
+            return;
+        }
         calcularBezerroComDescontoFrete(incidencia);
+    }
+
+    private void atualizarDisplayComFreteOverride() {
+        PrecificacaoBezerroUiState override = negociacaoViewModel.getOverride().getValue();
+        BigDecimal valorPorKgFinal = calcularKgComFrete(override.getValorPorKg());
+        BigDecimal valorPorCabFinal = calcularCabecaPorKg(valorPorKgFinal);
+        BigDecimal valorTotalFinal = calcularTotalPorCab(valorPorCabFinal);
+        atualizarCampoValorPorCabSilenciosamente(valorPorCabFinal);
+        atualizarCampoValorPorKgSilenciosamente(valorPorKgFinal);
+        resumoComFreteViewModel.setState(new ResumoValoresUiState(valorPorCabFinal, valorPorKgFinal));
+        resultadoFinalViewModel.setState(valorTotalFinal);
+    }
+
+    private void restaurarEditTextsParaOverride() {
+        PrecificacaoBezerroUiState override = negociacaoViewModel.getOverride().getValue();
+        atualizarCampoValorPorCabSilenciosamente(override.getValorPorCabeca());
+        atualizarCampoValorPorKgSilenciosamente(override.getValorPorKg());
+        resumoBezerroViewModel.setState(new ResumoValoresUiState(override.getValorPorCabeca(), override.getValorPorKg()));
     }
 
     private void calcularBezerroComDescontoFrete(BigDecimal incidencia) {
@@ -413,7 +459,9 @@ public class NegociacaoFragment extends Fragment {
 
     private void executarNavegacaoDetalhes() {
         NavHostFragment.findNavController(this).navigate(
-                NegociacaoFragmentDirections.actionNegociacaoFragmentToDetalhePrecificacaoFragment(quantidade));
+                NegociacaoFragmentDirections.actionNegociacaoFragmentToDetalhePrecificacaoFragment(
+                        quantidade, pesoUnitario.toPlainString(),
+                        orElse(lerValorFrete(), BigDecimal.ZERO).toPlainString()));
     }
 
     private void preencherInputsComValoresDaPrecificacao() {
@@ -556,7 +604,8 @@ public class NegociacaoFragment extends Fragment {
     }
 
     private BigDecimal calcularKgPorCabeca(BigDecimal valorPorCab) {
-        if (isEmpty(pesoUnitario) || pesoUnitario.compareTo(BigDecimal.ZERO) == 0) return BigDecimal.ZERO;
+        if (isEmpty(pesoUnitario) || pesoUnitario.compareTo(BigDecimal.ZERO) == 0)
+            return BigDecimal.ZERO;
         return valorPorCab.divide(pesoUnitario, 2, RoundingMode.HALF_UP);
     }
 
@@ -586,5 +635,37 @@ public class NegociacaoFragment extends Fragment {
 
     private boolean incidenciaDeveSerIgnorada(BigDecimal incidencia) {
         return anyEmpty(incidencia, pesoUnitario, quantidade);
+    }
+
+    private void onFinalizarClicado() {
+        ResumoValoresUiState resumo = resumoBezerroViewModel.getState().getValue();
+        ResumoValoresUiState resumoComFrete = resumoComFreteViewModel.getState().getValue();
+        double distancia = freteViewModel.getDistancia().getValue() != null ? freteViewModel.getDistancia().getValue() : 0.0;
+        RotaUiState rota = rotaViewModel.getState().getValue();
+        BigDecimal total = resultadoFinalViewModel.getState().getValue();
+
+        if (anyEmpty(resumo, total)) return;
+        gerarECompartilharCapaPdf(resumo, resumoComFrete, total, distancia, rota);
+    }
+
+    private void gerarECompartilharCapaPdf(ResumoValoresUiState resumo, ResumoValoresUiState resumoComFrete, BigDecimal total, double distancia, RotaUiState rota) {
+        BigDecimal valorTotalFrete = orElse(lerValorFrete(), BigDecimal.ZERO);
+
+        taskHelper.execute(
+                () -> PdfPrecificacaoBuilder.gerarCapaNegociacao(
+                        requireContext(), quantidade, pesoUnitario,
+                        resumo.getValorSecundario(), resumo.getValorPrincipal(),
+                        resumoComFrete != null ? resumoComFrete.getValorSecundario() : BigDecimal.ZERO,
+                        resumoComFrete != null ? resumoComFrete.getValorPrincipal() : BigDecimal.ZERO,
+                        total, incidenciaFrete, valorTotalFrete, distancia, rota),
+                pdf -> {
+                    if (isAdded())
+                        FileHelper.compartilhar(requireActivity(), pdf, "application/pdf", getString(R.string.compartilhar_relatorio));
+                },
+                error -> {
+                    if (isAdded())
+                        AlertHelper.showSnackBar(binding.getRoot(), getString(R.string.erro_gerar_pdf));
+                }
+        );
     }
 }

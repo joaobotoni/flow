@@ -9,11 +9,10 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class NumberHelper {
+public class FormatHelper {
     private static final Locale LOCALE_BR = new Locale("pt", "BR");
     private static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols(LOCALE_BR);
     public static final DecimalFormat CURRENCY_FORMAT = new DecimalFormat("#,##0.00", SYMBOLS);
-
     @NonNull
     public static Integer getInt(@Nullable String value) {
         if (value == null || value.trim().isEmpty()) return 0;
@@ -68,5 +67,11 @@ public class NumberHelper {
     public static String formatInteger(@Nullable Integer value) {
         if (value == null) return "0";
         return String.valueOf(value);
+    }
+
+    @NonNull
+    public static String formatDouble(@Nullable Double value) {
+        if (value == null) return "0";
+        return String.format(Locale.getDefault(), "%.2f", value);
     }
 }

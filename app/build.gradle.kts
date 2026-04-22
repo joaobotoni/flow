@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.secrects)
     alias(libs.plugins.navigation.safeargs)
@@ -35,10 +34,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -55,10 +54,13 @@ dependencies {
     implementation(libs.ext.junit)
     implementation(libs.androidx.runner)
     implementation(libs.material)
-    ksp(libs.room.compiler)
+    implementation(libs.gson)
 
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+
+
+    annotationProcessor (libs.room.compiler)
+    annotationProcessor (libs.hilt.android.compiler)
 
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
@@ -74,8 +76,8 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.hilt.android.testing)
-    kspTest(libs.hilt.android.compiler)
-    kspAndroidTest(libs.hilt.android.compiler)
+    annotationProcessor(libs.hilt.android.compiler)
+    annotationProcessor(libs.hilt.android.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.ext.junit)

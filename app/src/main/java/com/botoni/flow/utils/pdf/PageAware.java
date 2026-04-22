@@ -1,6 +1,6 @@
-package com.botoni.flow.utils.pdf;
+    package com.botoni.flow.utils.pdf;
 
 
-public interface PageAware {
-    void setPageInfo(int currentPage, int totalPages);
-}
+    public interface PageAware {
+        void setPageInfo(int currentPage, int totalPages);
+    }

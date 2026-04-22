@@ -6,20 +6,35 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.botoni.flow.data.source.local.converters.Converters;
 import com.botoni.flow.data.source.local.dao.CapacidadeFreteDao;
 import com.botoni.flow.data.source.local.dao.CategoriaFreteDao;
+import com.botoni.flow.data.source.local.dao.CategoriaNegDao;
+import com.botoni.flow.data.source.local.dao.CorretorDao;
+import com.botoni.flow.data.source.local.dao.EmpresaDao;
 import com.botoni.flow.data.source.local.dao.FreteDao;
+import com.botoni.flow.data.source.local.dao.NegociacaoAnimalDao;
+import com.botoni.flow.data.source.local.dao.NegociacaoGadoDao;
+import com.botoni.flow.data.source.local.dao.TipoReferenciaDao;
 import com.botoni.flow.data.source.local.dao.TipoVeiculoFreteDao;
+import com.botoni.flow.data.source.local.dao.ValorReferenciaDao;
 import com.botoni.flow.data.source.local.entities.CapacidadeFrete;
 import com.botoni.flow.data.source.local.entities.CategoriaFrete;
+import com.botoni.flow.data.source.local.entities.CategoriaNeg;
+import com.botoni.flow.data.source.local.entities.Corretor;
+import com.botoni.flow.data.source.local.entities.Empresa;
 import com.botoni.flow.data.source.local.entities.Frete;
+import com.botoni.flow.data.source.local.entities.NegociacaoAnimal;
+import com.botoni.flow.data.source.local.entities.NegociacaoGado;
+import com.botoni.flow.data.source.local.entities.TipoReferencia;
 import com.botoni.flow.data.source.local.entities.TipoVeiculoFrete;
+import com.botoni.flow.data.source.local.entities.ValorReferencia;
 
-
-@Database(entities = {Frete.class, CapacidadeFrete.class, CategoriaFrete.class, TipoVeiculoFrete.class}, version = 1)
+@Database(entities = {Frete.class, CapacidadeFrete.class, CategoriaFrete.class, TipoVeiculoFrete.class, ValorReferencia.class, TipoReferencia.class, NegociacaoGado.class, NegociacaoAnimal.class, Empresa.class, Corretor.class, CategoriaNeg.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FreteDao freteDao();
 
@@ -28,6 +43,20 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CapacidadeFreteDao capacidadeFreteDao();
 
     public abstract TipoVeiculoFreteDao tipoVeiculoFreteDao();
+
+    public abstract ValorReferenciaDao valorReferenciaDao();
+
+    public abstract TipoReferenciaDao tipoReferenciaDao();
+
+    public abstract NegociacaoGadoDao negociacaoGadoDao();
+
+    public abstract NegociacaoAnimalDao negociacaoAnimalDao();
+
+    public abstract EmpresaDao empresaDao();
+
+    public abstract CorretorDao corretorDao();
+
+    public abstract CategoriaNegDao categoriaNegDao();
 
     private static volatile AppDatabase INSTANCE;
 

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.botoni.flow.ui.helpers.NumberHelper;
+import com.botoni.flow.ui.helpers.FormatHelper;
 import com.botoni.flow.ui.state.DetalhePrecoBezerroUiState;
 import com.botoni.flow.utils.pdf.*;
 import com.botoni.flow.utils.pdf.bands.FooterBand;
@@ -36,7 +36,7 @@ public class PdfDetalhePrecificacaoBuilder {
         PdfGenerator generator = new PdfGenerator(PdfPageConfig.a4Portrait());
         generator.setFooter(new FooterBand("Flow — Precificação  •  " + dataGeracao));
 
-        generator.addBand(new TitleBand("Relatório de Detalhe Precificação de Bezerros"));
+        generator.addBand(new TitleBand("Relatório de Detalhe Negociação de Bezerros"));
         generator.addBand(new SpacerBand(10f));
         generator.addBand(new TextBand("Data: " + dataGeracao, 10f, TextAlignment.LEFT));
         generator.addBand(new TextBand("Total de animais: " + itens.size(), 10f, TextAlignment.LEFT));
@@ -54,8 +54,8 @@ public class PdfDetalhePrecificacaoBuilder {
             generator.addBand(new RowBand(10f, 22f,
                     new RowBand.Column(String.valueOf(numero), 0.5f, TextAlignment.CENTER),
                     new RowBand.Column(item.getPeso().toPlainString() + " kg", 1.5f, TextAlignment.CENTER),
-                    new RowBand.Column(NumberHelper.formatCurrency(item.getValorPorKg()), 1.5f, TextAlignment.RIGHT),
-                    new RowBand.Column(NumberHelper.formatCurrency(item.getValorTotal()), 1.5f, TextAlignment.RIGHT)
+                    new RowBand.Column(FormatHelper.formatCurrency(item.getValorPorKg()), 1.5f, TextAlignment.RIGHT),
+                    new RowBand.Column(FormatHelper.formatCurrency(item.getValorTotal()), 1.5f, TextAlignment.RIGHT)
             ));
             numero++;
         }
@@ -63,7 +63,7 @@ public class PdfDetalhePrecificacaoBuilder {
         generator.addBand(new SpacerBand(10f));
         generator.addBand(new RowBand(12f, 26f,
                 new RowBand.Column("TOTAL GERAL", 3.5f, TextAlignment.RIGHT),
-                new RowBand.Column(NumberHelper.formatCurrency(valorTotal), 1.5f, TextAlignment.RIGHT)
+                new RowBand.Column(FormatHelper.formatCurrency(valorTotal), 1.5f, TextAlignment.RIGHT)
         ));
 
         String nomeArquivo = "precificacao_" + System.currentTimeMillis() + ".pdf";

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.botoni.flow.data.repositories.CategoriaFreteRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
 import com.botoni.flow.ui.mappers.domain.CategoriaMapper;
-import com.botoni.flow.ui.state.CategoriaUiState;
+import com.botoni.flow.ui.state.ItemOpcaoUiState;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,8 +23,8 @@ public class CategoriaViewModel extends ViewModel {
     private final CategoriaFreteRepository repositorio;
     private final TaskHelper taskHelper;
     private final CategoriaMapper mapper;
-    private final MutableLiveData<List<CategoriaUiState>> state = new MutableLiveData<>();
-    private final MutableLiveData<CategoriaUiState> categoriaSelecionada = new MutableLiveData<>();
+    private final MutableLiveData<List<ItemOpcaoUiState>> state = new MutableLiveData<>();
+    private final MutableLiveData<ItemOpcaoUiState> categoriaSelecionada = new MutableLiveData<>();
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
 
     @Inject
@@ -37,11 +37,11 @@ public class CategoriaViewModel extends ViewModel {
         listar();
     }
 
-    public LiveData<List<CategoriaUiState>> getState() {
+    public LiveData<List<ItemOpcaoUiState>> getState() {
         return state;
     }
 
-    public LiveData<CategoriaUiState> getCategoriaSelecionada() {
+    public LiveData<ItemOpcaoUiState> getCategoriaSelecionada() {
         return categoriaSelecionada;
     }
 
@@ -49,11 +49,11 @@ public class CategoriaViewModel extends ViewModel {
         return error;
     }
 
-    public void selecionar(CategoriaUiState selecionada) {
+    public void selecionar(ItemOpcaoUiState selecionada) {
         if (state.getValue() == null) return;
 
-        List<CategoriaUiState> newList = state.getValue().stream()
-                .map(item -> new CategoriaUiState(
+        List<ItemOpcaoUiState> newList = state.getValue().stream()
+                .map(item -> new ItemOpcaoUiState(
                         item.getId(),
                         item.getDescricao(),
                         Objects.equals(item.getId(), selecionada.getId())))

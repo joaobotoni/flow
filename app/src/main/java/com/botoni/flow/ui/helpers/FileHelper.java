@@ -20,6 +20,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileHelper {
 
@@ -56,6 +58,16 @@ public class FileHelper {
         Intent intent = new Intent(Intent.ACTION_SEND)
                 .setType(mimeType)
                 .putExtra(Intent.EXTRA_STREAM, uri)
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        activity.startActivity(Intent.createChooser(intent, titulo));
+    }
+
+    public static void compartilharMultiplos(@NonNull Activity activity, @NonNull List<File> files, @NonNull String mimeType, @NonNull String titulo) {
+        ArrayList<Uri> uris = new ArrayList<>();
+        for (File file : files) uris.add(getUri(activity, file));
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE)
+                .setType(mimeType)
+                .putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         activity.startActivity(Intent.createChooser(intent, titulo));
     }

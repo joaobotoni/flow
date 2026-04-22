@@ -1,7 +1,7 @@
 package com.botoni.flow.ui.fragments;
 
 import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
-import static com.botoni.flow.ui.helpers.NumberHelper.formatCurrency;
+import static com.botoni.flow.ui.helpers.FormatHelper.formatCurrency;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SimpleTextWatcher;
 import static com.botoni.flow.ui.helpers.ViewHelper.anyEmpty;
 import static com.botoni.flow.ui.helpers.ViewHelper.getBigDecimal;
@@ -27,10 +27,10 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentPrecificacaoBinding;
-import com.botoni.flow.ui.adapters.CategoriaAdapter;
+import com.botoni.flow.ui.adapters.ItemOpcaoAdapter;
 import com.botoni.flow.ui.mappers.presentation.BezerroResumoMapper;
 import com.botoni.flow.ui.mappers.presentation.FreteResumoMapper;
-import com.botoni.flow.ui.state.CategoriaUiState;
+import com.botoni.flow.ui.state.ItemOpcaoUiState;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
 import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
 import com.botoni.flow.ui.state.ResumoValoresUiState;
@@ -52,20 +52,18 @@ public class PrecificacaoFragment extends Fragment {
 
     private static final BigDecimal ARROBA = new BigDecimal("310");
     private static final BigDecimal AGIO = new BigDecimal("30");
-
-    private static final BigDecimal PESO_BASE = new BigDecimal("30");
+    private static final BigDecimal PESO_BASE = new BigDecimal("180");
     private static final String CHAVE_RESUMO_BEZERRO = "resumo_bezerro";
     private static final String CHAVE_RESUMO_FRETE = "resumo_frete";
     private static final String CHAVE_RESUMO_COM_FRETE = "resumo_com_frete";
     private static final String CHAVE_RESULTADO_FINAL = "resultado_final";
-
-    @Inject BezerroResumoMapper bezerroResumoMapper;
-    @Inject FreteResumoMapper freteResumoMapper;
-
+    @Inject
+    BezerroResumoMapper bezerroResumoMapper;
+    @Inject
+    FreteResumoMapper freteResumoMapper;
     private FragmentPrecificacaoBinding binding;
     private TextWatcher entradaWatcher;
-    private CategoriaAdapter categoriaAdapter;
-
+    private ItemOpcaoAdapter itemOpcaoAdapter;
     private PrecificacaoBezerroViewModel bezerroViewModel;
     private PrecificacaoFreteViewModel freteViewModel;
     private CategoriaViewModel categoriaViewModel;
@@ -126,8 +124,8 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void iniciarAdapterCategorias() {
-        categoriaAdapter = new CategoriaAdapter(this::aoSelecionarCategoriaNaLista);
-        binding.listaCategorias.setAdapter(categoriaAdapter);
+        itemOpcaoAdapter = new ItemOpcaoAdapter(this::aoSelecionarCategoriaNaLista);
+        binding.listaCategorias.setAdapter(itemOpcaoAdapter);
     }
 
     private void registrarEventos() {
@@ -168,7 +166,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void observarListaCategorias() {
-        categoriaViewModel.getState().observe(getViewLifecycleOwner(), categoriaAdapter::submitList);
+        categoriaViewModel.getState().observe(getViewLifecycleOwner(), itemOpcaoAdapter::submitList);
     }
 
     private void observarCategoriaSelecionada() {
@@ -197,7 +195,7 @@ public class PrecificacaoFragment extends Fragment {
         processarFluxoCalculos();
     }
 
-    private void aoSelecionarCategoriaNaLista(CategoriaUiState categoria) {
+    private void aoSelecionarCategoriaNaLista(ItemOpcaoUiState categoria) {
         categoriaViewModel.selecionar(categoria);
     }
 
@@ -318,7 +316,7 @@ public class PrecificacaoFragment extends Fragment {
         processarRecomendacaoTransporte(categoriaViewModel.getCategoriaSelecionada().getValue());
     }
 
-    private void processarRecomendacaoTransporte(CategoriaUiState categoria) {
+    private void processarRecomendacaoTransporte(ItemOpcaoUiState categoria) {
         if (dadosIncompletosParaRecomendacao(categoria)) return;
         solicitarRecomendacaoTransporte(categoria.getId());
     }
@@ -438,6 +436,7 @@ public class PrecificacaoFragment extends Fragment {
     private int calcularPesoTotalLote() {
         return lerQuantidade() * lerPesoUnitario().intValue();
     }
+
     private boolean isCategoriaNaoSelecionada() {
         return isEmpty(categoriaViewModel.getCategoriaSelecionada().getValue());
     }
@@ -454,7 +453,7 @@ public class PrecificacaoFragment extends Fragment {
         return anyEmpty(lerPesoUnitario(), lerQuantidade());
     }
 
-    private boolean dadosIncompletosParaRecomendacao(CategoriaUiState categoria) {
+    private boolean dadosIncompletosParaRecomendacao(ItemOpcaoUiState categoria) {
         return anyEmpty(categoria, lerQuantidade());
     }
 
