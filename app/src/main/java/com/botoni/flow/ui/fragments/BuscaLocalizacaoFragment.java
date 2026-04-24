@@ -1,6 +1,6 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarErro;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SearchTextWatcher;
 import static com.botoni.flow.ui.helpers.ViewHelper.requireText;
 
@@ -115,12 +115,12 @@ public class BuscaLocalizacaoFragment extends BottomSheetDialogFragment {
     private void tratarErroBusca(@Nullable Throwable erro) {
         if (erro == null) return;
         adapter.submitList(null);
-        showSnackBar(requireView(), getString(R.string.error_search_address));
+        showSnackBarErro(requireView(), getString(R.string.error_search_address));
     }
 
     private void tratarErroRota(@Nullable Throwable erro) {
         if (erro == null) return;
-        showSnackBar(requireView(), getString(R.string.error_search_address));
+        showSnackBarErro(requireView(), getString(R.string.error_search_address));
     }
 
     private void onLocalizacaoSelecionada(Address origem) {

@@ -25,6 +25,10 @@ public class ValorReferenciaRepository {
         return Optional.ofNullable(dao.findById(id));
     }
 
+    public Optional<ValorReferencia> findMaisRecente() {
+        return Optional.ofNullable(dao.findMaisRecente());
+    }
+
     public long insert(ValorReferencia valorReferencia) {
         return dao.insert(valorReferencia);
     }

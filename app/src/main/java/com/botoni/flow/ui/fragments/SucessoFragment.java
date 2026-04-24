@@ -1,11 +1,13 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarErro;
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarSucesso;
 import static com.botoni.flow.ui.helpers.ViewHelper.orElse;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -28,6 +32,7 @@ import com.botoni.flow.ui.reports.PdfDetalhePrecificacaoBuilder;
 import com.botoni.flow.ui.reports.PdfPrecificacaoBuilder;
 import com.botoni.flow.ui.state.DetalhePrecoBezerroUiState;
 import com.botoni.flow.ui.state.ResumoValoresUiState;
+import com.botoni.flow.ui.viewmodel.CategoriaFreteViewModel;
 import com.botoni.flow.ui.viewmodel.DetalhePrecificacaoViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoBezerroViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoFreteViewModel;
@@ -58,6 +63,7 @@ public class SucessoFragment extends Fragment {
     private static final String CHAVE_VIEWMODEL_SIMULACAO = "viewmodel_simulacao_frete";
     private FragmentSucessBinding binding;
 
+    private CategoriaFreteViewModel categoriaFreteViewModel;
     private DetalhePrecificacaoViewModel viewModel;
     private ResultadoViewModel resultadoViewModel;
     private ResumoValoresViewModel resumoNegociacaoViewModel;
@@ -65,15 +71,28 @@ public class SucessoFragment extends Fragment {
     private ResumoValoresViewModel resumoComFreteNegociacaoViewModel;
     private ResultadoViewModel resultadoNegociacaoViewModel;
     private PrecificacaoFreteViewModel freteViewModel;
+    private PrecificacaoFreteViewModel freteViewModelPrincipal;
     private RotaViewModel rotaViewModel;
     private PrecificacaoBezerroViewModel bezerroViewModel;
 
+    private ActivityResultLauncher<Intent> compartilharLauncher;
     private int quantidadeTotal;
     private String pesoMedio;
     private String valorTotalFrete;
     private boolean isOrigemDetalhe;
     @Inject
     TaskHelper taskHelper;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        compartilharLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    limparViewModels();
+                    navegarParaTelaPrincipal();
+                });
+    }
 
     @Nullable
     @Override
@@ -112,7 +131,9 @@ public class SucessoFragment extends Fragment {
         resumoComFreteNegociacaoViewModel = activityProvider.get(CHAVE_RESUMO_COM_FRETE, ResumoValoresViewModel.class);
         resultadoNegociacaoViewModel = activityProvider.get(CHAVE_RESULTADO_FINAL, ResultadoViewModel.class);
         freteViewModel = activityProvider.get(CHAVE_VIEWMODEL_SIMULACAO, PrecificacaoFreteViewModel.class);
+        freteViewModelPrincipal = activityProvider.get(PrecificacaoFreteViewModel.class);
         rotaViewModel = activityProvider.get(RotaViewModel.class);
+        categoriaFreteViewModel = activityProvider.get(CategoriaFreteViewModel.class);
         bezerroViewModel = activityProvider.get(PrecificacaoBezerroViewModel.class);
     }
 
@@ -124,7 +145,7 @@ public class SucessoFragment extends Fragment {
     private void onFinalizarClicado() {
         if (isOrigemDetalhe && !listaValida()) return;
         if (isOrigemDetalhe && !listaCompleta()) {
-            showSnackBar(requireView(), getString(R.string.quantidade_incompleta));
+            showSnackBarSucesso(requireView(), getString(R.string.quantidade_incompleta));
             return;
         }
         gerarECompartilharPdf();
@@ -138,12 +159,14 @@ public class SucessoFragment extends Fragment {
         resumoComFreteNegociacaoViewModel.limpar();
         resultadoNegociacaoViewModel.limpar();
         freteViewModel.limpar();
+        freteViewModelPrincipal.limpar();
         rotaViewModel.limpar();
         bezerroViewModel.limpar();
+        categoriaFreteViewModel.limparSelecao();
     }
 
     private void navegarParaTelaPrincipal() {
-        NavHostFragment.findNavController(this).popBackStack(R.id.precificacaoFragment, false);
+        NavHostFragment.findNavController(this).navigate(R.id.action_sucessoFragment_to_precificacaoFragment);
     }
 
     private void gerarECompartilharPdf() {
@@ -151,13 +174,13 @@ public class SucessoFragment extends Fragment {
     }
 
     private void compartilharPdfs(List<File> pdfs) {
-        if (isAdded()) {
-            FileHelper.compartilharMultiplos(requireActivity(), pdfs, "application/pdf", getString(R.string.compartilhar_relatorio));
-        }
+        if (!isAdded()) return;
+        Intent intent = FileHelper.criarIntentCompartilharMultiplos(requireContext(), pdfs, "application/pdf", getString(R.string.compartilhar_relatorio));
+        compartilharLauncher.launch(intent);
     }
 
     private void tratarErroPdf(Exception error) {
-        if (isAdded()) showSnackBar(binding.getRoot(), getString(R.string.erro_gerar_pdf));
+        if (isAdded()) showSnackBarErro(binding.getRoot(), getString(R.string.erro_gerar_pdf));
     }
 
     private List<File> construirPdfs() throws IOException {

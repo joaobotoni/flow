@@ -45,23 +45,19 @@ public class PrecificacaoBezerroViewModel extends ViewModel {
         return error;
     }
 
-    public void calcularNegociacaoComFrete(BigDecimal peso, BigDecimal arroba,
-                                           BigDecimal percent, Integer quantidade, BigDecimal pesoBase) {
+    public void calcularNegociacaoComFrete(BigDecimal peso, Integer quantidade) {
         taskHelper.execute(
                 () -> precificacaoBezerroMapper
-                        .mapFrom(repositorio.calcularNegociacaoBezerroComFrete(peso, arroba, percent, quantidade, pesoBase)),
+                        .mapFrom(repositorio.calcularNegociacaoBezerroComFrete(peso, quantidade)),
                 state::postValue,
                 error::postValue
         );
     }
 
-    public void calcularNegociacao(BigDecimal peso, BigDecimal arroba,
-                                   BigDecimal percent, Integer quantidade,
-                                   BigDecimal valorIncidenteFrete, BigDecimal pesoBase) {
+    public void calcularNegociacao(BigDecimal peso, Integer quantidade, BigDecimal valorIncidenteFrete) {
         taskHelper.execute(
                 () -> precificacaoBezerroMapper
-                        .mapFrom(repositorio.calcularNegociacaoBezerro(
-                                peso, arroba, percent, quantidade, valorIncidenteFrete, pesoBase)),
+                        .mapFrom(repositorio.calcularNegociacaoBezerro(peso, quantidade, valorIncidenteFrete)),
                 stateComFrete::postValue,
                 error::postValue
         );

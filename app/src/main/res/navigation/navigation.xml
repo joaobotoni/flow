@@ -86,5 +86,12 @@
         <argument android:name="pesoMedio" app:argType="string" />
         <argument android:name="valorTotalFrete" app:argType="string" android:defaultValue="0" />
         <argument android:name="origemDetalhe" app:argType="boolean" android:defaultValue="false" />
+        <action
+            android:id="@+id/action_sucessoFragment_to_precificacaoFragment"
+            app:destination="@id/precificacaoFragment"
+            app:popUpTo="@id/precificacaoFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
 </navigation>

@@ -63,12 +63,16 @@ public class FileHelper {
     }
 
     public static void compartilharMultiplos(@NonNull Activity activity, @NonNull List<File> files, @NonNull String mimeType, @NonNull String titulo) {
+        activity.startActivity(criarIntentCompartilharMultiplos(activity, files, mimeType, titulo));
+    }
+
+    public static Intent criarIntentCompartilharMultiplos(@NonNull Context context, @NonNull List<File> files, @NonNull String mimeType, @NonNull String titulo) {
         ArrayList<Uri> uris = new ArrayList<>();
-        for (File file : files) uris.add(getUri(activity, file));
+        for (File file : files) uris.add(getUri(context, file));
         Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE)
                 .setType(mimeType)
                 .putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        activity.startActivity(Intent.createChooser(intent, titulo));
+        return Intent.createChooser(intent, titulo);
     }
 }

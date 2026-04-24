@@ -2,15 +2,34 @@ package com.botoni.flow.ui.helpers;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 public class AlertHelper {
 
-    public static void showSnackBar(View view, String message) {
+    public static void showSnackBarSucesso(View view, String message) {
         if (view != null && message != null) {
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(
+                            ContextCompat.getColor(view.getContext(), android.R.color.holo_green_dark)
+                    )
+                    .setTextColor(Color.WHITE)
+                    .show();
+        }
+    }
+
+    public static void showSnackBarErro(View view, String message) {
+        if (view != null && message != null) {
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(
+                            ContextCompat.getColor(view.getContext(), android.R.color.holo_red_dark)
+                    )
+                    .setTextColor(Color.WHITE)
+                    .show();
         }
     }
 

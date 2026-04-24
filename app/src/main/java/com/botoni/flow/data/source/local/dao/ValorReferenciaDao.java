@@ -20,6 +20,9 @@ public interface ValorReferenciaDao {
     @Query("SELECT * FROM xgp_valor_referencia WHERE id_valor_referencia = :id")
     ValorReferencia findById(long id);
 
+    @Query("SELECT * FROM xgp_valor_referencia ORDER BY data_referencia DESC LIMIT 1")
+    ValorReferencia findMaisRecente();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(ValorReferencia valorReferencia);
 

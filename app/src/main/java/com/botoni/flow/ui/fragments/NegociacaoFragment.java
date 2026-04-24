@@ -22,14 +22,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentNegociacaoBinding;
 import com.botoni.flow.ui.adapters.EmpresaAdapter;
-import com.botoni.flow.ui.helpers.AlertHelper;
 import com.botoni.flow.ui.mappers.presentation.BezerroResumoMapper;
 import com.botoni.flow.ui.mappers.presentation.FreteResumoMapper;
 import com.botoni.flow.ui.state.EmpresaUiState;
@@ -37,16 +35,18 @@ import com.botoni.flow.ui.state.ItemOpcaoUiState;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
 import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
 import com.botoni.flow.ui.state.ResumoValoresUiState;
+import com.botoni.flow.ui.viewmodel.CategoriaFreteViewModel;
 import com.botoni.flow.ui.viewmodel.NegociacaoViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoBezerroViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoFreteViewModel;
 import com.botoni.flow.ui.viewmodel.ResultadoViewModel;
 import com.botoni.flow.ui.viewmodel.ResumoValoresViewModel;
-import com.botoni.flow.ui.viewmodel.RotaViewModel;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -55,9 +55,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class NegociacaoFragment extends Fragment {
-    private static final BigDecimal ARROBA = new BigDecimal("310");
-    private static final BigDecimal AGIO = new BigDecimal("30");
-    private static final BigDecimal PESO_BASE = new BigDecimal("180");
     private static final String CHAVE_RESUMO_BEZERRO = "resumo_bezerro";
     private static final String CHAVE_RESUMO_FRETE = "resumo_frete";
     private static final String CHAVE_RESUMO_COM_FRETE = "resumo_com_frete";
@@ -298,20 +295,25 @@ public class NegociacaoFragment extends Fragment {
 
     private void atualizarTextoEmpresaSelecionada(List<EmpresaUiState> empresas) {
         EmpresaUiState selecionada = encontrarEmpresaSelecionada(empresas);
-        setVisible(selecionada != null, binding.cardEmpresaSelecionada);
-        if (selecionada != null)
-            setText(binding.textoEmpresaSelecionada, getString(R.string.label_empresa_selecionada, selecionada.getNome()));
+        setText(binding.textoEmpresaSelecionada, obterTextoEmpresa(selecionada));
+        setVisible(true, binding.cardEmpresaSelecionada);
+    }
+
+    private String obterTextoEmpresa(EmpresaUiState selecionada) {
+        if (selecionada == null) {
+            return getString(R.string.label_empresa_selecionada_error);
+        }
+        return getString(R.string.label_empresa_selecionada, selecionada.getNome());
     }
 
     private EmpresaUiState encontrarEmpresaSelecionada(List<EmpresaUiState> empresas) {
-        if (empresas == null) return null;
+        if (empresas == null || empresas.isEmpty()) return null;
         return empresas.stream().filter(EmpresaUiState::isSelecionada).findFirst().orElse(null);
     }
 
     private void aoSelecionarCategoriaNaLista(EmpresaUiState empresaUiState) {
         negociacaoViewModel.selecionarEmpresa(empresaUiState);
     }
-
 
 
     private void observarCalculosFrete() {
@@ -378,7 +380,7 @@ public class NegociacaoFragment extends Fragment {
     }
 
     private void calcularValorBaseBezerro() {
-        bezerroViewModel.calcularNegociacaoComFrete(pesoUnitario, ARROBA, AGIO, quantidade, PESO_BASE);
+        bezerroViewModel.calcularNegociacaoComFrete(pesoUnitario, quantidade);
     }
 
     private void calcularValorBaseFrete() {
@@ -396,12 +398,16 @@ public class NegociacaoFragment extends Fragment {
             return;
         }
         atualizarEstadoResumoComFrete(estado);
-        atualizarEstadoResultadoFinal(estado);
     }
 
     private void atualizarEstadoResumoBezerro(PrecificacaoBezerroUiState estado) {
         if (existeOverrideAtivo()) return;
         resumoBezerroViewModel.setState(isEmpty(estado) ? null : bezerroResumoMapper.mapper(estado));
+        atualizarEstadoResultadoFinal(estado);
+        if (!isEmpty(estado)) {
+            atualizarCampoValorPorCabSilenciosamente(estado.getValorPorCabeca());
+            atualizarCampoValorPorKgSilenciosamente(estado.getValorPorKg());
+        }
     }
 
     private void atualizarEstadoResumoComFrete(PrecificacaoBezerroUiState estado) {
@@ -444,7 +450,7 @@ public class NegociacaoFragment extends Fragment {
     }
 
     private void calcularBezerroComDescontoFrete(BigDecimal incidencia) {
-        bezerroViewModel.calcularNegociacao(pesoUnitario, ARROBA, AGIO, quantidade, incidencia, PESO_BASE);
+        bezerroViewModel.calcularNegociacao(pesoUnitario, quantidade, incidencia);
     }
 
     private void atualizarDisplayComFreteOverride() {
@@ -687,10 +693,7 @@ public class NegociacaoFragment extends Fragment {
 
     private void executarNavegacaoDetalhes() {
         NavHostFragment.findNavController(this).navigate(
-                NegociacaoFragmentDirections.actionNegociacaoFragmentToDetalhePrecificacaoFragment(
-                        quantidade,
-                        pesoUnitario.toPlainString()
-                )
+                NegociacaoFragmentDirections.actionNegociacaoFragmentToDetalhePrecificacaoFragment(quantidade, pesoUnitario.toPlainString())
         );
     }
 
@@ -707,12 +710,9 @@ public class NegociacaoFragment extends Fragment {
 
     private void navegarParaSucessoFragment() {
         NavHostFragment.findNavController(this).navigate(
-                NegociacaoFragmentDirections.actionNegociacaoFragmentToSucessoFragment(
-                        quantidade,
-                        pesoUnitario.toPlainString()
-                )
-                .setValorTotalFrete(orElse(lerValorFrete(), BigDecimal.ZERO).toPlainString())
-                .setOrigemDetalhe(false)
+                NegociacaoFragmentDirections.actionNegociacaoFragmentToSucessoFragment(quantidade, pesoUnitario.toPlainString())
+                        .setValorTotalFrete(orElse(lerValorFrete(), BigDecimal.ZERO).toPlainString())
+                        .setOrigemDetalhe(false)
         );
     }
 }

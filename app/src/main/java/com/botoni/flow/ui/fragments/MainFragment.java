@@ -1,6 +1,7 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarErro;
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarSucesso;
 import static com.botoni.flow.ui.helpers.ViewHelper.orElse;
 import static com.botoni.flow.ui.helpers.ViewHelper.requireText;
 
@@ -107,14 +108,14 @@ public class MainFragment extends Fragment {
     }
 
     private void onSuccess(String body) {
-        showSnackBar(requireView(),
+        showSnackBarSucesso(requireView(),
                 String.format(Locale.getDefault(), "Deu bom.\nResponse: %s", body));
 
         Log.d("TESTE", String.format(Locale.getDefault(), "Deu bom.\nResponse: %s", body));
     }
 
     private void onError(Throwable throwable) {
-        showSnackBar(requireView(),
+        showSnackBarErro(requireView(),
                 String.format(Locale.getDefault(), "Erro na comunicação: %s", throwable.getMessage()));
     }
 

@@ -230,6 +230,7 @@
 
     <!-- Negociacao -->
     <string name="label_empresa_selecionada">Selecionada: %s</string>
+    <string name="label_empresa_selecionada_error">Nenhuma empresa cadastrada</string>
 
     <!-- Precificacao Review Screen -->
     <string name="peso_bezerro">Peso do bezerro</string>

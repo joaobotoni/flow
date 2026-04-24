@@ -1,9 +1,12 @@
 package com.botoni.flow.data.repositories;
 
+import com.botoni.flow.data.models.ParametrosBezerro;
 import com.botoni.flow.data.models.PrecificacaoBezerro;
+import com.botoni.flow.data.source.local.entities.ValorReferencia;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
 import javax.inject.Inject;
 
 public class PrecificacaoBezerroRepository {
@@ -15,9 +18,26 @@ public class PrecificacaoBezerroRepository {
     private static final int ESCALA_CALCULO = 15;
     private static final int ESCALA_RESULTADO = 2;
     private static final RoundingMode MODO_ARREDONDAMENTO = RoundingMode.HALF_EVEN;
+    private final ValorReferenciaRepository valorReferenciaRepository;
 
     @Inject
-    public PrecificacaoBezerroRepository() {
+    public PrecificacaoBezerroRepository(ValorReferenciaRepository valorReferenciaRepository) {
+        this.valorReferenciaRepository = valorReferenciaRepository;
+    }
+
+    public PrecificacaoBezerro calcularNegociacaoBezerroComFrete(BigDecimal peso, Integer quantidade) {
+        ParametrosBezerro parametrosBezerro = obterParametros();
+        return calcularNegociacaoBezerroComFrete(peso, parametrosBezerro.precoPorArroba, parametrosBezerro.percentualAgio, quantidade, parametrosBezerro.pesoBaseKg);
+    }
+
+    public PrecificacaoBezerro calcularNegociacaoBezerro(BigDecimal peso, Integer quantidade, BigDecimal valorFrete) {
+        ParametrosBezerro parametrosBezerro = obterParametros();
+        return calcularNegociacaoBezerro(peso, parametrosBezerro.precoPorArroba, parametrosBezerro.percentualAgio, quantidade, valorFrete, parametrosBezerro.pesoBaseKg);
+    }
+
+    private ParametrosBezerro obterParametros() {
+    ValorReferencia ref = valorReferenciaRepository.findMaisRecente().orElseThrow(() -> new IllegalStateException("Nenhum valor de referência cadastrado"));
+        return new ParametrosBezerro(BigDecimal.valueOf(ref.getValorArrobaBoi()), BigDecimal.valueOf(ref.getAgioBezerro()), BigDecimal.valueOf(ref.getPesoBezerro()));
     }
 
     public PrecificacaoBezerro calcularNegociacaoBezerro(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade, BigDecimal valorFrete, BigDecimal pesoBaseKg) {
@@ -28,9 +48,7 @@ public class PrecificacaoBezerroRepository {
     }
 
     public BigDecimal calcularValorBezerro(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete, BigDecimal pesoBaseKg) {
-        return calcularValorPorKg(pesoKg, precoPorArroba, percentualAgio, valorFrete, pesoBaseKg)
-                .multiply(pesoKg)
-                .setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
+        return calcularValorPorKg(pesoKg, precoPorArroba, percentualAgio, valorFrete, pesoBaseKg).multiply(pesoKg).setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
     }
 
     public BigDecimal calcularValorPorKg(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete, BigDecimal pesoBaseKg) {

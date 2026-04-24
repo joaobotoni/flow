@@ -68,10 +68,18 @@ public class ValorReferencia {
     @SerializedName("PESO_BEZERRA")
     private Integer pesoBezerra;
 
+    @ColumnInfo(name = "agio_bezerro")
+    @SerializedName("AGIO_BEZERRO")
+    private Double agioBezerro;
+
+    @ColumnInfo(name = "agio_bezerra")
+    @SerializedName("AGIO_BEZERRA")
+    private Double agioBezerra;
+
     public ValorReferencia() {
     }
 
-    public ValorReferencia(int idValorReferencia, int idTipoReferencia, int idEmpresa, Date dataReferencia, Double valorArrobaBoi, Double valorBezerro, Integer pesoBezerro, Double valorArrobaVaca, Double valorBezerra, Integer pesoBezerra) {
+    public ValorReferencia(int idValorReferencia, int idTipoReferencia, int idEmpresa, Date dataReferencia, Double valorArrobaBoi, Double valorBezerro, Integer pesoBezerro, Double valorArrobaVaca, Double valorBezerra, Integer pesoBezerra, Double agioBezerro, Double agioBezerra) {
         this.idValorReferencia = idValorReferencia;
         this.idTipoReferencia = idTipoReferencia;
         this.idEmpresa = idEmpresa;
@@ -82,6 +90,8 @@ public class ValorReferencia {
         this.valorArrobaVaca = valorArrobaVaca;
         this.valorBezerra = valorBezerra;
         this.pesoBezerra = pesoBezerra;
+        this.agioBezerro = agioBezerro;
+        this.agioBezerra = agioBezerra;
     }
 
     public int getIdValorReferencia() {
@@ -162,5 +172,21 @@ public class ValorReferencia {
 
     public void setPesoBezerra(Integer pesoBezerra) {
         this.pesoBezerra = pesoBezerra;
+    }
+
+    public Double getAgioBezerro() {
+        return agioBezerro;
+    }
+
+    public void setAgioBezerro(Double agioBezerro) {
+        this.agioBezerro = agioBezerro;
+    }
+
+    public Double getAgioBezerra() {
+        return agioBezerra;
+    }
+
+    public void setAgioBezerra(Double agioBezerra) {
+        this.agioBezerra = agioBezerra;
     }
 }

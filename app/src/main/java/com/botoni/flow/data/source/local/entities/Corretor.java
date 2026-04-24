@@ -21,13 +21,18 @@ public class Corretor {
     @ColumnInfo(name = "comissao")
     private Double comissao;
 
+    @SerializedName("TIPO_COMISSAO")
+    @ColumnInfo(name = "tipo_comissao")
+    private String tipoComissao;
+
     public Corretor() {
     }
 
-    public Corretor(int idCorretor, String nome, Double comissao) {
+    public Corretor(int idCorretor, String nome, Double comissao, String tipoComissao) {
         this.idCorretor = idCorretor;
         this.nome = nome;
         this.comissao = comissao;
+        this.tipoComissao = tipoComissao;
     }
 
     public int getIdCorretor() {
@@ -52,5 +57,13 @@ public class Corretor {
 
     public void setComissao(Double comissao) {
         this.comissao = comissao;
+    }
+
+    public String getTipoComissao() {
+        return tipoComissao;
+    }
+
+    public void setTipoComissao(String tipoComissao) {
+        this.tipoComissao = tipoComissao;
     }
 }

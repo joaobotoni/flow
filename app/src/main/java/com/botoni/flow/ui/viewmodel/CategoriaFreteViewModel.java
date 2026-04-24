@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class CategoriaViewModel extends ViewModel {
+public class CategoriaFreteViewModel extends ViewModel {
 
     private final CategoriaFreteRepository repositorio;
     private final TaskHelper taskHelper;
@@ -28,13 +28,11 @@ public class CategoriaViewModel extends ViewModel {
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
 
     @Inject
-    public CategoriaViewModel(CategoriaFreteRepository repositorio,
-                              TaskHelper taskHelper,
-                              CategoriaMapper mapper) {
+    public CategoriaFreteViewModel(CategoriaFreteRepository repositorio, TaskHelper taskHelper, CategoriaMapper mapper) {
         this.repositorio = repositorio;
         this.taskHelper = taskHelper;
         this.mapper = mapper;
-        listar();
+        listarCategorias();
     }
 
     public LiveData<List<ItemOpcaoUiState>> getState() {
@@ -49,7 +47,7 @@ public class CategoriaViewModel extends ViewModel {
         return error;
     }
 
-    public void selecionar(ItemOpcaoUiState selecionada) {
+    public void selecionarCategorias(ItemOpcaoUiState selecionada) {
         if (state.getValue() == null) return;
 
         List<ItemOpcaoUiState> newList = state.getValue().stream()
@@ -63,7 +61,7 @@ public class CategoriaViewModel extends ViewModel {
         categoriaSelecionada.setValue(selecionada);
     }
 
-    private void listar() {
+    private void listarCategorias() {
         taskHelper.execute(
                 () -> repositorio.getAll().stream()
                         .map(mapper::mapFrom)
@@ -73,7 +71,16 @@ public class CategoriaViewModel extends ViewModel {
         );
     }
 
-    public void limpar() {
-        state.setValue(null);
+
+    public void limparSelecao() {
+        categoriaSelecionada.setValue(null);
+        if (state.getValue() == null) return;
+        List<ItemOpcaoUiState> newList = state.getValue().stream()
+                .map(item -> new ItemOpcaoUiState(
+                        item.getId(),
+                        item.getDescricao(),
+                        false))
+                .collect(Collectors.toList());
+        state.setValue(newList);
     }
 }

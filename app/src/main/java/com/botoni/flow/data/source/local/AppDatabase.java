@@ -7,6 +7,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.botoni.flow.data.source.local.converters.Converters;
@@ -33,7 +34,7 @@ import com.botoni.flow.data.source.local.entities.TipoReferencia;
 import com.botoni.flow.data.source.local.entities.TipoVeiculoFrete;
 import com.botoni.flow.data.source.local.entities.ValorReferencia;
 
-@Database(entities = {Frete.class, CapacidadeFrete.class, CategoriaFrete.class, TipoVeiculoFrete.class, ValorReferencia.class, TipoReferencia.class, NegociacaoGado.class, NegociacaoAnimal.class, Empresa.class, Corretor.class, CategoriaNeg.class}, version = 1)
+@Database(entities = {Frete.class, CapacidadeFrete.class, CategoriaFrete.class, TipoVeiculoFrete.class, ValorReferencia.class, TipoReferencia.class, NegociacaoGado.class, NegociacaoAnimal.class, Empresa.class, Corretor.class, CategoriaNeg.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FreteDao freteDao();
@@ -58,13 +59,21 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CategoriaNegDao categoriaNegDao();
 
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE xgp_valor_referencia ADD COLUMN agio_bezerro REAL NOT NULL DEFAULT 30.0");
+            database.execSQL("ALTER TABLE xgp_valor_referencia ADD COLUMN agio_bezerra REAL NOT NULL DEFAULT 30.0");
+        }
+    };
+
     private static volatile AppDatabase INSTANCE;
 
     public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "Sample.db").addCallback(new RoomDatabase.Callback() {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "Sample.db").addMigrations(MIGRATION_1_2).addCallback(new RoomDatabase.Callback() {
                         @Override
                         public void onCreate(@NonNull SupportSQLiteDatabase db) {
                             super.onCreate(db);
@@ -136,6 +145,20 @@ public abstract class AppDatabase extends RoomDatabase {
                             db.execSQL("INSERT INTO xgp_frete (tipo_cobranca, id_tipo_veiculo_frete, km_inicial, km_final, valor) VALUES (0,4,251,300,5300.00)");
                             db.execSQL("INSERT INTO xgp_frete (tipo_cobranca, id_tipo_veiculo_frete, km_inicial, km_final, valor) VALUES (1,4,301,9223372036854775807,17.00)");
 
+                            // TIPOS DE REFERÊNCIA DE PREÇO
+                            db.execSQL("INSERT INTO xgp_tipo_referencia (id_tipo_referencia, descricao) VALUES (1, 'CEPEA/Esalq')");
+                            db.execSQL("INSERT INTO xgp_tipo_referencia (id_tipo_referencia, descricao) VALUES (2, 'Mercado Local')");
+                            db.execSQL("INSERT INTO xgp_tipo_referencia (id_tipo_referencia, descricao) VALUES (3, 'Negociação Particular')");
+
+                            // EMPRESA PADRÃO
+                            db.execSQL("INSERT INTO empresa (nome) VALUES ('Bom Sucesso ')");
+                            db.execSQL("INSERT INTO empresa (nome) VALUES ('Poças')");
+
+                            // CORRETOR PADRÃO
+                            db.execSQL("INSERT INTO xgp_corretor (name, comissao, tipo_comissao) VALUES ('Julio', 20.0, 'c')");
+
+                            // VALOR DE REFERÊNCIA INICIAL
+                            db.execSQL("INSERT INTO xgp_valor_referencia (id_valor_referencia, id_tipo_referencia, id_empresa, data_referencia, valor_arroba_boi, valor_bezerro, peso_bezerro, valor_arroba_vaca, valor_bezerra, peso_bezerra, agio_bezerro, agio_bezerra) VALUES (1, 1, 1, strftime('%s','now') * 1000, 310.00, 2800.00, 180, 319.00, 2800.00, 180, 30.0, 30.0)");
                         }
                     }).build();
                 }

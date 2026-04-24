@@ -1,6 +1,7 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
+
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarErro;
 import static com.botoni.flow.ui.helpers.ViewHelper.anyEmpty;
 import static com.botoni.flow.ui.helpers.ViewHelper.getBigDecimal;
 import static com.botoni.flow.ui.helpers.ViewHelper.setText;
@@ -117,7 +118,7 @@ public class DetalhePrecificacaoFragment extends Fragment {
     private void onAdicionarClicado() {
         if (campoPesoVazio()) return;
         if (listaCheia()) {
-            showSnackBar(requireView(), getString(R.string.limite_bezerros_atingido));
+            showSnackBarErro(requireView(), getString(R.string.limite_bezerros_atingido));
             return;
         }
         viewModel.adicionarItem(lerPeso(), ARROBA, AGIO, PESO_BASE);
@@ -173,7 +174,7 @@ public class DetalhePrecificacaoFragment extends Fragment {
     private void onFinalizarClicado() {
         if (!listaValida()) return;
         if (!listaCompleta()) {
-            showSnackBar(requireView(), getString(R.string.quantidade_incompleta));
+            showSnackBarErro(requireView(), getString(R.string.quantidade_incompleta));
             return;
         }
         navegarParaSucessoFragment();

@@ -1,6 +1,6 @@
 package com.botoni.flow.ui.fragments;
 
-import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBar;
+import static com.botoni.flow.ui.helpers.AlertHelper.showSnackBarErro;
 import static com.botoni.flow.ui.helpers.FormatHelper.formatCurrency;
 import static com.botoni.flow.ui.helpers.TextWatcherHelper.SimpleTextWatcher;
 import static com.botoni.flow.ui.helpers.ViewHelper.anyEmpty;
@@ -34,7 +34,7 @@ import com.botoni.flow.ui.state.ItemOpcaoUiState;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
 import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
 import com.botoni.flow.ui.state.ResumoValoresUiState;
-import com.botoni.flow.ui.viewmodel.CategoriaViewModel;
+import com.botoni.flow.ui.viewmodel.CategoriaFreteViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoBezerroViewModel;
 import com.botoni.flow.ui.viewmodel.PrecificacaoFreteViewModel;
 import com.botoni.flow.ui.viewmodel.ResultadoViewModel;
@@ -49,10 +49,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class PrecificacaoFragment extends Fragment {
-
-    private static final BigDecimal ARROBA = new BigDecimal("310");
-    private static final BigDecimal AGIO = new BigDecimal("30");
-    private static final BigDecimal PESO_BASE = new BigDecimal("180");
     private static final String CHAVE_RESUMO_BEZERRO = "resumo_bezerro";
     private static final String CHAVE_RESUMO_FRETE = "resumo_frete";
     private static final String CHAVE_RESUMO_COM_FRETE = "resumo_com_frete";
@@ -66,7 +62,7 @@ public class PrecificacaoFragment extends Fragment {
     private ItemOpcaoAdapter itemOpcaoAdapter;
     private PrecificacaoBezerroViewModel bezerroViewModel;
     private PrecificacaoFreteViewModel freteViewModel;
-    private CategoriaViewModel categoriaViewModel;
+    private CategoriaFreteViewModel categoriaFreteViewModel;
     private TransporteViewModel transporteViewModel;
     private ResumoValoresViewModel resumoBezerroViewModel;
     private ResumoValoresViewModel resumoFreteViewModel;
@@ -104,7 +100,7 @@ public class PrecificacaoFragment extends Fragment {
         ViewModelProvider provider = new ViewModelProvider(requireActivity());
         bezerroViewModel = provider.get(PrecificacaoBezerroViewModel.class);
         freteViewModel = provider.get(PrecificacaoFreteViewModel.class);
-        categoriaViewModel = provider.get(CategoriaViewModel.class);
+        categoriaFreteViewModel = provider.get(CategoriaFreteViewModel.class);
         transporteViewModel = provider.get(TransporteViewModel.class);
         resumoBezerroViewModel = provider.get(CHAVE_RESUMO_BEZERRO, ResumoValoresViewModel.class);
         resumoFreteViewModel = provider.get(CHAVE_RESUMO_FRETE, ResumoValoresViewModel.class);
@@ -166,11 +162,11 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void observarListaCategorias() {
-        categoriaViewModel.getState().observe(getViewLifecycleOwner(), itemOpcaoAdapter::submitList);
+        categoriaFreteViewModel.getState().observe(getViewLifecycleOwner(), itemOpcaoAdapter::submitList);
     }
 
     private void observarCategoriaSelecionada() {
-        categoriaViewModel.getCategoriaSelecionada().observe(getViewLifecycleOwner(), this::processarRecomendacaoTransporte);
+        categoriaFreteViewModel.getCategoriaSelecionada().observe(getViewLifecycleOwner(), this::processarRecomendacaoTransporte);
     }
 
     private void observarCalculosFrete() {
@@ -196,7 +192,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void aoSelecionarCategoriaNaLista(ItemOpcaoUiState categoria) {
-        categoriaViewModel.selecionar(categoria);
+        categoriaFreteViewModel.selecionarCategorias(categoria);
     }
 
     private void aoReceberResultadoFrete(Bundle bundle) {
@@ -219,7 +215,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void calcularValorBaseBezerro() {
-        bezerroViewModel.calcularNegociacaoComFrete(lerPesoUnitario(), ARROBA, AGIO, lerQuantidade(), PESO_BASE);
+        bezerroViewModel.calcularNegociacaoComFrete(lerPesoUnitario(), lerQuantidade());
     }
 
     private void calcularValorBaseFrete() {
@@ -262,7 +258,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void calcularBezerroComDescontoFrete(BigDecimal incidencia) {
-        bezerroViewModel.calcularNegociacao(lerPesoUnitario(), ARROBA, AGIO, lerQuantidade(), incidencia, PESO_BASE);
+        bezerroViewModel.calcularNegociacao(lerPesoUnitario(), lerQuantidade(), incidencia);
     }
 
     private void processarNovoValorFrete(String valorFreteStr) {
@@ -314,7 +310,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void notificarMudancaRecomendacaoTransporte() {
-        processarRecomendacaoTransporte(categoriaViewModel.getCategoriaSelecionada().getValue());
+        processarRecomendacaoTransporte(categoriaFreteViewModel.getCategoriaSelecionada().getValue());
     }
 
     private void processarRecomendacaoTransporte(ItemOpcaoUiState categoria) {
@@ -351,7 +347,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private void exibirAlertaErro(int mensagemId) {
-        showSnackBar(requireView(), getString(mensagemId));
+        showSnackBarErro(requireView(), getString(mensagemId));
     }
 
     private void executarNavegacaoNegociacao() {
@@ -442,7 +438,7 @@ public class PrecificacaoFragment extends Fragment {
     }
 
     private boolean isCategoriaNaoSelecionada() {
-        return isEmpty(categoriaViewModel.getCategoriaSelecionada().getValue());
+        return isEmpty(categoriaFreteViewModel.getCategoriaSelecionada().getValue());
     }
 
     private boolean isFreteDeclarado() {
