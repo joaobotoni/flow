@@ -1,11 +1,9 @@
-package com.botoni.flow.ui.mappers.domain;
+package com.botoni.flow.utils.mappers.domain;
 
 import com.botoni.flow.data.models.Transporte;
-import com.botoni.flow.ui.mappers.BiMapper;
-import com.botoni.flow.ui.mappers.Mapper;
+import com.botoni.flow.utils.mappers.BiMapper;
 import com.botoni.flow.ui.state.TransporteUiState;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

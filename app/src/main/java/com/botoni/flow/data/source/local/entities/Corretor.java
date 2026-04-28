@@ -20,7 +20,6 @@ public class Corretor {
     @SerializedName("COMISSAO")
     @ColumnInfo(name = "comissao")
     private Double comissao;
-
     @SerializedName("TIPO_COMISSAO")
     @ColumnInfo(name = "tipo_comissao")
     private String tipoComissao;

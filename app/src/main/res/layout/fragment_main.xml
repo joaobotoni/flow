@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20"
-                android:text="@string/title_main"
+                android:text="@string/titulo_instrucao_preenchimento"
                 android:textSize="@dimen/text_14"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dimen_4"
                             android:maxLines="1"
-                            android:text="@string/solicitar_dispositivo"
+                            android:text="@string/botao_solicitar_dispositivo"
                             android:textColor="?attr/colorOnPrimaryContainer"
                             android:textSize="@dimen/text_14"
                             android:textStyle="bold" />
@@ -88,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:alpha="0.85"
                             android:maxLines="2"
-                            android:text="@string/texto_coneccao"
+                            android:text="@string/mensagem_info_conexao"
                             android:textColor="?attr/colorOnPrimaryContainer"
                             android:textSize="@dimen/text_12" />
                     </LinearLayout>
@@ -102,7 +102,7 @@
                 android:layout_marginStart="@dimen/dimen_4"
                 android:layout_marginTop="@dimen/dimen_20"
                 android:letterSpacing="0.08"
-                android:text="@string/dados_de_conexao"
+                android:text="@string/rotulo_dados_conexao"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="@dimen/text_12"
                 android:textStyle="bold"
@@ -110,7 +110,7 @@
                 app:layout_constraintTop_toBottomOf="@id/card_info_solicitacao" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/entradaTextoIpCampo"
+                android:id="@+id/entradaTextoHostCampo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_10"
@@ -121,29 +121,29 @@
                 app:startIconDrawable="@drawable/bigtop_updates_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/entradaTextoIp"
+                    android:id="@+id/entradaTextoHost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ip"
+                    android:hint="@string/dica_ip"
                     android:inputType="textUri" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/entradaTextoHostCampo"
+                android:id="@+id/entradaTextoPortCampo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/entradaTextoIpCampo"
+                app:layout_constraintTop_toBottomOf="@id/entradaTextoHostCampo"
                 app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
                 app:startIconDrawable="@drawable/dns_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/entradaTextoHost"
+                    android:id="@+id/entradaTextoPort"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/host" />
+                    android:hint="@string/dica_host" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -153,7 +153,7 @@
                 android:layout_marginTop="@dimen/dimen_10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/entradaTextoHostCampo"
+                app:layout_constraintTop_toBottomOf="@id/entradaTextoPortCampo"
                 app:shapeAppearance="?attr/shapeAppearanceCornerSmall"
                 app:startIconDrawable="@drawable/language_24px">
 
@@ -161,7 +161,7 @@
                     android:id="@+id/entradaTextoSite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/site"
+                    android:hint="@string/dica_site"
                     android:inputType="textUri" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -172,7 +172,7 @@
                 android:layout_marginStart="@dimen/dimen_4"
                 android:layout_marginTop="@dimen/dimen_20"
                 android:letterSpacing="0.08"
-                android:text="@string/identificacao"
+                android:text="@string/rotulo_identificacao"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="@dimen/text_12"
                 android:textStyle="bold"
@@ -196,7 +196,7 @@
                     android:id="@+id/entradaTextoUsuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/usuario" />
+                    android:hint="@string/dica_usuario" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -219,7 +219,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:text="@string/enviar_solicitacao"
+            android:text="@string/botao_enviar_solicitacao"
             android:textSize="@dimen/text_14"
             app:cornerRadius="28dp"
             app:icon="@drawable/send_24px"

@@ -33,8 +33,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentPrecificacaoFreteBinding;
-import com.botoni.flow.ui.mappers.domain.TransporteMapper;
-import com.botoni.flow.ui.mappers.presentation.FreteResumoMapper;
+import com.botoni.flow.utils.mappers.domain.TransporteMapper;
+import com.botoni.flow.utils.mappers.presentation.FreteResumoMapper;
 import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
 import com.botoni.flow.ui.state.ResumoValoresUiState;
 import com.botoni.flow.ui.state.RotaUiState;
@@ -154,8 +154,8 @@ public class PrecificacaoFreteFragment extends Fragment {
         return ResumoValoresFragment.newInstance(
                 CHAVE_RESUMO_SIMULACAO_FRETE,
                 getString(R.string.titulo_resumo_frete),
-                getString(R.string.card_label_total_value),
-                getString(R.string.card_label_unit_value_frete));
+                getString(R.string.cartao_valor_total),
+                getString(R.string.cartao_valor_por_kg_frete));
     }
 
     private void registrarEventosDeInterface() {
@@ -325,8 +325,8 @@ public class PrecificacaoFreteFragment extends Fragment {
     private void tratarRecusaDePermissao() {
         showDialog(
                 requireContext(),
-                getString(R.string.dialog_title_permission_location),
-                getString(R.string.dialog_message_permission_location),
+                getString(R.string.dialogo_titulo_permissao_localizacao),
+                getString(R.string.dialogo_mensagem_permissao_localizacao),
                 (d, w) -> navegarParaConfiguracoesDoApp(),
                 (d, w) -> encerrarAtividadeAtual());
     }

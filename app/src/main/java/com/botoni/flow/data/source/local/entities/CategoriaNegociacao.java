@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "xgp_categoria_neg")
-public class CategoriaNeg {
+public class CategoriaNegociacao {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_categoria_neg")
@@ -26,10 +26,10 @@ public class CategoriaNeg {
     @SerializedName(value = "ATIVO")
     private String ativo;
 
-    public CategoriaNeg() {
+    public CategoriaNegociacao() {
     }
 
-    public CategoriaNeg(int idCategoriaNeg, String descricao, String sexo, String ativo) {
+    public CategoriaNegociacao(int idCategoriaNeg, String descricao, String sexo, String ativo) {
         this.idCategoriaNeg = idCategoriaNeg;
         this.descricao = descricao;
         this.sexo = sexo;

@@ -1,7 +1,7 @@
 package com.botoni.flow.data.repositories;
 
-import com.botoni.flow.data.source.local.dao.CategoriaNegDao;
-import com.botoni.flow.data.source.local.entities.CategoriaNeg;
+import com.botoni.flow.data.source.local.dao.CategoriaNegociacaoDao;
+import com.botoni.flow.data.source.local.entities.CategoriaNegociacao;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,38 +10,38 @@ import javax.inject.Inject;
 
 public class CategoriaNegRepository {
 
-    private final CategoriaNegDao dao;
+    private final CategoriaNegociacaoDao dao;
 
     @Inject
-    public CategoriaNegRepository(CategoriaNegDao dao) {
+    public CategoriaNegRepository(CategoriaNegociacaoDao dao) {
         this.dao = dao;
     }
 
-    public List<CategoriaNeg> getAll() {
+    public List<CategoriaNegociacao> getAll() {
         return dao.getAll();
     }
 
-    public Optional<CategoriaNeg> findById(long id) {
+    public Optional<CategoriaNegociacao> findById(long id) {
         return Optional.ofNullable(dao.findById(id));
     }
 
-    public long insert(CategoriaNeg categoriaNeg) {
-        return dao.insert(categoriaNeg);
+    public long insert(CategoriaNegociacao categoriaNegociacao) {
+        return dao.insert(categoriaNegociacao);
     }
 
-    public void insertAll(List<CategoriaNeg> categoriaNegs) {
-        dao.insertAll(categoriaNegs);
+    public void insertAll(List<CategoriaNegociacao> categoriaNegociacaos) {
+        dao.insertAll(categoriaNegociacaos);
     }
 
-    public int update(CategoriaNeg categoriaNeg) {
-        return dao.update(categoriaNeg);
+    public int update(CategoriaNegociacao categoriaNegociacao) {
+        return dao.update(categoriaNegociacao);
     }
 
-    public int delete(CategoriaNeg categoriaNeg) {
-        return dao.delete(categoriaNeg);
+    public int delete(CategoriaNegociacao categoriaNegociacao) {
+        return dao.delete(categoriaNegociacao);
     }
 
-    public void deleteAll() {
+    public void delete() {
         dao.deleteAll();
     }
 }

@@ -4,7 +4,7 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.botoni.flow.data.models.Rota;
-import com.botoni.flow.data.source.network.RoutesDataSource;
+import com.botoni.flow.data.source.remote.RoutesRemoteDataSource;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -21,10 +21,10 @@ public class LocalizacaoRepository {
     private static final int BUSCA_UNICA = 1;
     private static final double METROS_POR_KM = 1000.0;
     private final Geocoder geocoder;
-    private final RoutesDataSource rotasDataSource;
+    private final RoutesRemoteDataSource rotasDataSource;
 
     @Inject
-    public LocalizacaoRepository(Geocoder geocoder, RoutesDataSource rotasDataSource) {
+    public LocalizacaoRepository(Geocoder geocoder, RoutesRemoteDataSource rotasDataSource) {
         this.geocoder = geocoder;
         this.rotasDataSource = rotasDataSource;
     }

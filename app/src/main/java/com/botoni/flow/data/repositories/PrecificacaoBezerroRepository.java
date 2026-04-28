@@ -1,5 +1,10 @@
 package com.botoni.flow.data.repositories;
 
+import static com.botoni.flow.utils.BigDecimalUtil.ARREDONDAMENTO_PADRAO;
+import static com.botoni.flow.utils.BigDecimalUtil.CEM;
+import static com.botoni.flow.utils.BigDecimalUtil.ESCALA_CALCULO;
+import static com.botoni.flow.utils.BigDecimalUtil.ESCALA_MONETARIA;
+
 import com.botoni.flow.data.models.ParametrosBezerro;
 import com.botoni.flow.data.models.PrecificacaoBezerro;
 import com.botoni.flow.data.source.local.entities.ValorReferencia;
@@ -14,10 +19,6 @@ public class PrecificacaoBezerroRepository {
     private static final BigDecimal ARROBAS_ABATE_ESPERADAS = new BigDecimal("21.00");
     private static final BigDecimal TAXA_FIXA_ABATE = new BigDecimal("69.70");
     private static final BigDecimal IMPOSTO_FUNRURAL = new BigDecimal("0.015");
-    private static final BigDecimal CEM = new BigDecimal("100");
-    private static final int ESCALA_CALCULO = 15;
-    private static final int ESCALA_RESULTADO = 2;
-    private static final RoundingMode MODO_ARREDONDAMENTO = RoundingMode.HALF_EVEN;
     private final ValorReferenciaRepository valorReferenciaRepository;
 
     @Inject
@@ -36,8 +37,8 @@ public class PrecificacaoBezerroRepository {
     }
 
     private ParametrosBezerro obterParametros() {
-    ValorReferencia ref = valorReferenciaRepository.findMaisRecente().orElseThrow(() -> new IllegalStateException("Nenhum valor de referência cadastrado"));
-        return new ParametrosBezerro(BigDecimal.valueOf(ref.getValorArrobaBoi()), BigDecimal.valueOf(ref.getAgioBezerro()), BigDecimal.valueOf(ref.getPesoBezerro()));
+        ValorReferencia referencia = valorReferenciaRepository.findMaisRecente().orElseThrow(() -> new IllegalStateException("Nenhum valor de referência cadastrado"));
+        return new ParametrosBezerro(BigDecimal.valueOf(referencia.getValorArrobaBoi()), BigDecimal.valueOf(referencia.getAgioBezerro()), BigDecimal.valueOf(referencia.getPesoBezerro()));
     }
 
     public PrecificacaoBezerro calcularNegociacaoBezerro(BigDecimal peso, BigDecimal precoPorArroba, BigDecimal percentualAgio, Integer quantidade, BigDecimal valorFrete, BigDecimal pesoBaseKg) {
@@ -48,12 +49,12 @@ public class PrecificacaoBezerroRepository {
     }
 
     public BigDecimal calcularValorBezerro(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete, BigDecimal pesoBaseKg) {
-        return calcularValorPorKg(pesoKg, precoPorArroba, percentualAgio, valorFrete, pesoBaseKg).multiply(pesoKg).setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
+        return calcularValorPorKg(pesoKg, precoPorArroba, percentualAgio, valorFrete, pesoBaseKg).multiply(pesoKg).setScale(ESCALA_MONETARIA, ARREDONDAMENTO_PADRAO);
     }
 
     public BigDecimal calcularValorPorKg(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal valorFrete, BigDecimal pesoBaseKg) {
         return pesoKg.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calcularValorTotalBezerroComFrete(pesoKg, precoPorArroba, percentualAgio, pesoBaseKg)
-                .divide(pesoKg, ESCALA_CALCULO, MODO_ARREDONDAMENTO)
+                .divide(pesoKg, ESCALA_CALCULO, ARREDONDAMENTO_PADRAO)
                 .subtract(valorFrete);
     }
 
@@ -67,20 +68,20 @@ public class PrecificacaoBezerroRepository {
     public BigDecimal calcularValorTotalBezerroComFrete(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal pesoBaseKg) {
         return calcularValorBasePorPeso(pesoKg, precoPorArroba)
                 .add(calcularValorTotalAgio(pesoKg, precoPorArroba, percentualAgio, pesoBaseKg))
-                .setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
+                .setScale(ESCALA_MONETARIA, ARREDONDAMENTO_PADRAO);
     }
 
     public BigDecimal calcularValorPorKgComFrete(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal pesoBaseKg) {
         return pesoKg.compareTo(BigDecimal.ZERO) == 0
                 ? BigDecimal.ZERO
                 : calcularValorTotalBezerroComFrete(pesoKg, precoPorArroba, percentualAgio, pesoBaseKg)
-                .divide(pesoKg, ESCALA_CALCULO, MODO_ARREDONDAMENTO);
+                .divide(pesoKg, ESCALA_CALCULO, ARREDONDAMENTO_PADRAO);
     }
 
     public BigDecimal calcularValorTotalLote(BigDecimal valorUnitario, Integer quantidade) {
         return valorUnitario
                 .multiply(new BigDecimal(quantidade))
-                .setScale(ESCALA_RESULTADO, MODO_ARREDONDAMENTO);
+                .setScale(ESCALA_MONETARIA, ARREDONDAMENTO_PADRAO);
     }
 
     private BigDecimal calcularValorTotalAgio(BigDecimal pesoKg, BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal pesoBaseKg) {
@@ -121,7 +122,7 @@ public class PrecificacaoBezerroRepository {
 
     private BigDecimal calcularAgioPorArrobaExatamenteNoPesoBase(BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal pesoBaseKg) {
         return calcularValorAgioNoPesoBase(precoPorArroba, percentualAgio, pesoBaseKg)
-                .divide(obterArrobasRestantesParaAbate(pesoBaseKg), ESCALA_CALCULO, MODO_ARREDONDAMENTO);
+                .divide(obterArrobasRestantesParaAbate(pesoBaseKg), ESCALA_CALCULO, ARREDONDAMENTO_PADRAO);
     }
 
     private BigDecimal calcularValorAgioNoPesoBase(BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal pesoBaseKg) {
@@ -132,7 +133,7 @@ public class PrecificacaoBezerroRepository {
     private BigDecimal calcularValorPesoBaseComAgio(BigDecimal precoPorArroba, BigDecimal percentualAgio, BigDecimal pesoBaseKg) {
         return converterKgParaArrobas(pesoBaseKg)
                 .multiply(precoPorArroba)
-                .divide(obterFatorMultiplicadorAgio(percentualAgio), ESCALA_CALCULO, MODO_ARREDONDAMENTO);
+                .divide(obterFatorMultiplicadorAgio(percentualAgio), ESCALA_CALCULO, ARREDONDAMENTO_PADRAO);
     }
 
     private BigDecimal calcularValorBasePorPeso(BigDecimal pesoKg, BigDecimal precoPorArroba) {
@@ -142,7 +143,7 @@ public class PrecificacaoBezerroRepository {
     private BigDecimal calcularTaxaPorArrobaRestante(BigDecimal pesoKg, BigDecimal precoPorArroba) {
         BigDecimal restantes = obterArrobasRestantesParaAbate(pesoKg);
         return restantes.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : calcularTotalTaxasAbate(precoPorArroba)
-                .divide(restantes, ESCALA_CALCULO, MODO_ARREDONDAMENTO);
+                .divide(restantes, ESCALA_CALCULO, ARREDONDAMENTO_PADRAO);
     }
 
     private BigDecimal calcularTotalTaxasAbate(BigDecimal precoPorArroba) {
@@ -154,11 +155,11 @@ public class PrecificacaoBezerroRepository {
     }
 
     private BigDecimal converterKgParaArrobas(BigDecimal pesoKg) {
-        return pesoKg.divide(PESO_ARROBA_KG, ESCALA_CALCULO, MODO_ARREDONDAMENTO);
+        return pesoKg.divide(PESO_ARROBA_KG, ESCALA_CALCULO, ARREDONDAMENTO_PADRAO);
     }
 
     private BigDecimal obterFatorMultiplicadorAgio(BigDecimal percentualAgio) {
-        return CEM.subtract(percentualAgio).divide(CEM, ESCALA_CALCULO, MODO_ARREDONDAMENTO);
+        return CEM.subtract(percentualAgio).divide(CEM, ESCALA_CALCULO, ARREDONDAMENTO_PADRAO);
     }
 
     private BigDecimal calcularProximoPesoSuperior(BigDecimal pesoKg, BigDecimal pesoBaseKg) {

@@ -5,19 +5,17 @@ import android.content.Context;
 import com.botoni.flow.data.source.local.AppDatabase;
 import com.botoni.flow.data.source.local.dao.CapacidadeFreteDao;
 import com.botoni.flow.data.source.local.dao.CategoriaFreteDao;
-import com.botoni.flow.data.source.local.dao.CategoriaNegDao;
+import com.botoni.flow.data.source.local.dao.CategoriaNegociacaoDao;
 import com.botoni.flow.data.source.local.dao.CorretorDao;
 import com.botoni.flow.data.source.local.dao.EmpresaDao;
 import com.botoni.flow.data.source.local.dao.FreteDao;
 import com.botoni.flow.data.source.local.dao.NegociacaoAnimalDao;
 import com.botoni.flow.data.source.local.dao.NegociacaoGadoDao;
+import com.botoni.flow.data.source.local.dao.RacaDao;
 import com.botoni.flow.data.source.local.dao.TipoReferenciaDao;
 import com.botoni.flow.data.source.local.dao.TipoVeiculoFreteDao;
 import com.botoni.flow.data.source.local.dao.ValorReferenciaDao;
-import com.botoni.flow.data.source.local.entities.Corretor;
-import com.botoni.flow.data.source.local.entities.NegociacaoAnimal;
-import com.botoni.flow.data.source.local.entities.NegociacaoGado;
-import com.botoni.flow.data.source.network.RoutesDataSource;
+import com.botoni.flow.data.source.remote.RoutesRemoteDataSource;
 
 import javax.inject.Singleton;
 
@@ -58,7 +56,7 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public CategoriaNegDao provideCategoriaNegDao(@ApplicationContext Context context) {
+    public CategoriaNegociacaoDao provideCategoriaNegDao(@ApplicationContext Context context) {
         return AppDatabase.getDatabase(context).categoriaNegDao();
     }
 
@@ -98,9 +96,16 @@ public class DataModule {
         return AppDatabase.getDatabase(context).tipoReferenciaDao();
     }
 
+
     @Provides
     @Singleton
-    public RoutesDataSource provideRoutesDataSource(@ApplicationContext Context context) {
-        return new RoutesDataSource(context);
+    public RacaDao provideRacaDao(@ApplicationContext Context context) {
+        return AppDatabase.getDatabase(context).racaDao();
+    }
+
+    @Provides
+    @Singleton
+    public RoutesRemoteDataSource provideRoutesDataSource(@ApplicationContext Context context) {
+        return new RoutesRemoteDataSource(context);
     }
 }

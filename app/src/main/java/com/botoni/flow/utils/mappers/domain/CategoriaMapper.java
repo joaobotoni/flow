@@ -1,7 +1,7 @@
-package com.botoni.flow.ui.mappers.domain;
+package com.botoni.flow.utils.mappers.domain;
 
 import com.botoni.flow.data.source.local.entities.CategoriaFrete;
-import com.botoni.flow.ui.mappers.BiMapper;
+import com.botoni.flow.utils.mappers.BiMapper;
 import com.botoni.flow.ui.state.ItemOpcaoUiState;
 
 import javax.inject.Inject;

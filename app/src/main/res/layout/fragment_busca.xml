@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:hint="@string/hint_search"
+            android:hint="@string/dica_pesquisar_endereco"
             android:inputType="text"
             android:paddingTop="@dimen/dimen_0"
             android:paddingBottom="@dimen/dimen_0"/>

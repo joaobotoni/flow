@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.botoni.flow.data.repositories.CategoriaFreteRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
-import com.botoni.flow.ui.mappers.domain.CategoriaMapper;
+import com.botoni.flow.utils.mappers.domain.CategoriaMapper;
 import com.botoni.flow.ui.state.ItemOpcaoUiState;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,9 +24,9 @@ public class CategoriaFreteViewModel extends ViewModel {
     private final CategoriaFreteRepository repositorio;
     private final TaskHelper taskHelper;
     private final CategoriaMapper mapper;
-    private final MutableLiveData<List<ItemOpcaoUiState>> state = new MutableLiveData<>();
-    private final MutableLiveData<ItemOpcaoUiState> categoriaSelecionada = new MutableLiveData<>();
-    private final MutableLiveData<Throwable> error = new MutableLiveData<>();
+    private final MutableLiveData<List<ItemOpcaoUiState>> state = new MutableLiveData<>(Collections.emptyList());
+    private final MutableLiveData<ItemOpcaoUiState> categoriaSelecionada = new MutableLiveData<>(null);
+    private final MutableLiveData<Throwable> error = new MutableLiveData<>(null);
 
     @Inject
     public CategoriaFreteViewModel(CategoriaFreteRepository repositorio, TaskHelper taskHelper, CategoriaMapper mapper) {

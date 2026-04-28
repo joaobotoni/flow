@@ -1,4 +1,4 @@
-package com.botoni.flow.ui.mappers;
+package com.botoni.flow.utils.mappers;
 
 public interface Mapper<I, O> {
     O mapper(I i);

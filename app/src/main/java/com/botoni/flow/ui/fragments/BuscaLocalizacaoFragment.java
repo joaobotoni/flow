@@ -115,12 +115,12 @@ public class BuscaLocalizacaoFragment extends BottomSheetDialogFragment {
     private void tratarErroBusca(@Nullable Throwable erro) {
         if (erro == null) return;
         adapter.submitList(null);
-        showSnackBarErro(requireView(), getString(R.string.error_search_address));
+        showSnackBarErro(requireView(), getString(R.string.erro_busca_endereco));
     }
 
     private void tratarErroRota(@Nullable Throwable erro) {
         if (erro == null) return;
-        showSnackBarErro(requireView(), getString(R.string.error_search_address));
+        showSnackBarErro(requireView(), getString(R.string.erro_busca_endereco));
     }
 
     private void onLocalizacaoSelecionada(Address origem) {

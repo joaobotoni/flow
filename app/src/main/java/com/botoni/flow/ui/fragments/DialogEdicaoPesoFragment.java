@@ -50,8 +50,8 @@
             configurarView();
             return builder
                     .setView(binding.getRoot())
-                    .setNegativeButton(R.string.cancelar, null)
-                    .setPositiveButton(R.string.confirmar, (dialogInterface, i) -> onConfirmarClicado())
+                    .setNegativeButton(R.string.botao_cancelar, null)
+                    .setPositiveButton(R.string.botao_confirmar, (dialogInterface, i) -> onConfirmarClicado())
                     .create();
         }
 

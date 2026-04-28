@@ -1,266 +1,255 @@
 <resources>
-    <!-- App Info -->
-    <string name="app_name">flow</string>
 
-    <!-- Main Titles -->
-    <string name="title_main">Preencha os campos abaixo</string>
-    <string name="title_negociacao">NEGOCIAÇÃO</string>
-    <string name="title_details">Detalhes</string>
-    <string name="title_summary">Resumo</string>
-    <string name="title_select">Selecionar</string>
-    <string name="title_boi_gordo">BOI GORDO</string>
-    <string name="title_vaca_gorda">VACA GORDA</string>
-    <string name="title_estrategias_de_calculo">ESTRATÉGIAS DE CÁLCULO</string>
+    <!-- ==================== APP ==================== -->
+    <string name="app_nome">flow</string>
 
-    <!-- Subtitles -->
-    <string name="subtitle_required">Campos obrigatórios</string>
-    <string name="subtitle_optional">Campos opcionais</string>
-    <string name="subtitle_info">Informações adicionais</string>
-
-    <!-- Input Hints -->
-    <string name="hint_animal_weight">Peso do Animal (kg)</string>
-    <string name="hint_animal_quantity">Quantidade</string>
-    <string name="hint_arroba_price">Preço da Arroba</string>
-    <string name="hint_percentage">Ágio</string>
-    <string name="hint_weight">Peso (%s)</string>
-    <string name="hint_quantity">Quantidade</string>
-    <string name="hint_price">Preço</string>
-    <string name="hint_name">Nome</string>
-    <string name="hint_email">E-mail</string>
-    <string name="hint_phone">Telefone</string>
-    <string name="hint_notes">Observações</string>
-    <string name="hint_searchbar">Digite a localização de origem</string>
-
-    <!-- Labels -->
-    <string name="label_weight">Peso</string>
-    <string name="label_quantity">Quantidade</string>
-    <string name="label_price">Preço</string>
-    <string name="label_percentage">Percentual</string>
-    <string name="label_total">Total</string>
-    <string name="label_value">Valor</string>
-    <string name="label_unit">Unitário</string>
-    <string name="label_arroba">Arroba</string>
-    <string name="label_per">por</string>
-
-    <!-- Card Labels - Flexíveis -->
-    <string name="card_label_valor_por_kg">Valor por Kg</string>
-    <string name="card_label_total_value">Valor Total</string>
-    <string name="card_label_unit_value">Valor por Cabeça</string>
-    <string name="card_label_total_arroba">Total de Arrobas</string>
-    <string name="card_label_value_per_unit">%1$s / %2$s</string> <!-- Ex: R$ / kg -->
-    <string name="card_suffix_unit">unidade</string>
-    <string name="card_suffix_head">cabeça</string>
-    <string name="card_suffix_kg">kg</string>
-    <string name="add_location_label">Adicionar localização</string>
-    <string name="card_label_unit_value_frete">Valor por kg</string>
-    <string name="card_label_unit_total_value_frete">Valor total frete</string>
+    <!-- ==================== TÍTULOS ==================== -->
+    <string name="titulo_instrucao_preenchimento">Preencha os campos abaixo</string>
+    <string name="titulo_negociacao">NEGOCIAÇÃO</string>
+    <string name="titulo_detalhes">Detalhes</string>
+    <string name="titulo_resumo">Resumo</string>
+    <string name="titulo_selecionar">Selecionar</string>
+    <string name="titulo_boi_gordo">BOI GORDO</string>
+    <string name="titulo_vaca_gorda">VACA GORDA</string>
+    <string name="titulo_estrategias_calculo">ESTRATÉGIAS DE CÁLCULO</string>
+    <string name="titulo_operacao_concluida">OPERAÇÃO CONCLUÍDA</string>
+    <string name="titulo_simular_frete">SIMULAR FRETE</string>
+    <string name="titulo_fechamento_negociacao">FECHAMENTO NEGOCIAÇÃO</string>
+    <string name="titulo_editar_peso">Editar peso do animal</string>
     <string name="titulo_resumo_bezerro">Valor do Bezerro sem frete</string>
     <string name="titulo_resumo_frete">Valor do Frete</string>
     <string name="titulo_resumo_com_frete">Valor do Bezerro com Frete</string>
-    <string name="rotulo_valor_final_por_cabeca">Valor por cabeça</string>
-    <string name="rotulo_valor_final_por_kg">Valor por kg</string>
+    <string name="titulo_resumo_comissao">Comissão</string>
+    <string name="titulo_resumo_valor_total_final">Valor total final</string>
 
-    <!-- Units -->
-    <string name="unit_kg">kg</string>
-    <string name="unit_percentage">%</string>
-    <string name="unit_currency">R$</string>
-    <string name="unit_head">cabeça</string>
-    <string name="unit_piece">unidade</string>
+    <!-- ==================== SUBTÍTULOS ==================== -->
+    <string name="subtitulo_campos_obrigatorios">Campos obrigatórios</string>
+    <string name="subtitulo_campos_opcionais">Campos opcionais</string>
+    <string name="subtitulo_informacoes_adicionais">Informações adicionais</string>
+    <string name="subtitulo_negociacao_registrada">Negociação registrada com sucesso</string>
 
-    <!-- Currency -->
-    <string name="currency_symbol">R$</string>
-    <string name="currency_symbol_slash">R$ /</string>
-    <string name="currency_format">R$ %s</string>
-    <string name="currency_with_unit">R$ %1$s / %2$s</string>
+    <!-- ==================== DICAS (android:hint) ==================== -->
+    <string name="dica_peso_animal">Peso do Animal (kg)</string>
+    <string name="dica_quantidade_animais">Quantidade</string>
+    <string name="dica_preco_arroba">Preço da Arroba</string>
+    <string name="dica_agio">Ágio</string>
+    <string name="dica_peso">Peso (%s)</string>
+    <string name="dica_quantidade">Quantidade</string>
+    <string name="dica_preco">Preço</string>
+    <string name="dica_nome">Nome</string>
+    <string name="dica_email">E-mail</string>
+    <string name="dica_telefone">Telefone</string>
+    <string name="dica_observacoes">Observações</string>
+    <string name="dica_localizacao_origem">Digite a localização de origem</string>
+    <string name="dica_pesquisar_endereco">Pesquisar endereço</string>
+    <string name="dica_quilometragem">Quilometragem</string>
+    <string name="dica_distancia_km">Distância em km</string>
+    <string name="dica_frete">Frete</string>
+    <string name="dica_valor_frete">Valor do Frete</string>
+    <string name="dica_valor_por_cabeca">Valor/Cab</string>
+    <string name="dica_valor_por_kg">Valor/Kg</string>
+    <string name="dica_peso_referencia">Peso de referência</string>
+    <string name="dica_peso_bezerro">Peso do bezerro</string>
+    <string name="dica_corretor">Corretor</string>
+    <string name="dica_ip">IP</string>
+    <string name="dica_host">Host</string>
+    <string name="dica_site">Site</string>
+    <string name="dica_usuario">Usuário</string>
 
-    <!-- Default Values -->
-    <string name="default_decimal_value">0,00</string>
-    <string name="default_integer_value">0</string>
-    <string name="default_empty">—</string>
-    <string name="placeholder_text">Texto placeholder</string>
-    <string name="placeholder_number">0</string>
+    <!-- ==================== RÓTULOS (Labels informativos) ==================== -->
+    <string name="rotulo_peso">Peso</string>
+    <string name="rotulo_quantidade">Quantidade</string>
+    <string name="rotulo_preco">Preço</string>
+    <string name="rotulo_percentual">Percentual</string>
+    <string name="rotulo_total">Total</string>
+    <string name="rotulo_valor">Valor</string>
+    <string name="rotulo_unitario">Unitário</string>
+    <string name="rotulo_arroba">Arroba</string>
+    <string name="rotulo_por">por</string>
+    <string name="rotulo_origem">Origem</string>
+    <string name="rotulo_destino">Destino</string>
+    <string name="rotulo_distancia">Distância</string>
+    <string name="rotulo_tempo">Tempo</string>
+    <string name="rotulo_rota">ROTA</string>
+    <string name="rotulo_valor_final">VALOR FINAL</string>
+    <string name="rotulo_frete">FRETE</string>
+    <string name="rotulo_transporte">TRANSPORTE</string>
+    <string name="rotulo_explorar_rotas">Toque para explorar rotas</string>
+    <string name="rotulo_adicionar_localizacao">Adicionar localização</string>
+    <string name="rotulo_empresa_selecionada">Selecionada: %s</string>
+    <string name="rotulo_empresa_nao_cadastrada">Nenhuma empresa cadastrada</string>
+    <string name="rotulo_empresa_nao_selecionada">Selecione uma empresa</string>
+    <string name="rotulo_identificacao">IDENTIFICAÇÃO</string>
+    <string name="rotulo_dados_conexao">DADOS DE CONEXÃO</string>
+    <string name="rotulo_quilometragem_atual">QUILOMETRAGEM ATUAL</string>
+    <string name="rotulo_ajuste_fino">AJUSTE FINO</string>
+    <string name="rotulo_incremento_rapido">INCREMENTO RÁPIDO</string>
+    <string name="rotulo_hodometro">HODÔMETRO</string>
 
-    <!-- Formatted Values -->
-    <string name="format_decimal">%,.2f</string>
-    <string name="format_integer">%d</string>
-    <string name="format_percentage">%s%%</string>
-    <string name="format_with_unit">%1$s %2$s</string>
+    <!-- ==================== CARTÕES DE RESULTADO ==================== -->
+    <string name="cartao_valor_por_kg">Valor por Kg</string>
+    <string name="cartao_valor_total">Valor Total</string>
+    <string name="cartao_valor_por_cabeca">Valor por Cabeça</string>
+    <string name="cartao_total_arrobas">Total de Arrobas</string>
+    <string name="cartao_valor_por_unidade">%1$s / %2$s</string>
+    <string name="cartao_sufixo_unidade">unidade</string>
+    <string name="cartao_sufixo_cabeca">cabeça</string>
+    <string name="cartao_sufixo_kg">kg</string>
+    <string name="cartao_valor_por_kg_frete">Valor por kg</string>
+    <string name="cartao_valor_total_frete">Valor total frete</string>
+    <string name="cartao_comissao_por_cabeca">Comissão por cabeça</string>
+    <string name="cartao_total_comissao">Total da comissão</string>
+    <string name="cartao_valor_final_por_cabeca">Valor por cabeça</string>
+    <string name="cartao_valor_final_por_kg">Valor por kg</string>
+    <string name="cartao_peso_medio">Peso médio</string>
+    <string name="cartao_cabecas">Cabeças</string>
+    <string name="cartao_variacao">Variação</string>
 
-    <!-- Buttons -->
-    <string name="button_confirm">Confirmar</string>
-    <string name="button_cancel">Cancelar</string>
-    <string name="button_save">Salvar</string>
-    <string name="button_submit">Enviar</string>
-    <string name="button_next">Próximo</string>
-    <string name="button_back">Voltar</string>
-    <string name="button_delete">Excluir</string>
-    <string name="button_edit">Editar</string>
-    <string name="button_add">Adicionar</string>
-    <string name="button_search">Buscar</string>
-    <string name="button_close">Fechar</string>
-    <string name="button_reset">Limpar</string>
-    <string name="button_goto_settings">Ir para configurações</string>
+    <!-- ==================== UNIDADES DE MEDIDA ==================== -->
+    <string name="unidade_kg">kg</string>
+    <string name="unidade_km">km</string>
+    <string name="unidade_percentual">%</string>
+    <string name="unidade_moeda">R$</string>
+    <string name="unidade_cabeca">cabeça</string>
+    <string name="unidade_peca">unidade</string>
 
-    <!-- Actions -->
-    <string name="action_yes">Sim</string>
-    <string name="action_no">Não</string>
-    <string name="action_ok">OK</string>
-    <string name="action_retry">Tentar novamente</string>
-    <string name="action_dismiss">Dispensar</string>
-    <string name="action_continue">Continuar</string>
+    <!-- ==================== MOEDA ==================== -->
+    <string name="moeda_simbolo">R$</string>
+    <string name="moeda_simbolo_barra">R$ /</string>
+    <string name="moeda_formato">R$ %s</string>
+    <string name="moeda_com_unidade">R$ %1$s / %2$s</string>
 
-    <!-- Success Screen -->
-    <string name="title_sucess">OPERAÇÃO CONCLUÍDA</string>
-    <string name="subtitle_sucess">Negociação registrada com sucesso</string>
-    <string name="button_concluir">Concluir</string>
-    <string name="button_ver_comprovante">Ver comprovante</string>
+    <!-- ==================== VALORES PADRÃO ==================== -->
+    <string name="padrao_valor_decimal">0,00</string>
+    <string name="padrao_zero">0</string>
+    <string name="padrao_vazio">—</string>
+    <string name="padrao_placeholder_texto">Texto placeholder</string>
+    <string name="padrao_placeholder_numero">0</string>
+    <string name="padrao_quilometragem">125.430</string>
 
-    <!-- Success Messages -->
-    <string name="message_success">Operação realizada com sucesso!</string>
-    <string name="message_saved">Salvo com sucesso</string>
-    <string name="message_deleted">Excluído com sucesso</string>
-    <string name="message_updated">Atualizado com sucesso</string>
-    <string name="message_success_generic">%s com sucesso!</string>
-    <string name="message_location_selected">Endereço selecionado e vinculado com sucesso.</string>
-    <!-- Info Messages -->
-    <string name="message_loading">Carregando…</string>
-    <string name="message_empty">Nenhum item encontrado</string>
-    <string name="message_no_data">Sem dados disponíveis</string>
-    <string name="message_processing">Processando…</string>
+    <!-- ==================== FORMATOS ==================== -->
+    <string name="formato_decimal">%,.2f</string>
+    <string name="formato_inteiro">%d</string>
+    <string name="formato_percentual">%s%%</string>
+    <string name="formato_com_unidade">%1$s %2$s</string>
+    <string name="formato_numero_percentual"> %1$d%%</string>
+    <string name="formato_contagem_bezerros">%1$d / %2$d bezerros</string>
+    <string name="formato_capacidade_cabecas">Capacidade: %1$d cabeças</string>
 
-    <!-- Error Messages -->
-    <string name="error_required_field">Campo obrigatório</string>
-    <string name="error_empty_field">Este campo não pode estar vazio</string>
-    <string name="error_invalid_email">E-mail inválido</string>
-    <string name="error_invalid_number">Número inválido</string>
-    <string name="error_invalid_value">Valor inválido</string>
-    <string name="error_network">Erro de conexão</string>
-    <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
-    <string name="error_field_invalid">%s inválido</string>
-    <string name="limite_bezerros_atingido">Limite de bezerros atingido.</string>
-    <string name="quantidade_incompleta">Adicione todos os bezerros antes de finalizar.</string>
-    <string name="error_field_category">Selecione a categoria</string>
-    <string name="error_min_value">Valor mínimo: %s</string>
-    <string name="error_max_value">Valor máximo: %s</string>
-    <string name="error_location_permission_required">Permissão necessária para calcular o frete.</string>
-    <string name="error_address_not_found">Nenhum endereço encontrado.</string>
-    <string name="error_search_address">Erro ao buscar endereço. Verifique sua conexão.</string>
-    <string name="error_invalid_input">Verifique os valores informados.</string>
-    <string name="error_permission_access_denied">Erro de permissão ao acessar localização.</string>
-    <string name="error_region_not_identified">Não foi possível identificar sua região.</string>
-    <string name="erro_chave_api_ausente">Erro ao fazer a requisição para calcular rota</string>
-
-    <!-- Validation Messages -->
-    <string name="validation_must_be_positive">O valor deve ser maior que zero</string>
-    <string name="validation_must_be_number">Digite apenas números</string>
-    <string name="validation_out_of_range">Valor fora do intervalo permitido</string>
-
-    <!-- Content Descriptions (Accessibility) -->
-    <string name="content_description_icon">Ícone</string>
-    <string name="content_description_image">Imagem</string>
-    <string name="content_description_logo">Logo</string>
-    <string name="content_description_close">Fechar</string>
-    <string name="content_description_info">Informação</string>
-    <string name="content_description_delete">Excluir</string>
-    <string name="content_description_edit">Editar</string>
-    <string name="content_description_add">Adicionar</string>
-
-    <string name="dialog_title_confirm">Confirmar ação</string>
-    <string name="dialog_title_delete">Excluir item</string>
-    <string name="dialog_message_delete">Deseja realmente excluir este item?</string>
-    <string name="dialog_message_unsaved">Há alterações não salvas. Deseja continuar?</string>
-    <string name="dialog_title_permission_location">Permissão de localização necessária</string>
-    <string name="dialog_message_permission_location">Para usar este recurso, você precisa permitir o acesso à localização nas configurações do aplicativo.</string>
-
-    <!-- Mileage Adjustment -->
-    <string name="label_km_atual">QUILOMETRAGEM ATUAL</string>
-    <string name="label_ajuste_fino">AJUSTE FINO</string>
-    <string name="label_incremento_rapido">INCREMENTO RÁPIDO</string>
-    <string name="label_km_unidade">km</string>
-    <string name="label_km_default">125.430</string>
-    <string name="label_hodometro">HODÔMETRO</string>
-    <string name="btn_menos_um_km">−1 Km</string>
-    <string name="btn_mais_um_km">+1 Km</string>
-    <string name="btn_incremento_10">+10</string>
-    <string name="btn_incremento_30">+30</string>
-    <string name="btn_incremento_50">+50</string>
-    <string name="btn_incremento_100">+100</string>
-    <string name="hint_valor_km">Quilometragem</string>
-    <string name="label_origin">Origem</string>
-    <string name="label_destination">Destino</string>
-
-
-    <string name="hint_search">Pesquisar endereço</string>
-    <string name="label_distancia">Distância</string>
-    <string name="label_peso">Peso</string>
-    <string name="label_tempo">Tempo</string>
+    <!-- ==================== BOTÕES ==================== -->
+    <string name="botao_confirmar">Confirmar</string>
+    <string name="botao_cancelar">Cancelar</string>
+    <string name="botao_salvar">Salvar</string>
+    <string name="botao_enviar">Enviar</string>
+    <string name="botao_proximo">Próximo</string>
+    <string name="botao_excluir">Excluir</string>
     <string name="botao_editar">Editar</string>
-    <string name="botao_finalizar_rota">Finalizar rota</string>
-    <string name="bezerros_contagem">%1$d / %2$d bezerros</string>
+    <string name="botao_adicionar">Adicionar</string>
+    <string name="botao_buscar">Buscar</string>
+    <string name="botao_fechar">Fechar</string>
+    <string name="botao_limpar">Limpar</string>
+    <string name="botao_ir_configuracoes">Ir para configurações</string>
+    <string name="botao_concluir">Concluir</string>
+    <string name="botao_ver_comprovante">Ver comprovante</string>
+    <string name="botao_finalizar">Finalizar</string>
+    <string name="botao_editar_peso">Editar Peso</string>
+    <string name="botao_compartilhar_relatorio">Compartilhar relatório</string>
+    <string name="botao_enviar_solicitacao">Enviar solicitação</string>
+    <string name="botao_solicitar_dispositivo">Solicitar liberação do dispositivo</string>
+    <string name="botao_menos_um_km">−1 Km</string>
+    <string name="botao_mais_um_km">+1 Km</string>
+    <string name="botao_incremento_10">+10</string>
+    <string name="botao_incremento_30">+30</string>
+    <string name="botao_incremento_50">+50</string>
+    <string name="botao_incremento_100">+100</string>
 
+    <!-- ==================== AÇÕES SECUNDÁRIAS ==================== -->
+    <string name="acao_sim">Sim</string>
+    <string name="acao_nao">Não</string>
+    <string name="acao_ok">OK</string>
+    <string name="acao_tentar_novamente">Tentar novamente</string>
+    <string name="acao_dispensar">Dispensar</string>
+    <string name="acao_continuar">Continuar</string>
+    <string name="acao_simular_frete">Simular frete</string>
+    <string name="acao_prosseguir">Prosseguir</string>
+    <string name="acao_voltar">Voltar</string>
+    <string name="acao_finalizar_rota">Finalizar rota</string>
 
-    <string name="api_key_google_maps">com.google.android.geo.API_KEY</string>
-    <string name="km">km</string>
-    <string name="label_origem">Origem</string>
-    <string name="label_destino">Destino</string>
-    <string name="finalizar_rota">Finalizar rota</string>
-    <string name="editar">Editar</string>
-    <string name="label_rota">ROTA</string>
-    <string name="label_result">VALOR FINAL</string>
-    <string name="label_frete">FRETE</string>
-    <string name="label_transporte">TRANSPORTE</string>
-    <string name="action_open_frete">Simular frete</string>
-    <string name="action_next">Prosseguir</string>
-    <string name="erro_endereco_nao_encontrado">Endereço de destino não encontrado</string>
-    <string name="capacidade_cabecas">Capacidade: %1$d cabeças</string>
-    <string name="hint_distancia">Distância em km</string>
-    <string name="hint_valor_frete">Frete</string>
-    <string name="hint_valor_frete_ex">Valor do Frete</string>
-    <string name="hint_valor_por_cab">Valor/Cab</string>
-    <string name="hint_valor_por_kg">Valor/Kg</string>
-    <string name="action_voltar">Voltar</string>
-    <string name="titulo_frete">SIMULAR FRETE</string>
-    <plurals name="quantidade_veiculos">
+    <!-- ==================== MENSAGENS DE SUCESSO ==================== -->
+    <string name="mensagem_sucesso">Operação realizada com sucesso!</string>
+    <string name="mensagem_salvo">Salvo com sucesso</string>
+    <string name="mensagem_excluido">Excluído com sucesso</string>
+    <string name="mensagem_atualizado">Atualizado com sucesso</string>
+    <string name="mensagem_sucesso_generico">%s com sucesso!</string>
+    <string name="mensagem_endereco_selecionado">Endereço selecionado e vinculado com sucesso.</string>
+
+    <!-- ==================== MENSAGENS DE INFORMAÇÃO ==================== -->
+    <string name="mensagem_carregando">Carregando…</string>
+    <string name="mensagem_nenhum_item">Nenhum item encontrado</string>
+    <string name="mensagem_sem_dados">Sem dados disponíveis</string>
+    <string name="mensagem_processando">Processando…</string>
+    <string name="mensagem_info_conexao">Preencha os dados de rede abaixo. A equipe de suporte revisará em até 1 hora útil.</string>
+
+    <!-- ==================== MENSAGENS DE ERRO ==================== -->
+    <string name="erro_campo_obrigatorio">Campo obrigatório</string>
+    <string name="erro_campo_vazio">Este campo não pode estar vazio</string>
+    <string name="erro_email_invalido">E-mail inválido</string>
+    <string name="erro_numero_invalido">Número inválido</string>
+    <string name="erro_valor_invalido">Valor inválido</string>
+    <string name="erro_conexao">Erro de conexão</string>
+    <string name="erro_generico">Ocorreu um erro. Tente novamente.</string>
+    <string name="erro_campo_invalido">%s inválido</string>
+    <string name="erro_limite_bezerros">Limite de bezerros atingido.</string>
+    <string name="erro_quantidade_incompleta">Adicione todos os bezerros antes de finalizar.</string>
+    <string name="erro_categoria_nao_selecionada">Selecione a categoria</string>
+    <string name="erro_valor_minimo">Valor mínimo: %s</string>
+    <string name="erro_valor_maximo">Valor máximo: %s</string>
+    <string name="erro_permissao_localizacao">Permissão necessária para calcular o frete.</string>
+    <string name="erro_endereco_nao_encontrado">Nenhum endereço encontrado.</string>
+    <string name="erro_destino_nao_encontrado">Endereço de destino não encontrado</string>
+    <string name="erro_busca_endereco">Erro ao buscar endereço. Verifique sua conexão.</string>
+    <string name="erro_entrada_invalida">Verifique os valores informados.</string>
+    <string name="erro_acesso_localizacao_negado">Erro de permissão ao acessar localização.</string>
+    <string name="erro_regiao_nao_identificada">Não foi possível identificar sua região.</string>
+    <string name="erro_chave_api_ausente">Erro ao fazer a requisição para calcular rota</string>
+    <string name="erro_gerar_pdf">Erro ao gerar o PDF</string>
+
+    <!-- ==================== VALIDAÇÃO ==================== -->
+    <string name="validacao_valor_positivo">O valor deve ser maior que zero</string>
+    <string name="validacao_apenas_numeros">Digite apenas números</string>
+    <string name="validacao_fora_do_intervalo">Valor fora do intervalo permitido</string>
+
+    <!-- ==================== DESCRIÇÕES DE ACESSIBILIDADE ==================== -->
+    <string name="descr_icone">Ícone</string>
+    <string name="descr_imagem">Imagem</string>
+    <string name="descr_logo">Logo</string>
+    <string name="descr_fechar">Fechar</string>
+    <string name="descr_informacao">Informação</string>
+    <string name="descr_excluir">Excluir</string>
+    <string name="descr_editar">Editar</string>
+    <string name="descr_adicionar">Adicionar</string>
+
+    <!-- ==================== DIÁLOGOS ==================== -->
+    <string name="dialogo_titulo_confirmar">Confirmar ação</string>
+    <string name="dialogo_titulo_excluir">Excluir item</string>
+    <string name="dialogo_mensagem_excluir">Deseja realmente excluir este item?</string>
+    <string name="dialogo_mensagem_alteracoes_nao_salvas">Há alterações não salvas. Deseja continuar?</string>
+    <string name="dialogo_titulo_permissao_localizacao">Permissão de localização necessária</string>
+    <string name="dialogo_mensagem_permissao_localizacao">Para usar este recurso, você precisa permitir o acesso à localização nas configurações do aplicativo.</string>
+
+    <!-- ==================== CHAVES DE API ==================== -->
+    <string name="chave_api_google_maps">com.google.android.geo.API_KEY</string>
+
+    <!-- ==================== URIs DE SERVIÇO GESPEC ==================== -->
+    <string name="url_directions">"https://routes.googleapis.com/directions/v2:computeRoutes";</string>
+    <string name="url_usuario_gespec">http://%1$s:%2$s/gespec/gespecservices/UsuarioService/obtem/%3$s/%4$s/%5$s</string>
+    <string name="url_acesso_gespec">http://%1$s:%2$s/gespec/gespecservices/AcessoService/obtem/%3$s</string>
+    <string name="url_negociacao_gespec">http://%1$s:%2$s/gespec/gespecservices/NegGadoService/%3$s/%4$s/FLOW</string>
+
+    <!-- ==================== PLURAIS ==================== -->
+    <plurals name="plural_quantidade_veiculos">
         <item quantity="one">%1$d veículo</item>
         <item quantity="other">%1$d veículos</item>
     </plurals>
-    <string name="percent"> %1$d%%</string>
-    <string name="zero">0</string>
-    <string name="label_explorar_rotas">Toque para explorar rotas</string>
-
-    <!-- Negociacao -->
-    <string name="label_empresa_selecionada">Selecionada: %s</string>
-    <string name="label_empresa_selecionada_error">Nenhuma empresa cadastrada</string>
-
-    <!-- Precificacao Review Screen -->
-    <string name="peso_bezerro">Peso do bezerro</string>
-    <string name="adicionar">Adicionar</string>
-    <string name="finalizar">Finalizar</string>
-    <string name="editar_peso">Editar Peso</string>
-    <string name="cancelar">Cancelar</string>
-    <string name="confirmar">Confirmar</string>
-    <string name="compartilhar_relatorio">Compartilhar relatório</string>
-    <string name="erro_gerar_pdf">Erro ao gerar o PDF</string>
-    <string name="editar_peso_animal">Editar peso do animal</string>
-    <string name="negocia_o">FECHAMENTO NEGOCIAÇÃO</string>
-    <string name="card_label_peso_medio">Peso médio</string>
-    <string name="card_label_cabecas">Cabeças</string>
-    <string name="card_label_variacao">Variação</string>
-    <string name="hint_peso_referencia">Peso de referência</string>
-    <string name="uri_gespec_usuario_service">http://%1$s:%2$s/gespec/gespecservices/UsuarioService/obtem/%3$s/%4$s/%5$s</string>
-    <string name="uri_gespec_acesso_service">http://%1$s:%2$s/gespec/gespecservices/AcessoService/obtem/%3$s</string>
-    <string name="corretor">Corretor</string>
-    <string name="texto_coneccao">Preencha os dados de rede abaixo. A equipe de suporte revisará em até 1 hora útil.</string>
-    <string name="dados_de_conexao">DADOS DE CONEXÃO</string>
-    <string name="ip">IP</string>
-    <string name="host">Host</string>
-    <string name="site">Site</string>
-    <string name="identificacao">IDENTIFICAÇÃO</string>
-    <string name="usuario">Usuário</string>
-    <string name="enviar_solicitacao">Enviar solicitação</string>
-    <string name="solicitar_dispositivo">Solicitar liberação do dispositivo</string>
 
 </resources>
-
-
-

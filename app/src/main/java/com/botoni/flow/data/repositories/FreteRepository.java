@@ -1,31 +1,33 @@
 package com.botoni.flow.data.repositories;
 
+import static com.botoni.flow.utils.BigDecimalUtil.ARREDONDAMENTO_FINANCEIRO;
+import static com.botoni.flow.utils.BigDecimalUtil.ESCALA_CALCULO;
+import static com.botoni.flow.utils.BigDecimalUtil.ESCALA_MONETARIA;
+
 import com.botoni.flow.data.models.PrecificacaoFrete;
 import com.botoni.flow.data.models.Transporte;
 import com.botoni.flow.data.source.local.dao.FreteDao;
 import com.botoni.flow.data.source.local.entities.Frete;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
 
 public class FreteRepository {
-    private static final int ESCALA_CALCULO = 15;
-    private static final int ESCALA_RESULTADO = 2;
     private final FreteDao dao;
+
     @Inject
     public FreteRepository(FreteDao dao) {
         this.dao = dao;
     }
 
-    public List<Frete> listar() {
+    public List<Frete> getAll() {
         return dao.getAll();
     }
 
-    public Optional<Frete> buscarPorId(long id) {
+    public Optional<Frete> findById(long id) {
         return Optional.ofNullable(dao.findById(id));
     }
 
@@ -33,23 +35,23 @@ public class FreteRepository {
         return Optional.ofNullable(dao.findByVehicleAndDistance(idVeiculo, distancia));
     }
 
-    public long inserir(Frete frete) {
+    public long insert(Frete frete) {
         return dao.insert(frete);
     }
 
-    public void inserirTodos(List<Frete> fretes) {
+    public void insertAll(List<Frete> fretes) {
         dao.insertAll(fretes);
     }
 
-    public int atualizar(Frete frete) {
+    public int update(Frete frete) {
         return dao.update(frete);
     }
 
-    public int remover(Frete frete) {
+    public int delete(Frete frete) {
         return dao.delete(frete);
     }
 
-    public void removerTodos() {
+    public void delete() {
         dao.deleteAll();
     }
 
@@ -70,13 +72,13 @@ public class FreteRepository {
             total = total.add(subtotal);
         }
 
-        return total.setScale(ESCALA_RESULTADO, RoundingMode.HALF_UP);
+        return total.setScale(ESCALA_MONETARIA, ARREDONDAMENTO_FINANCEIRO);
     }
 
     public BigDecimal calcularIncidenciaFretePorAnimal(BigDecimal valorTotalFrete, int cargaTotal) {
         BigDecimal quantidadeAnimais = BigDecimal.valueOf(cargaTotal);
-        return valorTotalFrete.divide(quantidadeAnimais, ESCALA_CALCULO, RoundingMode.HALF_UP)
-                .setScale(ESCALA_RESULTADO, RoundingMode.HALF_UP);
+        return valorTotalFrete.divide(quantidadeAnimais, ESCALA_CALCULO, ARREDONDAMENTO_FINANCEIRO)
+                .setScale(ESCALA_MONETARIA, ARREDONDAMENTO_FINANCEIRO);
     }
 
     public BigDecimal calcularCustoUnitario(Frete frete, double distancia) {

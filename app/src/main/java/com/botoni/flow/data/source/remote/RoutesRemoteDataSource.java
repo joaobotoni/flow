@@ -1,4 +1,4 @@
-package com.botoni.flow.data.source.network;
+package com.botoni.flow.data.source.remote;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -18,12 +18,12 @@ import java.net.URL;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
-public class RoutesDataSource {
+public class RoutesRemoteDataSource {
     private static final String URL = "https://routes.googleapis.com/directions/v2:computeRoutes";
     private static final String MASK = "routes.distanceMeters";
     private final String apiKey;
 
-    public RoutesDataSource(@ApplicationContext Context context) {
+    public RoutesRemoteDataSource(@ApplicationContext Context context) {
         this.apiKey = load(context);
     }
 
@@ -42,7 +42,7 @@ public class RoutesDataSource {
     private static String load(@NonNull Context context) {
         try {
             ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            String key = info.metaData.getString(context.getString(R.string.api_key_google_maps));
+            String key = info.metaData.getString(context.getString(R.string.chave_api_google_maps));
             if (key == null || key.isEmpty())
                 throw new IllegalStateException(context.getString(R.string.erro_chave_api_ausente));
             return key;

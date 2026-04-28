@@ -45,8 +45,7 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
     }
 
     @Override
-    public void onCurrentListChanged(@NonNull List<TransporteUiState> previousList,
-                                     @NonNull List<TransporteUiState> currentList) {
+    public void onCurrentListChanged(@NonNull List<TransporteUiState> previousList, @NonNull List<TransporteUiState> currentList) {
         super.onCurrentListChanged(previousList, currentList);
         boolean tamanhoMudou = (previousList.size() == 1) != (currentList.size() == 1);
         if (tamanhoMudou) notifyItemRangeChanged(0, currentList.size());
@@ -63,9 +62,9 @@ public class TransporteAdapter extends ListAdapter<TransporteUiState, Transporte
         void bind(TransporteUiState estado) {
             Context context = itemView.getContext();
             setText(binding.textoTipoVeiculo, estado.nomeVeiculo);
-            setPluralText(binding.textoQuantidadeVeiculos, context, R.plurals.quantidade_veiculos, estado.quantidade);
-            setText(binding.textoCapacidadeCabecas, context, R.string.capacidade_cabecas, estado.capacidade);
-            setText(binding.textoPorcentagemOcupada, context, R.string.percent, estado.ocupacao);
+            setPluralText(binding.textoQuantidadeVeiculos, context, R.plurals.plural_quantidade_veiculos, estado.quantidade);
+            setText(binding.textoCapacidadeCabecas, context, R.string.formato_capacidade_cabecas, estado.capacidade);
+            setText(binding.textoPorcentagemOcupada, context, R.string.formato_numero_percentual, estado.ocupacao);
         }
 
         void applyLayoutForDisplayMode(boolean isSingleItem) {

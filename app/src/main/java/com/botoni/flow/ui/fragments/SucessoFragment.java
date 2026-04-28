@@ -145,7 +145,7 @@ public class SucessoFragment extends Fragment {
     private void onFinalizarClicado() {
         if (isOrigemDetalhe && !listaValida()) return;
         if (isOrigemDetalhe && !listaCompleta()) {
-            showSnackBarSucesso(requireView(), getString(R.string.quantidade_incompleta));
+            showSnackBarSucesso(requireView(), getString(R.string.erro_quantidade_incompleta));
             return;
         }
         gerarECompartilharPdf();
@@ -175,7 +175,7 @@ public class SucessoFragment extends Fragment {
 
     private void compartilharPdfs(List<File> pdfs) {
         if (!isAdded()) return;
-        Intent intent = FileHelper.criarIntentCompartilharMultiplos(requireContext(), pdfs, "application/pdf", getString(R.string.compartilhar_relatorio));
+        Intent intent = FileHelper.criarIntentCompartilharMultiplos(requireContext(), pdfs, "application/pdf", getString(R.string.botao_compartilhar_relatorio));
         compartilharLauncher.launch(intent);
     }
 

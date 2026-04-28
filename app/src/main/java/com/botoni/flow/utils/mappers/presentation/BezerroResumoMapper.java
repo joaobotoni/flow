@@ -1,6 +1,6 @@
-package com.botoni.flow.ui.mappers.presentation;
+package com.botoni.flow.utils.mappers.presentation;
 
-import com.botoni.flow.ui.mappers.Mapper;
+import com.botoni.flow.utils.mappers.Mapper;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
 import com.botoni.flow.ui.state.ResumoValoresUiState;
 

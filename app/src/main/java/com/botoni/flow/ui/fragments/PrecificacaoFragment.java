@@ -28,8 +28,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.botoni.flow.R;
 import com.botoni.flow.databinding.FragmentPrecificacaoBinding;
 import com.botoni.flow.ui.adapters.ItemOpcaoAdapter;
-import com.botoni.flow.ui.mappers.presentation.BezerroResumoMapper;
-import com.botoni.flow.ui.mappers.presentation.FreteResumoMapper;
+import com.botoni.flow.utils.mappers.presentation.BezerroResumoMapper;
+import com.botoni.flow.utils.mappers.presentation.FreteResumoMapper;
 import com.botoni.flow.ui.state.ItemOpcaoUiState;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
 import com.botoni.flow.ui.state.PrecificacaoFreteUiState;
@@ -336,13 +336,13 @@ public class PrecificacaoFragment extends Fragment {
 
     private boolean falhaValidacaoCategoria() {
         if (!isCategoriaNaoSelecionada()) return false;
-        exibirAlertaErro(R.string.error_field_category);
+        exibirAlertaErro(R.string.erro_categoria_nao_selecionada);
         return true;
     }
 
     private boolean falhaValidacaoEntradas() {
         if (!dadosIncompletosParaCalculo()) return false;
-        exibirAlertaErro(R.string.error_invalid_input);
+        exibirAlertaErro(R.string.erro_entrada_invalida);
         return true;
     }
 
@@ -364,24 +364,24 @@ public class PrecificacaoFragment extends Fragment {
         return ResumoValoresFragment.newInstance(
                 CHAVE_RESUMO_FRETE,
                 getString(R.string.titulo_resumo_frete),
-                getString(R.string.card_label_total_value),
-                getString(R.string.card_label_unit_value_frete));
+                getString(R.string.cartao_valor_total),
+                getString(R.string.cartao_valor_por_kg_frete));
     }
 
     private ResumoValoresFragment criarFragmentoResumoBezerroSemFrete() {
         return ResumoValoresFragment.newInstance(
                 CHAVE_RESUMO_BEZERRO,
                 getString(R.string.titulo_resumo_bezerro),
-                getString(R.string.rotulo_valor_final_por_cabeca),
-                getString(R.string.rotulo_valor_final_por_kg));
+                getString(R.string.cartao_valor_final_por_cabeca),
+                getString(R.string.cartao_valor_final_por_kg));
     }
 
     private ResumoValoresFragment criarFragmentoResumoBezerroComFrete() {
         return ResumoValoresFragment.newInstance(
                 CHAVE_RESUMO_COM_FRETE,
                 getString(R.string.titulo_resumo_com_frete),
-                getString(R.string.card_label_total_value),
-                getString(R.string.card_label_unit_value_frete));
+                getString(R.string.cartao_valor_total),
+                getString(R.string.cartao_valor_por_kg_frete));
     }
 
     private ResultadoFragment criarFragmentoResultadoFinal() {

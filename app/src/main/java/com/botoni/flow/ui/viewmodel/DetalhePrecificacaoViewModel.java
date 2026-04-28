@@ -22,7 +22,7 @@ public class DetalhePrecificacaoViewModel extends ViewModel {
     private final PrecificacaoBezerroRepository repository;
     private final MutableLiveData<List<DetalhePrecoBezerroUiState>> state = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<BigDecimal> total = new MutableLiveData<>(BigDecimal.ZERO);
-    private final MutableLiveData<Throwable> error = new MutableLiveData<>();
+    private final MutableLiveData<Throwable> error = new MutableLiveData<>(null);
     @Inject
     public DetalhePrecificacaoViewModel(PrecificacaoBezerroRepository repository, TaskHelper taskHelper) {
         this.repository = repository;

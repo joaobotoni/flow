@@ -1,7 +1,7 @@
-package com.botoni.flow.ui.mappers.domain;
+package com.botoni.flow.utils.mappers.domain;
 
 import com.botoni.flow.data.models.Rota;
-import com.botoni.flow.ui.mappers.BiMapper;
+import com.botoni.flow.utils.mappers.BiMapper;
 import com.botoni.flow.ui.state.RotaUiState;
 
 import javax.inject.Inject;

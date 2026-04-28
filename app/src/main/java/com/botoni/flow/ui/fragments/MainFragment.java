@@ -64,8 +64,9 @@ public class MainFragment extends Fragment {
     }
 
     private void request(Configuration config) {
-        requestUsuario(config);
-        requestAcesso(config);
+//        requestUsuario(config);
+//        requestAcesso(config);
+        requestEmpresa(config);
     }
 
     private void requestUsuario(Configuration config) {
@@ -84,10 +85,19 @@ public class MainFragment extends Fragment {
         );
     }
 
+
+    private void requestEmpresa(Configuration config) {
+        taskHelper.execute(
+                () -> repository.syncNegociacaoGado(config),
+                this::onSuccess,
+                this::onError
+        );
+    }
+
     private Configuration buildConfig() {
         return Configuration.builder()
-                .host(readIp())
-                .port(readHost())
+                .host(readHost())
+                .port(readPort())
                 .site(readSite())
                 .username(readUsername())
                 .applicationId(deviceId())
@@ -119,13 +129,11 @@ public class MainFragment extends Fragment {
                 String.format(Locale.getDefault(), "Erro na comunicação: %s", throwable.getMessage()));
     }
 
-    private String readHost() {
-        return orElse(requireText(binding.entradaTextoHost), "");
+    private String readPort() {
+        return orElse(requireText(binding.entradaTextoPort), "");
     }
 
-    private String readIp() {
-        return orElse(requireText(binding.entradaTextoIp), "");
-    }
+    private String readHost() {return orElse(requireText(binding.entradaTextoHost), "");}
 
     private String readSite() {
         return orElse(requireText(binding.entradaTextoSite), "");

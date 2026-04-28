@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.botoni.flow.data.repositories.TransporteRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
-import com.botoni.flow.ui.mappers.domain.TransporteMapper;
+import com.botoni.flow.utils.mappers.domain.TransporteMapper;
 import com.botoni.flow.ui.state.TransporteUiState;
 
 import java.util.List;

@@ -29,8 +29,7 @@ public class EmpresaAdapter extends ListAdapter<EmpresaUiState, EmpresaAdapter.V
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemEmpresaBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(ItemEmpresaBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override

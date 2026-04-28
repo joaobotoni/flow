@@ -16,7 +16,6 @@ import javax.inject.Inject;
 public class TransporteRepository {
     private final CapacidadeFreteDao capacidadeDao;
     private final TipoVeiculoFreteDao tipoVeiculoDao;
-
     @Inject
     public TransporteRepository(CapacidadeFreteDao capacidadeDao, TipoVeiculoFreteDao tipoVeiculoDao) {
         this.capacidadeDao = capacidadeDao;

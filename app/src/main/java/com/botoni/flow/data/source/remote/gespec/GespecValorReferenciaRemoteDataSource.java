@@ -1,4 +1,4 @@
-package com.botoni.flow.data.source.network.gespec;
+package com.botoni.flow.data.source.remote.gespec;
 
 import android.content.Context;
 
@@ -12,25 +12,31 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
-import dagger.hilt.android.qualifiers.ApplicationContext;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
-public class GespecSyncAcessoService {
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
+public class GespecValorReferenciaRemoteDataSource {
     private final Context context;
 
     @Inject
-    public GespecSyncAcessoService(@ApplicationContext Context context) {
+    public GespecValorReferenciaRemoteDataSource(@ApplicationContext Context context) {
         this.context = context;
     }
 
-    public String sync(Configuration config) throws IOException {
-        HttpURLConnection connection = openConnection(buildUrl(config));
+    public String sync(Configuration config, String path) throws IOException {
+        HttpURLConnection connection = openConnection(buildUrl(config, path));
         applyHeaders(connection, config);
         return readResponse(connection);
     }
 
-    private String buildUrl(Configuration config) {
-        return context.getString(R.string.uri_gespec_acesso_service, config.host, config.port, config.username);
+    private String buildUrl(Configuration config, String path) {
+        return context.getString(R.string.url_negociacao_gespec,
+                config.host,
+                config.port,
+                path,
+                config.username
+        );
     }
 
     private HttpURLConnection openConnection(String url) throws IOException {

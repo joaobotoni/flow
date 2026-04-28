@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.botoni.flow.data.repositories.PrecificacaoBezerroRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
-import com.botoni.flow.ui.mappers.domain.PrecificacaoBezerroMapper;
+import com.botoni.flow.utils.mappers.domain.PrecificacaoBezerroMapper;
 import com.botoni.flow.ui.state.PrecificacaoBezerroUiState;
 
 import java.math.BigDecimal;
@@ -21,8 +21,8 @@ public class PrecificacaoBezerroViewModel extends ViewModel {
     private final PrecificacaoBezerroRepository repositorio;
     private final TaskHelper taskHelper;
     private final PrecificacaoBezerroMapper precificacaoBezerroMapper;
-    private final MutableLiveData<PrecificacaoBezerroUiState> state = new MutableLiveData<>();
-    private final MutableLiveData<PrecificacaoBezerroUiState> stateComFrete = new MutableLiveData<>();
+    private final MutableLiveData<PrecificacaoBezerroUiState> state = new MutableLiveData<>(null);
+    private final MutableLiveData<PrecificacaoBezerroUiState> stateComFrete = new MutableLiveData<>(null);
     private final MutableLiveData<Throwable> error = new MutableLiveData<>();
     @Inject
     public PrecificacaoBezerroViewModel(PrecificacaoBezerroRepository repositorio,

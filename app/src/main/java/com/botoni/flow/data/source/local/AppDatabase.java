@@ -13,28 +13,30 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.botoni.flow.data.source.local.converters.Converters;
 import com.botoni.flow.data.source.local.dao.CapacidadeFreteDao;
 import com.botoni.flow.data.source.local.dao.CategoriaFreteDao;
-import com.botoni.flow.data.source.local.dao.CategoriaNegDao;
+import com.botoni.flow.data.source.local.dao.CategoriaNegociacaoDao;
 import com.botoni.flow.data.source.local.dao.CorretorDao;
 import com.botoni.flow.data.source.local.dao.EmpresaDao;
 import com.botoni.flow.data.source.local.dao.FreteDao;
 import com.botoni.flow.data.source.local.dao.NegociacaoAnimalDao;
 import com.botoni.flow.data.source.local.dao.NegociacaoGadoDao;
+import com.botoni.flow.data.source.local.dao.RacaDao;
 import com.botoni.flow.data.source.local.dao.TipoReferenciaDao;
 import com.botoni.flow.data.source.local.dao.TipoVeiculoFreteDao;
 import com.botoni.flow.data.source.local.dao.ValorReferenciaDao;
 import com.botoni.flow.data.source.local.entities.CapacidadeFrete;
 import com.botoni.flow.data.source.local.entities.CategoriaFrete;
-import com.botoni.flow.data.source.local.entities.CategoriaNeg;
+import com.botoni.flow.data.source.local.entities.CategoriaNegociacao;
 import com.botoni.flow.data.source.local.entities.Corretor;
 import com.botoni.flow.data.source.local.entities.Empresa;
 import com.botoni.flow.data.source.local.entities.Frete;
 import com.botoni.flow.data.source.local.entities.NegociacaoAnimal;
 import com.botoni.flow.data.source.local.entities.NegociacaoGado;
+import com.botoni.flow.data.source.local.entities.Raca;
 import com.botoni.flow.data.source.local.entities.TipoReferencia;
 import com.botoni.flow.data.source.local.entities.TipoVeiculoFrete;
 import com.botoni.flow.data.source.local.entities.ValorReferencia;
 
-@Database(entities = {Frete.class, CapacidadeFrete.class, CategoriaFrete.class, TipoVeiculoFrete.class, ValorReferencia.class, TipoReferencia.class, NegociacaoGado.class, NegociacaoAnimal.class, Empresa.class, Corretor.class, CategoriaNeg.class}, version = 2)
+@Database(entities = {Frete.class, CapacidadeFrete.class, CategoriaFrete.class, TipoVeiculoFrete.class, ValorReferencia.class, TipoReferencia.class, NegociacaoGado.class, NegociacaoAnimal.class, Empresa.class, Corretor.class, CategoriaNegociacao.class, Raca.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FreteDao freteDao();
@@ -57,7 +59,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CorretorDao corretorDao();
 
-    public abstract CategoriaNegDao categoriaNegDao();
+    public abstract CategoriaNegociacaoDao categoriaNegDao();
+    public abstract RacaDao racaDao();
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -156,6 +159,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
                             // CORRETOR PADRÃO
                             db.execSQL("INSERT INTO xgp_corretor (name, comissao, tipo_comissao) VALUES ('Julio', 20.0, 'c')");
+                            db.execSQL("INSERT INTO xgp_corretor (name, comissao, tipo_comissao) VALUES ('Armando', 4.0, 'p')");
 
                             // VALOR DE REFERÊNCIA INICIAL
                             db.execSQL("INSERT INTO xgp_valor_referencia (id_valor_referencia, id_tipo_referencia, id_empresa, data_referencia, valor_arroba_boi, valor_bezerro, peso_bezerro, valor_arroba_vaca, valor_bezerra, peso_bezerra, agio_bezerro, agio_bezerra) VALUES (1, 1, 1, strftime('%s','now') * 1000, 310.00, 2800.00, 180, 319.00, 2800.00, 180, 30.0, 30.0)");

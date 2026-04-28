@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.botoni.flow.data.models.Rota;
 import com.botoni.flow.data.repositories.LocalizacaoRepository;
 import com.botoni.flow.ui.helpers.TaskHelper;
-import com.botoni.flow.ui.mappers.domain.RotaMapper;
+import com.botoni.flow.utils.mappers.domain.RotaMapper;
 import com.botoni.flow.ui.state.RotaUiState;
 
 import javax.inject.Inject;

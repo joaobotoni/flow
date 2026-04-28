@@ -26,7 +26,7 @@ import java.util.Date;
                         onDelete = ForeignKey.RESTRICT
                 ),
                 @ForeignKey(
-                        entity = CategoriaNeg.class,
+                        entity = CategoriaNegociacao.class,
                         parentColumns = "id_categoria_neg",
                         childColumns = "id_categoria_neg",
                         onDelete = ForeignKey.RESTRICT

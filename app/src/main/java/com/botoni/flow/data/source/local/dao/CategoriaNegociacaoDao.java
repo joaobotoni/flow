@@ -7,30 +7,30 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.botoni.flow.data.source.local.entities.CategoriaNeg;
+import com.botoni.flow.data.source.local.entities.CategoriaNegociacao;
 
 import java.util.List;
 
 @Dao
-public interface CategoriaNegDao {
+public interface CategoriaNegociacaoDao {
 
     @Query("SELECT * FROM xgp_categoria_neg")
-    List<CategoriaNeg> getAll();
+    List<CategoriaNegociacao> getAll();
 
     @Query("SELECT * FROM xgp_categoria_neg WHERE id_categoria_neg = :id")
-    CategoriaNeg findById(long id);
+    CategoriaNegociacao findById(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(CategoriaNeg categoriaNeg);
+    long insert(CategoriaNegociacao categoriaNegociacao);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<CategoriaNeg> categoriaNegs);
+    void insertAll(List<CategoriaNegociacao> categoriaNegociacaos);
 
     @Update
-    int update(CategoriaNeg categoriaNeg);
+    int update(CategoriaNegociacao categoriaNegociacao);
 
     @Delete
-    int delete(CategoriaNeg categoriaNeg);
+    int delete(CategoriaNegociacao categoriaNegociacao);
 
     @Query("DELETE FROM xgp_categoria_neg")
     void deleteAll();

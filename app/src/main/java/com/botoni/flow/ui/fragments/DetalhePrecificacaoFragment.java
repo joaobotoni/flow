@@ -118,7 +118,7 @@ public class DetalhePrecificacaoFragment extends Fragment {
     private void onAdicionarClicado() {
         if (campoPesoVazio()) return;
         if (listaCheia()) {
-            showSnackBarErro(requireView(), getString(R.string.limite_bezerros_atingido));
+            showSnackBarErro(requireView(), getString(R.string.erro_limite_bezerros));
             return;
         }
         viewModel.adicionarItem(lerPeso(), ARROBA, AGIO, PESO_BASE);
@@ -143,7 +143,7 @@ public class DetalhePrecificacaoFragment extends Fragment {
 
     private void atualizarLista(List<DetalhePrecoBezerroUiState> lista) {
         adapter.submitList(new ArrayList<>(lista));
-        setText(binding.textoContagemBezerros, requireContext(), R.string.bezerros_contagem, lista.size(), quantidadeTotal);
+        setText(binding.textoContagemBezerros, requireContext(), R.string.formato_contagem_bezerros, lista.size(), quantidadeTotal);
         binding.barraProgresso.setProgressCompat(calcularProgresso(lista.size()), true);
     }
 
@@ -174,7 +174,7 @@ public class DetalhePrecificacaoFragment extends Fragment {
     private void onFinalizarClicado() {
         if (!listaValida()) return;
         if (!listaCompleta()) {
-            showSnackBarErro(requireView(), getString(R.string.quantidade_incompleta));
+            showSnackBarErro(requireView(), getString(R.string.erro_quantidade_incompleta));
             return;
         }
         navegarParaSucessoFragment();

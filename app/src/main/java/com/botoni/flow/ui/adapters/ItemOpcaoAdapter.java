@@ -31,8 +31,7 @@ public class ItemOpcaoAdapter extends ListAdapter<ItemOpcaoUiState, ItemOpcaoAda
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemOpcaoBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false));
+        return new ViewHolder(ItemOpcaoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override

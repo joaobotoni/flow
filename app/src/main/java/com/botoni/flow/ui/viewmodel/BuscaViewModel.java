@@ -16,8 +16,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class BuscaViewModel extends ViewModel {
     private final LocalizacaoRepository repositorio;
     private final TaskHelper taskHelper;
-    private final MutableLiveData<BuscaLocalizacaoUiState> state = new MutableLiveData<>();
-    private final MutableLiveData<Throwable> error = new MutableLiveData<>();
+    private final MutableLiveData<BuscaLocalizacaoUiState> state = new MutableLiveData<>(null);
+    private final MutableLiveData<Throwable> error = new MutableLiveData<>(null);
 
     @Inject
     public BuscaViewModel(LocalizacaoRepository repositorio, TaskHelper taskHelper) {
